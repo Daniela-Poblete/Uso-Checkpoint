@@ -3,377 +3,377 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkpoint DUOC · Panel de Préstamos</title>
+<title>Checkpoint DUOC · Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c14;
-    --surface: #0d1520;
-    --surface2: #111d2e;
-    --border: #1c2d42;
-    --border2: #243647;
-    --text: #e8f0f8;
-    --text2: #7a9bb8;
-    --text3: #3f5a72;
-    --accent: #00c8ff;
-    --accent2: #0090d4;
-    --y21: #818cf8;
-    --y22: #34d399;
-    --y23: #fbbf24;
-    --y24: #f87171;
-    --radius: 12px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.5);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#FCB32E;
+  --gold-d:#d4921f;
+  --gold-l:#FCB32E15;
+  --gold-m:#FCB32E28;
+  --bg:#f7f8fa;
+  --white:#ffffff;
+  --s1:#f0f2f5;
+  --border:#e5e8ef;
+  --border2:#dde1ea;
+  --txt:#0f1724;
+  --txt2:#5a6478;
+  --txt3:#9ba5b5;
+  --y21:#6366f1; --y21b:#6366f115;
+  --y22:#0ea5e9; --y22b:#0ea5e915;
+  --y23:#FCB32E; --y23b:#FCB32E18;
+  --y24:#ef4444; --y24b:#ef444415;
+  --r:10px;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.06);
+  --sh2:0 2px 8px rgba(0,0,0,.07),0 8px 28px rgba(0,0,0,.08);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(#cbd2de 1px,transparent 1px);
+  background-size:22px 22px;opacity:.45
+}
+#app{position:relative;z-index:1;display:flex;min-height:100vh}
 
-  /* ── BACKGROUND GRID ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.25;
-    pointer-events: none;
-  }
+/* ── SIDEBAR ── */
+#sb{
+  width:252px;flex-shrink:0;background:var(--white);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  box-shadow:2px 0 10px rgba(0,0,0,.04)
+}
+#sb::-webkit-scrollbar{width:3px}
+#sb::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-  #app { position: relative; z-index: 1; display: flex; min-height: 100vh; }
+.sb-top{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
+.logo-row{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.logo-ico{
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:var(--gold);display:flex;align-items:center;justify-content:center;
+  font-size:16px;box-shadow:0 2px 8px rgba(252,179,46,.3)
+}
+.logo-txt h1{font-size:12.5px;font-weight:800;letter-spacing:-.2px;line-height:1.3}
+.logo-txt p{font-size:9.5px;color:var(--txt3);font-family:'JetBrains Mono',monospace}
+.total-chip{
+  background:var(--gold-l);border:1.5px solid var(--gold-m);border-radius:8px;
+  padding:8px 12px;display:flex;justify-content:space-between;align-items:center
+}
+.total-chip .lbl{font-size:10px;color:var(--txt2);font-weight:500}
+.total-chip .num{font-size:16px;font-weight:800;color:var(--gold-d);font-family:'JetBrains Mono',monospace}
 
-  /* ── SIDEBAR ── */
-  #sidebar {
-    width: 260px; flex-shrink: 0;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    position: sticky; top: 0; height: 100vh; overflow-y: auto;
-  }
-  .sidebar-header {
-    padding: 24px 20px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .logo-badge {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-  }
-  .logo-icon {
-    width: 36px; height: 36px; border-radius: 9px;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 17px; flex-shrink: 0;
-  }
-  .logo-text h1 { font-size: 14px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; }
-  .logo-text p { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; }
-  .total-badge {
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 10px 14px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .total-badge .lbl { font-size: 11px; color: var(--text2); }
-  .total-badge .val { font-size: 18px; font-weight: 700; color: var(--accent); font-family: 'DM Mono', monospace; }
+.sb-sec{padding:12px 16px;border-bottom:1px solid var(--border)}
+.sb-sec h3{font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:9px}
 
-  .filter-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
-  .filter-section h3 { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+/* years */
+.yr-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.yr-btn{
+  padding:7px 4px;border-radius:7px;cursor:pointer;border:1.5px solid var(--border2);
+  background:var(--white);color:var(--txt3);font-size:11px;font-weight:700;
+  font-family:'JetBrains Mono',monospace;transition:all .15s;line-height:1.3;text-align:center
+}
+.yr-btn:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-l)}
+.yr-btn.on-21{background:var(--y21b);border-color:var(--y21);color:var(--y21)}
+.yr-btn.on-22{background:var(--y22b);border-color:var(--y22);color:#0284c7}
+.yr-btn.on-23{background:var(--y23b);border-color:var(--y23);color:var(--gold-d)}
+.yr-btn.on-24{background:var(--y24b);border-color:var(--y24);color:#dc2626}
 
-  /* Year toggles */
-  .year-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .year-btn {
-    padding: 8px 6px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border2);
-    background: transparent; color: var(--text2); font-size: 12px; font-weight: 600;
-    font-family: 'DM Mono', monospace; transition: all 0.18s; text-align: center;
-  }
-  .year-btn:hover { border-color: var(--accent); }
-  .year-btn.active-21 { background: #818cf822; border-color: #818cf8; color: #818cf8; }
-  .year-btn.active-22 { background: #34d39922; border-color: #34d399; color: #34d399; }
-  .year-btn.active-23 { background: #fbbf2422; border-color: #fbbf24; color: #fbbf24; }
-  .year-btn.active-24 { background: #f8717122; border-color: #f87171; color: #f87171; }
+/* sedes */
+.sede-acts{display:flex;gap:4px;margin-bottom:7px}
+.sede-acts button{
+  flex:1;padding:5px;font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;border-radius:5px;cursor:pointer;border:1px solid var(--border2);
+  background:var(--s1);color:var(--txt2);transition:all .13s
+}
+.sede-acts button:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-l)}
+.sede-list{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:1px}
+.sede-list::-webkit-scrollbar{width:3px}
+.sede-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.sede-item{
+  display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:6px;
+  cursor:pointer;border:1px solid transparent;transition:all .12s
+}
+.sede-item:hover{background:var(--s1)}
+.sede-item.on{background:var(--gold-l);border-color:var(--gold-m)}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sede-item input{display:none}
+.sname{font-size:10px;color:var(--txt3);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.sede-item.on .sname{color:var(--txt2)}
+.scount{font-size:9.5px;font-family:'JetBrains Mono',monospace;color:var(--txt3)}
 
-  /* Sede checkboxes */
-  .sede-actions { display: flex; gap: 6px; margin-bottom: 8px; }
-  .sede-actions button {
-    flex: 1; padding: 5px; font-size: 10px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.5px; border-radius: 5px; cursor: pointer; border: 1px solid var(--border2);
-    background: var(--surface2); color: var(--text2); transition: all 0.15s;
-  }
-  .sede-actions button:hover { border-color: var(--accent); color: var(--accent); }
-  .sede-list { max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
-  .sede-list::-webkit-scrollbar { width: 4px; }
-  .sede-list::-webkit-scrollbar-track { background: transparent; }
-  .sede-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-  .sede-item {
-    display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px;
-    cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
-  }
-  .sede-item:hover { background: var(--surface2); }
-  .sede-item.checked { background: #00c8ff0d; border-color: #00c8ff22; }
-  .sede-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .sede-item input { display: none; }
-  .sede-name { font-size: 11px; color: var(--text2); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sede-item.checked .sede-name { color: var(--text); }
-  .sede-count { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
+/* nav */
+.sb-nav{padding:12px 16px 0;flex:1}
+.sb-nav h3{font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:8px}
+.nav-btn{
+  display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border-radius:8px;
+  cursor:pointer;border:1px solid transparent;background:transparent;
+  text-align:left;margin-bottom:3px;transition:all .15s
+}
+.nav-btn:hover{background:var(--s1)}
+.nav-btn.active{background:var(--gold-l);border-color:var(--gold-m)}
+.nav-ico{font-size:14px;flex-shrink:0}
+.nav-lbl{font-size:11.5px;font-weight:600;color:var(--txt2)}
+.nav-btn.active .nav-lbl{color:var(--gold-d)}
 
-  /* ── NAV TABS ── */
-  .nav-tabs {
-    padding: 16px 20px 0; border-bottom: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 4px;
-  }
-  .nav-tab {
-    display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
-    cursor: pointer; border: 1px solid transparent; background: transparent; transition: all 0.18s;
-    text-align: left; width: 100%;
-  }
-  .nav-tab:hover { background: var(--surface2); }
-  .nav-tab.active { background: #00c8ff12; border-color: #00c8ff33; }
-  .nav-tab .tab-icon { font-size: 14px; flex-shrink: 0; }
-  .nav-tab .tab-label { font-size: 12px; font-weight: 500; color: var(--text2); }
-  .nav-tab.active .tab-label { color: var(--accent); font-weight: 600; }
-  .nav-tab .tab-count { margin-left: auto; font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); background: var(--surface2); padding: 2px 6px; border-radius: 4px; }
+/* ── MAIN ── */
+#main{flex:1;min-width:0;overflow:auto}
 
-  /* ── MAIN ── */
-  #main { flex: 1; overflow: auto; }
+/* KPI strip */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);background:var(--white)}
+.kpi-card{
+  padding:18px 20px;border-right:1px solid var(--border);
+  border-bottom:3px solid transparent;transition:all .2s;cursor:default
+}
+.kpi-card:last-child{border-right:none}
+.kpi-card:hover{background:var(--s1)}
+.kpi-yr{font-size:10px;font-weight:600;color:var(--txt3);margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.kpi-val{font-size:26px;font-weight:800;letter-spacing:-1.2px;font-family:'JetBrains Mono',monospace}
+.kpi-sub{font-size:10.5px;margin-top:3px;font-weight:500}
+.kpi-sub.up{color:#16a34a}.kpi-sub.dn{color:#dc2626}.kpi-sub.na{color:var(--txt3)}
 
-  /* KPI bar */
-  .kpi-bar {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 0; border-bottom: 1px solid var(--border);
-  }
-  .kpi-card {
-    padding: 20px 24px; border-right: 1px solid var(--border);
-    transition: background 0.2s; cursor: default;
-    animation: fadeIn 0.4s both;
-  }
-  .kpi-card:last-child { border-right: none; }
-  .kpi-card:hover { background: var(--surface); }
-  .kpi-year { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text2); margin-bottom: 4px; }
-  .kpi-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; font-family: 'DM Mono', monospace; }
-  .kpi-delta { font-size: 11px; margin-top: 4px; }
-  .kpi-delta.up { color: #34d399; }
-  .kpi-delta.down { color: #f87171; }
-  .kpi-delta.neutral { color: var(--text3); }
+/* panels */
+.panel{display:none;padding:24px;animation:fadeUp .2s ease both}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-  /* Tab panels */
-  .tab-panel { display: none; padding: 28px; animation: slideIn 0.25s ease both; }
-  .tab-panel.active { display: block; }
-  @keyframes slideIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.ph{margin-bottom:20px}
+.ph h2{font-size:19px;font-weight:800;letter-spacing:-.4px}
+.ph p{font-size:12px;color:var(--txt2);margin-top:3px}
 
-  .panel-header { margin-bottom: 24px; }
-  .panel-header h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
-  .panel-header p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+/* cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-d),transparent)
+}
+.card h3{font-size:10.5px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
+.cw{position:relative}
 
-  /* Chart containers */
-  .chart-grid { display: grid; gap: 20px; }
-  .chart-grid.cols2 { grid-template-columns: 1fr 1fr; }
-  .chart-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
-    position: relative; overflow: hidden;
-  }
-  .chart-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent2), var(--accent), transparent);
-  }
-  .chart-card h3 { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .chart-wrap { position: relative; }
+/* empty state */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 24px;color:var(--txt3);gap:10px;text-align:center
+}
+.empty-state .big{font-size:36px}
+.empty-state p{font-size:13px;max-width:220px;line-height:1.5}
 
-  /* Data table */
-  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 20px; }
-  .data-table thead tr { border-bottom: 1px solid var(--border2); }
-  .data-table th { padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
-  .data-table th.r { text-align: right; }
-  .data-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
-  .data-table tbody tr:hover { background: var(--surface2); }
-  .data-table td { padding: 9px 14px; color: var(--text2); }
-  .data-table td.r { text-align: right; font-family: 'DM Mono', monospace; }
-  .data-table td.bold { color: var(--text); font-weight: 600; }
-  .data-table tfoot tr { border-top: 2px solid var(--border2); }
-  .data-table tfoot td { font-weight: 700; color: var(--text); font-family: 'DM Mono', monospace; }
+/* progress bars */
+.prog-list{display:flex;flex-direction:column;gap:0}
+.prog-row{
+  display:flex;align-items:center;gap:10px;padding:8px 0;
+  border-bottom:1px solid var(--border)
+}
+.prog-row:last-child{border-bottom:none}
+.prog-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.prog-sede{font-size:11px;color:var(--txt2);width:160px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.prog-bar-wrap{flex:1;height:5px;background:var(--s1);border-radius:3px;overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.prog-val{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--txt);font-weight:600;width:52px;text-align:right;flex-shrink:0}
+.prog-pct{font-size:10px;color:var(--txt3);width:36px;text-align:right;flex-shrink:0}
 
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
-  .rank-num { font-family: 'DM Mono', monospace; color: var(--text3); font-size: 11px; }
-  .bar-mini { display: inline-block; height: 4px; background: var(--accent); border-radius: 2px; vertical-align: middle; margin-left: 8px; opacity: 0.5; }
+/* tables */
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:16px}
+.tbl thead tr{border-bottom:2px solid var(--border)}
+.tbl th{padding:9px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px}
+.tbl th.r{text-align:right}
+.tbl tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+.tbl tbody tr:last-child{border-bottom:none}
+.tbl tbody tr:hover{background:var(--s1)}
+.tbl td{padding:8px 12px;color:var(--txt2)}
+.tbl td.r{text-align:right;font-family:'JetBrains Mono',monospace}
+.tbl td.b{color:var(--txt);font-weight:700}
+.tbl tfoot tr{border-top:2px solid var(--border2)}
+.tbl tfoot td{padding:9px 12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--txt)}
+.tbl tfoot td.r{text-align:right}
 
-  /* scrollbar global */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 5px; }
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.rn{font-family:'JetBrains Mono',monospace;color:var(--txt3);font-size:10px}
 
-  /* Year dot legend */
-  .legend-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+/* legend */
+.leg-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--txt2);font-weight:500}
+.leg-dot{width:10px;height:10px;border-radius:50%}
 
-  /* Progress bars in tab 1 */
-  .progress-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); }
-  .progress-row:last-child { border-bottom: none; }
-  .progress-sede { font-size: 11px; color: var(--text2); width: 175px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .progress-bar-wrap { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(.22,1,.36,1); }
-  .progress-val { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text); width: 55px; text-align: right; flex-shrink: 0; }
+/* value highlight (new: uso display) */
+.val-display{
+  display:flex;align-items:baseline;gap:6px;padding:10px 0 4px
+}
+.val-big{font-size:36px;font-weight:800;letter-spacing:-1.5px;color:var(--gold-d);font-family:'JetBrains Mono',monospace}
+.val-label{font-size:12px;color:var(--txt3);font-weight:500}
 
-  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+/* scroll */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 
-  /* Responsive hint */
-  @media (max-width: 1100px) { .chart-grid.cols2 { grid-template-columns: 1fr; } }
-  @media (max-width: 860px) {
-    #sidebar { width: 200px; }
-    .kpi-bar { grid-template-columns: 1fr 1fr; }
-  }
+@media(max-width:1100px){.grid2{grid-template-columns:1fr}}
+@media(max-width:860px){#sb{width:200px}.kpi-strip{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div id="app">
 
 <!-- SIDEBAR -->
-<aside id="sidebar">
-  <div class="sidebar-header">
-    <div class="logo-badge">
-      <div class="logo-icon">📚</div>
-      <div class="logo-text">
+<aside id="sb">
+  <div class="sb-top">
+    <div class="logo-row">
+      <div class="logo-ico">📚</div>
+      <div class="logo-txt">
         <h1>Checkpoint DUOC</h1>
-        <p>2021 – 2024</p>
+        <p>Panel 2021 – 2024</p>
       </div>
     </div>
-    <div class="total-badge">
-      <span class="lbl">Total registros</span>
-      <span class="val" id="total-global">70,863</span>
+    <div class="total-chip">
+      <span class="lbl">Total préstamos</span>
+      <span class="num" id="total-num">—</span>
     </div>
   </div>
 
-  <!-- Year filter -->
-  <div class="filter-section">
+  <div class="sb-sec">
     <h3>Año</h3>
-    <div class="year-grid" id="year-filters"></div>
+    <div class="yr-grid" id="yr-grid"></div>
   </div>
 
-  <!-- Sede filter -->
-  <div class="filter-section">
+  <div class="sb-sec">
     <h3>Sede</h3>
-    <div class="sede-actions">
-      <button onclick="selectAllSedes()">Todas</button>
-      <button onclick="clearSedes()">Ninguna</button>
+    <div class="sede-acts">
+      <button onclick="allSedes()">Todas</button>
+      <button onclick="noneSedes()">Ninguna</button>
     </div>
-    <div class="sede-list" id="sede-filters"></div>
+    <div class="sede-list" id="sede-list"></div>
   </div>
 
-  <!-- Nav -->
-  <div class="nav-tabs" id="nav-tabs">
-    <button class="nav-tab active" data-tab="0" onclick="switchTab(0)">
-      <span class="tab-icon">📊</span>
-      <span class="tab-label">Total Préstamos</span>
-    </button>
-    <button class="nav-tab" data-tab="1" onclick="switchTab(1)">
-      <span class="tab-icon">📅</span>
-      <span class="tab-label">Resumen Mes/Año</span>
-    </button>
-    <button class="nav-tab" data-tab="2" onclick="switchTab(2)">
-      <span class="tab-icon">🎓</span>
-      <span class="tab-label">Carrera por Sede</span>
-    </button>
-    <button class="nav-tab" data-tab="3" onclick="switchTab(3)">
-      <span class="tab-icon">📈</span>
-      <span class="tab-label">Acumulado Sede</span>
-    </button>
+  <div class="sb-nav">
+    <h3>Vistas</h3>
+    <button class="nav-btn active" onclick="switchTab(0)"><span class="nav-ico">📊</span><span class="nav-lbl">Préstamos x Sede</span></button>
+    <button class="nav-btn" onclick="switchTab(1)"><span class="nav-ico">📅</span><span class="nav-lbl">Mes por Año</span></button>
+    <button class="nav-btn" onclick="switchTab(2)"><span class="nav-ico">🎓</span><span class="nav-lbl">Carrera / Sede</span></button>
+    <button class="nav-btn" onclick="switchTab(3)"><span class="nav-ico">📈</span><span class="nav-lbl">Acumulado</span></button>
   </div>
 </aside>
 
 <!-- MAIN -->
 <main id="main">
+  <!-- KPI -->
+  <div class="kpi-strip" id="kpi-strip"></div>
 
-  <!-- KPI bar -->
-  <div class="kpi-bar" id="kpi-bar"></div>
-
-  <!-- Tab 0: Total -->
-  <div class="tab-panel active" id="panel-0">
-    <div class="panel-header">
-      <h2>Total Préstamos por Sede</h2>
-      <p id="p0-subtitle">Distribución acumulada de préstamos Checkpoint por sede · años seleccionados</p>
+  <!-- TAB 0 -->
+  <div class="panel active" id="p0">
+    <div class="ph">
+      <h2>Préstamos por Sede</h2>
+      <p id="p0-sub">Selecciona sedes en el panel izquierdo para visualizar datos</p>
     </div>
-    <div class="chart-grid cols2">
-      <div class="chart-card">
-        <h3>Top 15 Sedes — Volumen Total</h3>
-        <div class="chart-wrap" style="height:380px"><canvas id="chart-bar-sede"></canvas></div>
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Volumen por Sede</h3>
+        <div class="cw" style="height:340px"><canvas id="c-bar"></canvas></div>
       </div>
-      <div class="chart-card">
-        <h3>Participación Porcentual</h3>
-        <div class="chart-wrap" style="height:380px"><canvas id="chart-doughnut"></canvas></div>
+      <div class="card">
+        <h3>Distribución Porcentual</h3>
+        <div class="cw" style="height:340px"><canvas id="c-donut"></canvas></div>
       </div>
     </div>
-    <div class="chart-card" style="margin-top:20px">
-      <h3>Detalle por Sede</h3>
-      <div id="progress-bars"></div>
-      <table class="data-table" id="table-sede"></table>
+    <div class="card">
+      <h3>Detalle comparativo</h3>
+      <div id="prog-list"></div>
+      <table class="tbl" id="tbl-sede"></table>
     </div>
   </div>
 
-  <!-- Tab 1: Mes/Año -->
-  <div class="tab-panel" id="panel-1">
-    <div class="panel-header">
-      <h2>Resumen Mes por Año</h2>
-      <p>Comparativa mensual de préstamos entre años seleccionados</p>
+  <!-- TAB 1 -->
+  <div class="panel" id="p1">
+    <div class="ph">
+      <h2>Préstamos por Mes y Año</h2>
+      <p>Evolución mensual comparada entre años seleccionados</p>
     </div>
-    <div class="chart-card" style="margin-bottom:20px">
-      <h3>Tendencia Mensual por Año</h3>
-      <div class="legend-row" id="legend-year"></div>
-      <div class="chart-wrap" style="height:300px"><canvas id="chart-line"></canvas></div>
+    <!-- valor destacado -->
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Mes más activo</h3>
+        <div id="mes-max-display"></div>
+      </div>
+      <div class="card">
+        <h3>Año con mayor actividad</h3>
+        <div id="yr-max-display"></div>
+      </div>
     </div>
-    <div class="chart-card">
-      <h3>Distribución Mensual Comparada</h3>
-      <div class="chart-wrap" style="height:260px"><canvas id="chart-bar-month"></canvas></div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Tendencia mensual por año</h3>
+      <div class="leg-row" id="leg-yr"></div>
+      <div class="cw" style="height:280px"><canvas id="c-line"></canvas></div>
     </div>
-    <div class="chart-card" style="margin-top:20px">
-      <h3>Tabla Mes × Año</h3>
-      <table class="data-table" id="table-mes"></table>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Comparación mensual (barras)</h3>
+      <div class="cw" style="height:240px"><canvas id="c-barm"></canvas></div>
     </div>
-  </div>
-
-  <!-- Tab 2: Carrera/Sede -->
-  <div class="tab-panel" id="panel-2">
-    <div class="panel-header">
-      <h2>Resumen Carrera por Sede</h2>
-      <p>Top combinaciones sede–carrera según selección de filtros</p>
-    </div>
-    <div class="chart-card" style="margin-bottom:20px">
-      <h3>Top 20 Sede / Carrera</h3>
-      <div class="chart-wrap" style="height:420px"><canvas id="chart-carrera"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>Tabla Detallada</h3>
-      <table class="data-table" id="table-carrera"></table>
+    <div class="card">
+      <h3>Tabla mes × año</h3>
+      <table class="tbl" id="tbl-mes"></table>
     </div>
   </div>
 
-  <!-- Tab 3: Acumulado -->
-  <div class="tab-panel" id="panel-3">
-    <div class="panel-header">
+  <!-- TAB 2 -->
+  <div class="panel" id="p2">
+    <div class="ph">
+      <h2>Carrera por Sede</h2>
+      <p>Top combinaciones sede–carrera según selección</p>
+    </div>
+    <!-- valor destacado -->
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Carrera líder</h3>
+        <div id="top-carrera-display"></div>
+      </div>
+      <div class="card">
+        <h3>Sede con más diversidad</h3>
+        <div id="top-sede-div-display"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Top 20 combinaciones sede / carrera</h3>
+      <div class="cw" style="height:420px"><canvas id="c-car"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Tabla detallada</h3>
+      <table class="tbl" id="tbl-car"></table>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="panel" id="p3">
+    <div class="ph">
       <h2>Acumulado por Sede y Año</h2>
-      <p>Evolución y comparación anual de préstamos por sede</p>
+      <p>Evolución anual de préstamos por sede seleccionada</p>
     </div>
-    <div class="chart-card" style="margin-bottom:20px">
-      <h3>Barras Apiladas por Año</h3>
-      <div class="chart-wrap" style="height:340px"><canvas id="chart-stacked"></canvas></div>
+    <!-- valor destacado -->
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Sede con mayor crecimiento</h3>
+        <div id="top-crecimiento-display"></div>
+      </div>
+      <div class="card">
+        <h3>Total periodo seleccionado</h3>
+        <div id="total-periodo-display"></div>
+      </div>
     </div>
-    <div class="chart-card">
-      <h3>Tabla Resumen Acumulado</h3>
-      <table class="data-table" id="table-acum"></table>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Barras apiladas por año</h3>
+      <div class="cw" style="height:320px"><canvas id="c-stk"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Tabla resumen</h3>
+      <table class="tbl" id="tbl-acum"></table>
     </div>
   </div>
-
 </main>
 </div>
-
 <script>
-// ═══════════════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════════════
 const DATA = {
   total_sede_año:[{Año:2021,Sede:"ALAMEDA",count:12},{Año:2021,Sede:"ANTONIO VARAS",count:5580},{Año:2021,Sede:"CASA CENTRAL",count:199},{Año:2021,Sede:"CONCEPCION",count:1039},{Año:2021,Sede:"LICEO RENCA",count:1},{Año:2021,Sede:"MAIPU",count:88},{Año:2021,Sede:"MELIPILLA",count:1},{Año:2021,Sede:"No Informado",count:690},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",count:1455},{Año:2021,Sede:"PLAZA NORTE",count:625},{Año:2021,Sede:"PLAZA OESTE",count:40},{Año:2021,Sede:"PLAZA VESPUCIO",count:1521},{Año:2021,Sede:"PUENTE ALTO",count:26},{Año:2021,Sede:"PUERTO MONTT",count:6},{Año:2021,Sede:"SAN BERNARDO",count:289},{Año:2021,Sede:"SAN CARLOS DE APOQUINDO",count:517},{Año:2021,Sede:"SAN JOAQUIN",count:5},{Año:2021,Sede:"VALPARAISO",count:710},{Año:2021,Sede:"VINA DEL MAR",count:2533},{Año:2022,Sede:"ALAMEDA",count:257},{Año:2022,Sede:"ANTONIO VARAS",count:5869},{Año:2022,Sede:"CAMPUS VILLARRICA",count:3},{Año:2022,Sede:"CASA CENTRAL",count:69},{Año:2022,Sede:"CONCEPCION",count:1801},{Año:2022,Sede:"MAIPU",count:82},{Año:2022,Sede:"MELIPILLA",count:2},{Año:2022,Sede:"No Informado",count:98},{Año:2022,Sede:"ONLINE",count:1},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",count:2146},{Año:2022,Sede:"PLAZA NORTE",count:608},{Año:2022,Sede:"PLAZA OESTE",count:51},{Año:2022,Sede:"PLAZA VESPUCIO",count:1438},{Año:2022,Sede:"PUENTE ALTO",count:46},{Año:2022,Sede:"PUERTO MONTT",count:97},{Año:2022,Sede:"SAN BERNARDO",count:98},{Año:2022,Sede:"SAN CARLOS DE APOQUINDO",count:497},{Año:2022,Sede:"SAN JOAQUIN",count:52},{Año:2022,Sede:"VALPARAISO",count:998},{Año:2022,Sede:"VINA DEL MAR",count:3960},{Año:2023,Sede:"ALAMEDA",count:232},{Año:2023,Sede:"ANTONIO VARAS",count:6431},{Año:2023,Sede:"CAMPUS ARAUCO",count:12},{Año:2023,Sede:"CAMPUS NACIMIENTO",count:2},{Año:2023,Sede:"CAMPUS VILLARRICA",count:1},{Año:2023,Sede:"CASA CENTRAL",count:25},{Año:2023,Sede:"CONCEPCION",count:2619},{Año:2023,Sede:"Educacion Continua",count:10},{Año:2023,Sede:"MAIPU",count:136},{Año:2023,Sede:"MELIPILLA",count:3},{Año:2023,Sede:"No Informado",count:127},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",count:2730},{Año:2023,Sede:"PLAZA NORTE",count:1626},{Año:2023,Sede:"PLAZA OESTE",count:11},{Año:2023,Sede:"PLAZA VESPUCIO",count:4298},{Año:2023,Sede:"PUENTE ALTO",count:94},{Año:2023,Sede:"PUERTO MONTT",count:181},{Año:2023,Sede:"SAN BERNARDO",count:95},{Año:2023,Sede:"SAN CARLOS DE APOQUINDO",count:371},{Año:2023,Sede:"SAN JOAQUIN",count:32},{Año:2023,Sede:"VALPARAISO",count:1112},{Año:2023,Sede:"VINA DEL MAR",count:3424},{Año:2024,Sede:"ALAMEDA",count:380},{Año:2024,Sede:"ANTONIO VARAS",count:3914},{Año:2024,Sede:"CAMPUS ARAUCO",count:30},{Año:2024,Sede:"CASA CENTRAL",count:45},{Año:2024,Sede:"CONCEPCION",count:1134},{Año:2024,Sede:"MAIPU",count:379},{Año:2024,Sede:"MELIPILLA",count:4},{Año:2024,Sede:"NACIMIENTO",count:4},{Año:2024,Sede:"No Informado",count:131},{Año:2024,Sede:"ONLINE",count:1},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",count:1336},{Año:2024,Sede:"PLAZA NORTE",count:611},{Año:2024,Sede:"PLAZA OESTE",count:46},{Año:2024,Sede:"PLAZA VESPUCIO",count:2416},{Año:2024,Sede:"PUENTE ALTO",count:43},{Año:2024,Sede:"PUERTO MONTT",count:263},{Año:2024,Sede:"SAN BERNARDO",count:76},{Año:2024,Sede:"SAN CARLOS DE APOQUINDO",count:212},{Año:2024,Sede:"SAN JOAQUIN",count:5},{Año:2024,Sede:"VALPARAISO",count:821},{Año:2024,Sede:"VINA DEL MAR",count:1930}],
   mes_sede_año:[{Año:2021,Mes:1,Sede:"ANTONIO VARAS",count:74},{Año:2021,Mes:1,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:1,Sede:"CONCEPCION",count:26},{Año:2021,Mes:1,Sede:"MAIPU",count:3},{Año:2021,Mes:1,Sede:"No Informado",count:1},{Año:2021,Mes:1,Sede:"PADRE ALONSO DE OVALLE",count:36},{Año:2021,Mes:1,Sede:"PLAZA NORTE",count:17},{Año:2021,Mes:1,Sede:"PLAZA OESTE",count:5},{Año:2021,Mes:1,Sede:"PLAZA VESPUCIO",count:42},{Año:2021,Mes:1,Sede:"PUENTE ALTO",count:1},{Año:2021,Mes:1,Sede:"SAN BERNARDO",count:4},{Año:2021,Mes:1,Sede:"SAN CARLOS DE APOQUINDO",count:8},{Año:2021,Mes:1,Sede:"VALPARAISO",count:1},{Año:2021,Mes:1,Sede:"VINA DEL MAR",count:58},{Año:2021,Mes:2,Sede:"ANTONIO VARAS",count:51},{Año:2021,Mes:2,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:2,Sede:"CONCEPCION",count:8},{Año:2021,Mes:2,Sede:"MAIPU",count:3},{Año:2021,Mes:2,Sede:"No Informado",count:1},{Año:2021,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:31},{Año:2021,Mes:2,Sede:"PLAZA NORTE",count:4},{Año:2021,Mes:2,Sede:"PLAZA OESTE",count:2},{Año:2021,Mes:2,Sede:"PLAZA VESPUCIO",count:13},{Año:2021,Mes:2,Sede:"PUERTO MONTT",count:2},{Año:2021,Mes:2,Sede:"SAN BERNARDO",count:13},{Año:2021,Mes:2,Sede:"SAN CARLOS DE APOQUINDO",count:4},{Año:2021,Mes:2,Sede:"VALPARAISO",count:2},{Año:2021,Mes:2,Sede:"VINA DEL MAR",count:40},{Año:2021,Mes:3,Sede:"ALAMEDA",count:1},{Año:2021,Mes:3,Sede:"ANTONIO VARAS",count:670},{Año:2021,Mes:3,Sede:"CASA CENTRAL",count:93},{Año:2021,Mes:3,Sede:"CONCEPCION",count:13},{Año:2021,Mes:3,Sede:"MAIPU",count:7},{Año:2021,Mes:3,Sede:"No Informado",count:4},{Año:2021,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:111},{Año:2021,Mes:3,Sede:"PLAZA NORTE",count:7},{Año:2021,Mes:3,Sede:"PLAZA OESTE",count:2},{Año:2021,Mes:3,Sede:"PLAZA VESPUCIO",count:167},{Año:2021,Mes:3,Sede:"PUENTE ALTO",count:2},{Año:2021,Mes:3,Sede:"SAN BERNARDO",count:30},{Año:2021,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:71},{Año:2021,Mes:3,Sede:"VALPARAISO",count:5},{Año:2021,Mes:3,Sede:"VINA DEL MAR",count:258},{Año:2021,Mes:4,Sede:"ALAMEDA",count:4},{Año:2021,Mes:4,Sede:"ANTONIO VARAS",count:1299},{Año:2021,Mes:4,Sede:"CASA CENTRAL",count:7},{Año:2021,Mes:4,Sede:"CONCEPCION",count:69},{Año:2021,Mes:4,Sede:"MAIPU",count:26},{Año:2021,Mes:4,Sede:"No Informado",count:16},{Año:2021,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:181},{Año:2021,Mes:4,Sede:"PLAZA NORTE",count:23},{Año:2021,Mes:4,Sede:"PLAZA OESTE",count:7},{Año:2021,Mes:4,Sede:"PLAZA VESPUCIO",count:173},{Año:2021,Mes:4,Sede:"PUENTE ALTO",count:4},{Año:2021,Mes:4,Sede:"SAN BERNARDO",count:13},{Año:2021,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:112},{Año:2021,Mes:4,Sede:"SAN JOAQUIN",count:3},{Año:2021,Mes:4,Sede:"VALPARAISO",count:148},{Año:2021,Mes:4,Sede:"VINA DEL MAR",count:331},{Año:2021,Mes:5,Sede:"ALAMEDA",count:1},{Año:2021,Mes:5,Sede:"ANTONIO VARAS",count:492},{Año:2021,Mes:5,Sede:"CASA CENTRAL",count:23},{Año:2021,Mes:5,Sede:"CONCEPCION",count:139},{Año:2021,Mes:5,Sede:"MAIPU",count:18},{Año:2021,Mes:5,Sede:"MELIPILLA",count:1},{Año:2021,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:84},{Año:2021,Mes:5,Sede:"PLAZA NORTE",count:63},{Año:2021,Mes:5,Sede:"PLAZA OESTE",count:6},{Año:2021,Mes:5,Sede:"PLAZA VESPUCIO",count:236},{Año:2021,Mes:5,Sede:"SAN BERNARDO",count:11},{Año:2021,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:22},{Año:2021,Mes:5,Sede:"VALPARAISO",count:42},{Año:2021,Mes:5,Sede:"VINA DEL MAR",count:240},{Año:2021,Mes:6,Sede:"ALAMEDA",count:1},{Año:2021,Mes:6,Sede:"ANTONIO VARAS",count:447},{Año:2021,Mes:6,Sede:"CASA CENTRAL",count:4},{Año:2021,Mes:6,Sede:"CONCEPCION",count:64},{Año:2021,Mes:6,Sede:"MAIPU",count:16},{Año:2021,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:92},{Año:2021,Mes:6,Sede:"PLAZA NORTE",count:34},{Año:2021,Mes:6,Sede:"PLAZA OESTE",count:11},{Año:2021,Mes:6,Sede:"PLAZA VESPUCIO",count:152},{Año:2021,Mes:6,Sede:"SAN BERNARDO",count:4},{Año:2021,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:32},{Año:2021,Mes:6,Sede:"VALPARAISO",count:42},{Año:2021,Mes:6,Sede:"VINA DEL MAR",count:177},{Año:2021,Mes:7,Sede:"ANTONIO VARAS",count:143},{Año:2021,Mes:7,Sede:"CASA CENTRAL",count:6},{Año:2021,Mes:7,Sede:"CONCEPCION",count:27},{Año:2021,Mes:7,Sede:"LICEO RENCA",count:1},{Año:2021,Mes:7,Sede:"MAIPU",count:8},{Año:2021,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:39},{Año:2021,Mes:7,Sede:"PLAZA NORTE",count:19},{Año:2021,Mes:7,Sede:"PLAZA OESTE",count:3},{Año:2021,Mes:7,Sede:"PLAZA VESPUCIO",count:145},{Año:2021,Mes:7,Sede:"PUENTE ALTO",count:3},{Año:2021,Mes:7,Sede:"SAN BERNARDO",count:8},{Año:2021,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:2},{Año:2021,Mes:7,Sede:"SAN JOAQUIN",count:1},{Año:2021,Mes:7,Sede:"VALPARAISO",count:23},{Año:2021,Mes:7,Sede:"VINA DEL MAR",count:85},{Año:2021,Mes:8,Sede:"ALAMEDA",count:3},{Año:2021,Mes:8,Sede:"ANTONIO VARAS",count:263},{Año:2021,Mes:8,Sede:"CASA CENTRAL",count:6},{Año:2021,Mes:8,Sede:"CONCEPCION",count:43},{Año:2021,Mes:8,Sede:"No Informado",count:628},{Año:2021,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:127},{Año:2021,Mes:8,Sede:"PLAZA NORTE",count:81},{Año:2021,Mes:8,Sede:"PLAZA VESPUCIO",count:85},{Año:2021,Mes:8,Sede:"PUENTE ALTO",count:1},{Año:2021,Mes:8,Sede:"SAN BERNARDO",count:17},{Año:2021,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:55},{Año:2021,Mes:8,Sede:"VALPARAISO",count:40},{Año:2021,Mes:8,Sede:"VINA DEL MAR",count:250},{Año:2021,Mes:9,Sede:"ALAMEDA",count:1},{Año:2021,Mes:9,Sede:"ANTONIO VARAS",count:1232},{Año:2021,Mes:9,Sede:"CASA CENTRAL",count:51},{Año:2021,Mes:9,Sede:"CONCEPCION",count:427},{Año:2021,Mes:9,Sede:"MAIPU",count:1},{Año:2021,Mes:9,Sede:"No Informado",count:7},{Año:2021,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:446},{Año:2021,Mes:9,Sede:"PLAZA NORTE",count:258},{Año:2021,Mes:9,Sede:"PLAZA VESPUCIO",count:245},{Año:2021,Mes:9,Sede:"PUENTE ALTO",count:6},{Año:2021,Mes:9,Sede:"PUERTO MONTT",count:1},{Año:2021,Mes:9,Sede:"SAN BERNARDO",count:84},{Año:2021,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:134},{Año:2021,Mes:9,Sede:"VALPARAISO",count:119},{Año:2021,Mes:9,Sede:"VINA DEL MAR",count:522},{Año:2021,Mes:10,Sede:"ANTONIO VARAS",count:288},{Año:2021,Mes:10,Sede:"CONCEPCION",count:80},{Año:2021,Mes:10,Sede:"MAIPU",count:3},{Año:2021,Mes:10,Sede:"No Informado",count:7},{Año:2021,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:206},{Año:2021,Mes:10,Sede:"PLAZA NORTE",count:79},{Año:2021,Mes:10,Sede:"PLAZA VESPUCIO",count:75},{Año:2021,Mes:10,Sede:"PUENTE ALTO",count:9},{Año:2021,Mes:10,Sede:"SAN BERNARDO",count:52},{Año:2021,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:30},{Año:2021,Mes:10,Sede:"VALPARAISO",count:98},{Año:2021,Mes:10,Sede:"VINA DEL MAR",count:186},{Año:2021,Mes:11,Sede:"ALAMEDA",count:1},{Año:2021,Mes:11,Sede:"ANTONIO VARAS",count:405},{Año:2021,Mes:11,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:11,Sede:"CONCEPCION",count:77},{Año:2021,Mes:11,Sede:"MAIPU",count:1},{Año:2021,Mes:11,Sede:"No Informado",count:20},{Año:2021,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:78},{Año:2021,Mes:11,Sede:"PLAZA NORTE",count:17},{Año:2021,Mes:11,Sede:"PLAZA OESTE",count:3},{Año:2021,Mes:11,Sede:"PLAZA VESPUCIO",count:141},{Año:2021,Mes:11,Sede:"PUERTO MONTT",count:2},{Año:2021,Mes:11,Sede:"SAN BERNARDO",count:39},{Año:2021,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:38},{Año:2021,Mes:11,Sede:"SAN JOAQUIN",count:1},{Año:2021,Mes:11,Sede:"VALPARAISO",count:83},{Año:2021,Mes:11,Sede:"VINA DEL MAR",count:251},{Año:2021,Mes:12,Sede:"ANTONIO VARAS",count:216},{Año:2021,Mes:12,Sede:"CASA CENTRAL",count:3},{Año:2021,Mes:12,Sede:"CONCEPCION",count:66},{Año:2021,Mes:12,Sede:"MAIPU",count:2},{Año:2021,Mes:12,Sede:"No Informado",count:6},{Año:2021,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:24},{Año:2021,Mes:12,Sede:"PLAZA NORTE",count:23},{Año:2021,Mes:12,Sede:"PLAZA OESTE",count:1},{Año:2021,Mes:12,Sede:"PLAZA VESPUCIO",count:47},{Año:2021,Mes:12,Sede:"PUERTO MONTT",count:1},{Año:2021,Mes:12,Sede:"SAN BERNARDO",count:14},{Año:2021,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:9},{Año:2021,Mes:12,Sede:"VALPARAISO",count:107},{Año:2021,Mes:12,Sede:"VINA DEL MAR",count:135},{Año:2022,Mes:2,Sede:"ANTONIO VARAS",count:35},{Año:2022,Mes:2,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:2,Sede:"CONCEPCION",count:4},{Año:2022,Mes:2,Sede:"MAIPU",count:4},{Año:2022,Mes:2,Sede:"MELIPILLA",count:1},{Año:2022,Mes:2,Sede:"No Informado",count:1},{Año:2022,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:5},{Año:2022,Mes:2,Sede:"PLAZA NORTE",count:5},{Año:2022,Mes:2,Sede:"PLAZA OESTE",count:1},{Año:2022,Mes:2,Sede:"PLAZA VESPUCIO",count:8},{Año:2022,Mes:2,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:2,Sede:"SAN JOAQUIN",count:1},{Año:2022,Mes:2,Sede:"VALPARAISO",count:1},{Año:2022,Mes:2,Sede:"VINA DEL MAR",count:15},{Año:2022,Mes:3,Sede:"ALAMEDA",count:1},{Año:2022,Mes:3,Sede:"ANTONIO VARAS",count:1343},{Año:2022,Mes:3,Sede:"CASA CENTRAL",count:12},{Año:2022,Mes:3,Sede:"CONCEPCION",count:54},{Año:2022,Mes:3,Sede:"MAIPU",count:6},{Año:2022,Mes:3,Sede:"ONLINE",count:1},{Año:2022,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:135},{Año:2022,Mes:3,Sede:"PLAZA NORTE",count:17},{Año:2022,Mes:3,Sede:"PLAZA OESTE",count:2},{Año:2022,Mes:3,Sede:"PLAZA VESPUCIO",count:56},{Año:2022,Mes:3,Sede:"PUENTE ALTO",count:6},{Año:2022,Mes:3,Sede:"SAN BERNARDO",count:26},{Año:2022,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:61},{Año:2022,Mes:3,Sede:"VALPARAISO",count:70},{Año:2022,Mes:3,Sede:"VINA DEL MAR",count:472},{Año:2022,Mes:4,Sede:"ALAMEDA",count:2},{Año:2022,Mes:4,Sede:"ANTONIO VARAS",count:475},{Año:2022,Mes:4,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:4,Sede:"CONCEPCION",count:97},{Año:2022,Mes:4,Sede:"MAIPU",count:2},{Año:2022,Mes:4,Sede:"No Informado",count:9},{Año:2022,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:99},{Año:2022,Mes:4,Sede:"PLAZA NORTE",count:4},{Año:2022,Mes:4,Sede:"PLAZA VESPUCIO",count:85},{Año:2022,Mes:4,Sede:"PUENTE ALTO",count:8},{Año:2022,Mes:4,Sede:"PUERTO MONTT",count:1},{Año:2022,Mes:4,Sede:"SAN BERNARDO",count:13},{Año:2022,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:45},{Año:2022,Mes:4,Sede:"VALPARAISO",count:35},{Año:2022,Mes:4,Sede:"VINA DEL MAR",count:272},{Año:2022,Mes:5,Sede:"ALAMEDA",count:5},{Año:2022,Mes:5,Sede:"ANTONIO VARAS",count:626},{Año:2022,Mes:5,Sede:"CAMPUS VILLARRICA",count:2},{Año:2022,Mes:5,Sede:"CASA CENTRAL",count:32},{Año:2022,Mes:5,Sede:"CONCEPCION",count:80},{Año:2022,Mes:5,Sede:"MAIPU",count:9},{Año:2022,Mes:5,Sede:"No Informado",count:22},{Año:2022,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:167},{Año:2022,Mes:5,Sede:"PLAZA NORTE",count:97},{Año:2022,Mes:5,Sede:"PLAZA OESTE",count:1},{Año:2022,Mes:5,Sede:"PLAZA VESPUCIO",count:75},{Año:2022,Mes:5,Sede:"PUENTE ALTO",count:10},{Año:2022,Mes:5,Sede:"PUERTO MONTT",count:22},{Año:2022,Mes:5,Sede:"SAN BERNARDO",count:14},{Año:2022,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:10},{Año:2022,Mes:5,Sede:"SAN JOAQUIN",count:11},{Año:2022,Mes:5,Sede:"VALPARAISO",count:36},{Año:2022,Mes:5,Sede:"VINA DEL MAR",count:152},{Año:2022,Mes:6,Sede:"ALAMEDA",count:5},{Año:2022,Mes:6,Sede:"ANTONIO VARAS",count:386},{Año:2022,Mes:6,Sede:"CASA CENTRAL",count:5},{Año:2022,Mes:6,Sede:"CONCEPCION",count:88},{Año:2022,Mes:6,Sede:"MAIPU",count:5},{Año:2022,Mes:6,Sede:"No Informado",count:26},{Año:2022,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:298},{Año:2022,Mes:6,Sede:"PLAZA NORTE",count:24},{Año:2022,Mes:6,Sede:"PLAZA OESTE",count:3},{Año:2022,Mes:6,Sede:"PLAZA VESPUCIO",count:80},{Año:2022,Mes:6,Sede:"PUENTE ALTO",count:6},{Año:2022,Mes:6,Sede:"SAN BERNARDO",count:13},{Año:2022,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:15},{Año:2022,Mes:6,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:6,Sede:"VALPARAISO",count:43},{Año:2022,Mes:6,Sede:"VINA DEL MAR",count:195},{Año:2022,Mes:7,Sede:"ALAMEDA",count:17},{Año:2022,Mes:7,Sede:"ANTONIO VARAS",count:59},{Año:2022,Mes:7,Sede:"CASA CENTRAL",count:2},{Año:2022,Mes:7,Sede:"CONCEPCION",count:17},{Año:2022,Mes:7,Sede:"MAIPU",count:4},{Año:2022,Mes:7,Sede:"No Informado",count:3},{Año:2022,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:47},{Año:2022,Mes:7,Sede:"PLAZA NORTE",count:25},{Año:2022,Mes:7,Sede:"PLAZA VESPUCIO",count:26},{Año:2022,Mes:7,Sede:"PUENTE ALTO",count:4},{Año:2022,Mes:7,Sede:"PUERTO MONTT",count:1},{Año:2022,Mes:7,Sede:"SAN BERNARDO",count:5},{Año:2022,Mes:7,Sede:"SAN JOAQUIN",count:5},{Año:2022,Mes:7,Sede:"VALPARAISO",count:25},{Año:2022,Mes:7,Sede:"VINA DEL MAR",count:45},{Año:2022,Mes:8,Sede:"ALAMEDA",count:203},{Año:2022,Mes:8,Sede:"ANTONIO VARAS",count:803},{Año:2022,Mes:8,Sede:"CASA CENTRAL",count:1},{Año:2022,Mes:8,Sede:"CONCEPCION",count:591},{Año:2022,Mes:8,Sede:"MAIPU",count:6},{Año:2022,Mes:8,Sede:"MELIPILLA",count:1},{Año:2022,Mes:8,Sede:"No Informado",count:9},{Año:2022,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:667},{Año:2022,Mes:8,Sede:"PLAZA NORTE",count:187},{Año:2022,Mes:8,Sede:"PLAZA OESTE",count:3},{Año:2022,Mes:8,Sede:"PLAZA VESPUCIO",count:555},{Año:2022,Mes:8,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:8,Sede:"PUERTO MONTT",count:56},{Año:2022,Mes:8,Sede:"SAN BERNARDO",count:7},{Año:2022,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:148},{Año:2022,Mes:8,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:8,Sede:"VALPARAISO",count:181},{Año:2022,Mes:8,Sede:"VINA DEL MAR",count:631},{Año:2022,Mes:9,Sede:"ALAMEDA",count:6},{Año:2022,Mes:9,Sede:"ANTONIO VARAS",count:812},{Año:2022,Mes:9,Sede:"CASA CENTRAL",count:5},{Año:2022,Mes:9,Sede:"CONCEPCION",count:447},{Año:2022,Mes:9,Sede:"MAIPU",count:4},{Año:2022,Mes:9,Sede:"No Informado",count:15},{Año:2022,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:226},{Año:2022,Mes:9,Sede:"PLAZA NORTE",count:96},{Año:2022,Mes:9,Sede:"PLAZA OESTE",count:4},{Año:2022,Mes:9,Sede:"PLAZA VESPUCIO",count:253},{Año:2022,Mes:9,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:9,Sede:"PUERTO MONTT",count:8},{Año:2022,Mes:9,Sede:"SAN BERNARDO",count:3},{Año:2022,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:147},{Año:2022,Mes:9,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:9,Sede:"VALPARAISO",count:211},{Año:2022,Mes:9,Sede:"VINA DEL MAR",count:1161},{Año:2022,Mes:10,Sede:"ALAMEDA",count:2},{Año:2022,Mes:10,Sede:"ANTONIO VARAS",count:370},{Año:2022,Mes:10,Sede:"CASA CENTRAL",count:1},{Año:2022,Mes:10,Sede:"CONCEPCION",count:127},{Año:2022,Mes:10,Sede:"MAIPU",count:6},{Año:2022,Mes:10,Sede:"No Informado",count:4},{Año:2022,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:124},{Año:2022,Mes:10,Sede:"PLAZA NORTE",count:45},{Año:2022,Mes:10,Sede:"PLAZA OESTE",count:8},{Año:2022,Mes:10,Sede:"PLAZA VESPUCIO",count:80},{Año:2022,Mes:10,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:10,Sede:"PUERTO MONTT",count:9},{Año:2022,Mes:10,Sede:"SAN BERNARDO",count:10},{Año:2022,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2022,Mes:10,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:10,Sede:"VALPARAISO",count:107},{Año:2022,Mes:10,Sede:"VINA DEL MAR",count:425},{Año:2022,Mes:11,Sede:"ALAMEDA",count:12},{Año:2022,Mes:11,Sede:"ANTONIO VARAS",count:611},{Año:2022,Mes:11,Sede:"CASA CENTRAL",count:2},{Año:2022,Mes:11,Sede:"CONCEPCION",count:152},{Año:2022,Mes:11,Sede:"MAIPU",count:20},{Año:2022,Mes:11,Sede:"No Informado",count:6},{Año:2022,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:161},{Año:2022,Mes:11,Sede:"PLAZA NORTE",count:68},{Año:2022,Mes:11,Sede:"PLAZA OESTE",count:22},{Año:2022,Mes:11,Sede:"PLAZA VESPUCIO",count:52},{Año:2022,Mes:11,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:11,Sede:"SAN BERNARDO",count:2},{Año:2022,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:23},{Año:2022,Mes:11,Sede:"SAN JOAQUIN",count:5},{Año:2022,Mes:11,Sede:"VALPARAISO",count:210},{Año:2022,Mes:11,Sede:"VINA DEL MAR",count:230},{Año:2022,Mes:12,Sede:"ALAMEDA",count:4},{Año:2022,Mes:12,Sede:"ANTONIO VARAS",count:349},{Año:2022,Mes:12,Sede:"CAMPUS VILLARRICA",count:1},{Año:2022,Mes:12,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:12,Sede:"CONCEPCION",count:144},{Año:2022,Mes:12,Sede:"MAIPU",count:16},{Año:2022,Mes:12,Sede:"No Informado",count:3},{Año:2022,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:217},{Año:2022,Mes:12,Sede:"PLAZA NORTE",count:40},{Año:2022,Mes:12,Sede:"PLAZA OESTE",count:7},{Año:2022,Mes:12,Sede:"PLAZA VESPUCIO",count:168},{Año:2022,Mes:12,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:12,Sede:"SAN BERNARDO",count:5},{Año:2022,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:31},{Año:2022,Mes:12,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:12,Sede:"VALPARAISO",count:79},{Año:2022,Mes:12,Sede:"VINA DEL MAR",count:362},{Año:2023,Mes:1,Sede:"ALAMEDA",count:2},{Año:2023,Mes:1,Sede:"ANTONIO VARAS",count:172},{Año:2023,Mes:1,Sede:"CAMPUS VILLARRICA",count:1},{Año:2023,Mes:1,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:1,Sede:"CONCEPCION",count:52},{Año:2023,Mes:1,Sede:"MAIPU",count:7},{Año:2023,Mes:1,Sede:"No Informado",count:10},{Año:2023,Mes:1,Sede:"PADRE ALONSO DE OVALLE",count:22},{Año:2023,Mes:1,Sede:"PLAZA NORTE",count:4},{Año:2023,Mes:1,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:1,Sede:"PLAZA VESPUCIO",count:47},{Año:2023,Mes:1,Sede:"SAN BERNARDO",count:4},{Año:2023,Mes:1,Sede:"SAN CARLOS DE APOQUINDO",count:3},{Año:2023,Mes:1,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:1,Sede:"VALPARAISO",count:21},{Año:2023,Mes:1,Sede:"VINA DEL MAR",count:36},{Año:2023,Mes:2,Sede:"ALAMEDA",count:4},{Año:2023,Mes:2,Sede:"ANTONIO VARAS",count:80},{Año:2023,Mes:2,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:2,Sede:"CONCEPCION",count:10},{Año:2023,Mes:2,Sede:"MAIPU",count:5},{Año:2023,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:13},{Año:2023,Mes:2,Sede:"PLAZA VESPUCIO",count:9},{Año:2023,Mes:2,Sede:"SAN BERNARDO",count:2},{Año:2023,Mes:2,Sede:"SAN CARLOS DE APOQUINDO",count:2},{Año:2023,Mes:2,Sede:"SAN JOAQUIN",count:3},{Año:2023,Mes:2,Sede:"VALPARAISO",count:5},{Año:2023,Mes:2,Sede:"VINA DEL MAR",count:5},{Año:2023,Mes:3,Sede:"ALAMEDA",count:131},{Año:2023,Mes:3,Sede:"ANTONIO VARAS",count:568},{Año:2023,Mes:3,Sede:"CONCEPCION",count:127},{Año:2023,Mes:3,Sede:"MAIPU",count:6},{Año:2023,Mes:3,Sede:"No Informado",count:8},{Año:2023,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:311},{Año:2023,Mes:3,Sede:"PLAZA NORTE",count:27},{Año:2023,Mes:3,Sede:"PLAZA OESTE",count:3},{Año:2023,Mes:3,Sede:"PLAZA VESPUCIO",count:132},{Año:2023,Mes:3,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:3,Sede:"PUERTO MONTT",count:23},{Año:2023,Mes:3,Sede:"SAN BERNARDO",count:20},{Año:2023,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:22},{Año:2023,Mes:3,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:3,Sede:"VALPARAISO",count:39},{Año:2023,Mes:3,Sede:"VINA DEL MAR",count:370},{Año:2023,Mes:4,Sede:"ALAMEDA",count:22},{Año:2023,Mes:4,Sede:"ANTONIO VARAS",count:507},{Año:2023,Mes:4,Sede:"CAMPUS ARAUCO",count:4},{Año:2023,Mes:4,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:4,Sede:"CONCEPCION",count:74},{Año:2023,Mes:4,Sede:"MAIPU",count:10},{Año:2023,Mes:4,Sede:"No Informado",count:12},{Año:2023,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:85},{Año:2023,Mes:4,Sede:"PLAZA NORTE",count:179},{Año:2023,Mes:4,Sede:"PLAZA OESTE",count:3},{Año:2023,Mes:4,Sede:"PLAZA VESPUCIO",count:106},{Año:2023,Mes:4,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:4,Sede:"PUERTO MONTT",count:28},{Año:2023,Mes:4,Sede:"SAN BERNARDO",count:22},{Año:2023,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:68},{Año:2023,Mes:4,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:4,Sede:"VALPARAISO",count:30},{Año:2023,Mes:4,Sede:"VINA DEL MAR",count:241},{Año:2023,Mes:5,Sede:"ALAMEDA",count:13},{Año:2023,Mes:5,Sede:"ANTONIO VARAS",count:545},{Año:2023,Mes:5,Sede:"CAMPUS NACIMIENTO",count:2},{Año:2023,Mes:5,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:5,Sede:"CONCEPCION",count:72},{Año:2023,Mes:5,Sede:"MAIPU",count:9},{Año:2023,Mes:5,Sede:"MELIPILLA",count:1},{Año:2023,Mes:5,Sede:"No Informado",count:18},{Año:2023,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:64},{Año:2023,Mes:5,Sede:"PLAZA NORTE",count:88},{Año:2023,Mes:5,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:5,Sede:"PLAZA VESPUCIO",count:105},{Año:2023,Mes:5,Sede:"PUERTO MONTT",count:2},{Año:2023,Mes:5,Sede:"SAN BERNARDO",count:6},{Año:2023,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:34},{Año:2023,Mes:5,Sede:"VALPARAISO",count:73},{Año:2023,Mes:5,Sede:"VINA DEL MAR",count:222},{Año:2023,Mes:6,Sede:"ALAMEDA",count:6},{Año:2023,Mes:6,Sede:"ANTONIO VARAS",count:436},{Año:2023,Mes:6,Sede:"CONCEPCION",count:150},{Año:2023,Mes:6,Sede:"MAIPU",count:7},{Año:2023,Mes:6,Sede:"MELIPILLA",count:1},{Año:2023,Mes:6,Sede:"No Informado",count:11},{Año:2023,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:78},{Año:2023,Mes:6,Sede:"PLAZA NORTE",count:35},{Año:2023,Mes:6,Sede:"PLAZA OESTE",count:2},{Año:2023,Mes:6,Sede:"PLAZA VESPUCIO",count:87},{Año:2023,Mes:6,Sede:"PUENTE ALTO",count:3},{Año:2023,Mes:6,Sede:"PUERTO MONTT",count:6},{Año:2023,Mes:6,Sede:"SAN BERNARDO",count:3},{Año:2023,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:4},{Año:2023,Mes:6,Sede:"SAN JOAQUIN",count:7},{Año:2023,Mes:6,Sede:"VALPARAISO",count:24},{Año:2023,Mes:6,Sede:"VINA DEL MAR",count:136},{Año:2023,Mes:7,Sede:"ALAMEDA",count:7},{Año:2023,Mes:7,Sede:"ANTONIO VARAS",count:133},{Año:2023,Mes:7,Sede:"CASA CENTRAL",count:3},{Año:2023,Mes:7,Sede:"CONCEPCION",count:94},{Año:2023,Mes:7,Sede:"Educacion Continua",count:10},{Año:2023,Mes:7,Sede:"MAIPU",count:6},{Año:2023,Mes:7,Sede:"No Informado",count:4},{Año:2023,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:20},{Año:2023,Mes:7,Sede:"PLAZA NORTE",count:5},{Año:2023,Mes:7,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:7,Sede:"PLAZA VESPUCIO",count:67},{Año:2023,Mes:7,Sede:"PUERTO MONTT",count:4},{Año:2023,Mes:7,Sede:"SAN BERNARDO",count:4},{Año:2023,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2023,Mes:7,Sede:"SAN JOAQUIN",count:4},{Año:2023,Mes:7,Sede:"VALPARAISO",count:17},{Año:2023,Mes:7,Sede:"VINA DEL MAR",count:79},{Año:2023,Mes:8,Sede:"ALAMEDA",count:14},{Año:2023,Mes:8,Sede:"ANTONIO VARAS",count:952},{Año:2023,Mes:8,Sede:"CAMPUS ARAUCO",count:7},{Año:2023,Mes:8,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:8,Sede:"CONCEPCION",count:572},{Año:2023,Mes:8,Sede:"MAIPU",count:6},{Año:2023,Mes:8,Sede:"No Informado",count:11},{Año:2023,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:889},{Año:2023,Mes:8,Sede:"PLAZA NORTE",count:622},{Año:2023,Mes:8,Sede:"PLAZA VESPUCIO",count:1102},{Año:2023,Mes:8,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:8,Sede:"PUERTO MONTT",count:10},{Año:2023,Mes:8,Sede:"SAN BERNARDO",count:5},{Año:2023,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:76},{Año:2023,Mes:8,Sede:"SAN JOAQUIN",count:8},{Año:2023,Mes:8,Sede:"VALPARAISO",count:211},{Año:2023,Mes:8,Sede:"VINA DEL MAR",count:555},{Año:2023,Mes:9,Sede:"ALAMEDA",count:12},{Año:2023,Mes:9,Sede:"ANTONIO VARAS",count:1570},{Año:2023,Mes:9,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:9,Sede:"CONCEPCION",count:688},{Año:2023,Mes:9,Sede:"MAIPU",count:10},{Año:2023,Mes:9,Sede:"No Informado",count:6},{Año:2023,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:422},{Año:2023,Mes:9,Sede:"PLAZA NORTE",count:421},{Año:2023,Mes:9,Sede:"PLAZA VESPUCIO",count:932},{Año:2023,Mes:9,Sede:"PUERTO MONTT",count:22},{Año:2023,Mes:9,Sede:"SAN BERNARDO",count:2},{Año:2023,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:92},{Año:2023,Mes:9,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:9,Sede:"VALPARAISO",count:255},{Año:2023,Mes:9,Sede:"VINA DEL MAR",count:744},{Año:2023,Mes:10,Sede:"ALAMEDA",count:12},{Año:2023,Mes:10,Sede:"ANTONIO VARAS",count:477},{Año:2023,Mes:10,Sede:"CASA CENTRAL",count:6},{Año:2023,Mes:10,Sede:"CONCEPCION",count:327},{Año:2023,Mes:10,Sede:"MAIPU",count:4},{Año:2023,Mes:10,Sede:"MELIPILLA",count:1},{Año:2023,Mes:10,Sede:"No Informado",count:19},{Año:2023,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:124},{Año:2023,Mes:10,Sede:"PLAZA NORTE",count:88},{Año:2023,Mes:10,Sede:"PLAZA VESPUCIO",count:421},{Año:2023,Mes:10,Sede:"PUERTO MONTT",count:15},{Año:2023,Mes:10,Sede:"SAN BERNARDO",count:7},{Año:2023,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2023,Mes:10,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:10,Sede:"VALPARAISO",count:170},{Año:2023,Mes:10,Sede:"VINA DEL MAR",count:340},{Año:2023,Mes:11,Sede:"ALAMEDA",count:3},{Año:2023,Mes:11,Sede:"ANTONIO VARAS",count:422},{Año:2023,Mes:11,Sede:"CASA CENTRAL",count:7},{Año:2023,Mes:11,Sede:"CONCEPCION",count:221},{Año:2023,Mes:11,Sede:"MAIPU",count:64},{Año:2023,Mes:11,Sede:"No Informado",count:19},{Año:2023,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:183},{Año:2023,Mes:11,Sede:"PLAZA NORTE",count:53},{Año:2023,Mes:11,Sede:"PLAZA VESPUCIO",count:674},{Año:2023,Mes:11,Sede:"PUENTE ALTO",count:55},{Año:2023,Mes:11,Sede:"PUERTO MONTT",count:56},{Año:2023,Mes:11,Sede:"SAN BERNARDO",count:20},{Año:2023,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2023,Mes:11,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:11,Sede:"VALPARAISO",count:173},{Año:2023,Mes:11,Sede:"VINA DEL MAR",count:411},{Año:2023,Mes:12,Sede:"ALAMEDA",count:6},{Año:2023,Mes:12,Sede:"ANTONIO VARAS",count:569},{Año:2023,Mes:12,Sede:"CONCEPCION",count:232},{Año:2023,Mes:12,Sede:"MAIPU",count:2},{Año:2023,Mes:12,Sede:"No Informado",count:9},{Año:2023,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:519},{Año:2023,Mes:12,Sede:"PLAZA NORTE",count:104},{Año:2023,Mes:12,Sede:"PLAZA VESPUCIO",count:616},{Año:2023,Mes:12,Sede:"PUENTE ALTO",count:30},{Año:2023,Mes:12,Sede:"PUERTO MONTT",count:15},{Año:2023,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:30},{Año:2023,Mes:12,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:12,Sede:"VALPARAISO",count:94},{Año:2023,Mes:12,Sede:"VINA DEL MAR",count:285},{Año:2024,Mes:2,Sede:"ANTONIO VARAS",count:64},{Año:2024,Mes:2,Sede:"CONCEPCION",count:10},{Año:2024,Mes:2,Sede:"No Informado",count:4},{Año:2024,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:22},{Año:2024,Mes:2,Sede:"PLAZA NORTE",count:2},{Año:2024,Mes:2,Sede:"PLAZA VESPUCIO",count:31},{Año:2024,Mes:2,Sede:"PUENTE ALTO",count:6},{Año:2024,Mes:2,Sede:"PUERTO MONTT",count:5},{Año:2024,Mes:2,Sede:"VALPARAISO",count:5},{Año:2024,Mes:2,Sede:"VINA DEL MAR",count:106},{Año:2024,Mes:3,Sede:"ANTONIO VARAS",count:437},{Año:2024,Mes:3,Sede:"CASA CENTRAL",count:23},{Año:2024,Mes:3,Sede:"CONCEPCION",count:41},{Año:2024,Mes:3,Sede:"MAIPU",count:4},{Año:2024,Mes:3,Sede:"No Informado",count:19},{Año:2024,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:100},{Año:2024,Mes:3,Sede:"PLAZA NORTE",count:18},{Año:2024,Mes:3,Sede:"PLAZA VESPUCIO",count:176},{Año:2024,Mes:3,Sede:"PUENTE ALTO",count:3},{Año:2024,Mes:3,Sede:"PUERTO MONTT",count:25},{Año:2024,Mes:3,Sede:"SAN BERNARDO",count:9},{Año:2024,Mes:3,Sede:"VALPARAISO",count:1},{Año:2024,Mes:3,Sede:"VINA DEL MAR",count:204},{Año:2024,Mes:4,Sede:"ANTONIO VARAS",count:577},{Año:2024,Mes:4,Sede:"CONCEPCION",count:296},{Año:2024,Mes:4,Sede:"MAIPU",count:31},{Año:2024,Mes:4,Sede:"No Informado",count:16},{Año:2024,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:292},{Año:2024,Mes:4,Sede:"PLAZA NORTE",count:92},{Año:2024,Mes:4,Sede:"PLAZA VESPUCIO",count:279},{Año:2024,Mes:4,Sede:"PUENTE ALTO",count:2},{Año:2024,Mes:4,Sede:"PUERTO MONTT",count:50},{Año:2024,Mes:4,Sede:"SAN BERNARDO",count:35},{Año:2024,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:96},{Año:2024,Mes:4,Sede:"VALPARAISO",count:42},{Año:2024,Mes:4,Sede:"VINA DEL MAR",count:320},{Año:2024,Mes:5,Sede:"ALAMEDA",count:3},{Año:2024,Mes:5,Sede:"ANTONIO VARAS",count:335},{Año:2024,Mes:5,Sede:"CONCEPCION",count:127},{Año:2024,Mes:5,Sede:"MAIPU",count:37},{Año:2024,Mes:5,Sede:"No Informado",count:9},{Año:2024,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:111},{Año:2024,Mes:5,Sede:"PLAZA NORTE",count:27},{Año:2024,Mes:5,Sede:"PLAZA VESPUCIO",count:244},{Año:2024,Mes:5,Sede:"PUENTE ALTO",count:5},{Año:2024,Mes:5,Sede:"PUERTO MONTT",count:24},{Año:2024,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:57},{Año:2024,Mes:5,Sede:"VALPARAISO",count:86},{Año:2024,Mes:5,Sede:"VINA DEL MAR",count:184},{Año:2024,Mes:6,Sede:"ALAMEDA",count:17},{Año:2024,Mes:6,Sede:"ANTONIO VARAS",count:386},{Año:2024,Mes:6,Sede:"CASA CENTRAL",count:6},{Año:2024,Mes:6,Sede:"CONCEPCION",count:62},{Año:2024,Mes:6,Sede:"MAIPU",count:91},{Año:2024,Mes:6,Sede:"No Informado",count:10},{Año:2024,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:165},{Año:2024,Mes:6,Sede:"PLAZA NORTE",count:134},{Año:2024,Mes:6,Sede:"PLAZA OESTE",count:9},{Año:2024,Mes:6,Sede:"PLAZA VESPUCIO",count:313},{Año:2024,Mes:6,Sede:"PUENTE ALTO",count:1},{Año:2024,Mes:6,Sede:"PUERTO MONTT",count:45},{Año:2024,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:9},{Año:2024,Mes:6,Sede:"VALPARAISO",count:230},{Año:2024,Mes:6,Sede:"VINA DEL MAR",count:159},{Año:2024,Mes:7,Sede:"ALAMEDA",count:4},{Año:2024,Mes:7,Sede:"ANTONIO VARAS",count:174},{Año:2024,Mes:7,Sede:"CASA CENTRAL",count:3},{Año:2024,Mes:7,Sede:"CONCEPCION",count:84},{Año:2024,Mes:7,Sede:"MAIPU",count:83},{Año:2024,Mes:7,Sede:"No Informado",count:17},{Año:2024,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:81},{Año:2024,Mes:7,Sede:"PLAZA NORTE",count:37},{Año:2024,Mes:7,Sede:"PLAZA OESTE",count:8},{Año:2024,Mes:7,Sede:"PLAZA VESPUCIO",count:103},{Año:2024,Mes:7,Sede:"PUENTE ALTO",count:2},{Año:2024,Mes:7,Sede:"PUERTO MONTT",count:7},{Año:2024,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:5},{Año:2024,Mes:7,Sede:"VALPARAISO",count:93},{Año:2024,Mes:7,Sede:"VINA DEL MAR",count:101},{Año:2024,Mes:8,Sede:"ALAMEDA",count:128},{Año:2024,Mes:8,Sede:"ANTONIO VARAS",count:363},{Año:2024,Mes:8,Sede:"CAMPUS ARAUCO",count:20},{Año:2024,Mes:8,Sede:"CONCEPCION",count:92},{Año:2024,Mes:8,Sede:"MAIPU",count:16},{Año:2024,Mes:8,Sede:"No Informado",count:11},{Año:2024,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:152},{Año:2024,Mes:8,Sede:"PLAZA NORTE",count:115},{Año:2024,Mes:8,Sede:"PLAZA OESTE",count:7},{Año:2024,Mes:8,Sede:"PLAZA VESPUCIO",count:189},{Año:2024,Mes:8,Sede:"PUENTE ALTO",count:5},{Año:2024,Mes:8,Sede:"PUERTO MONTT",count:18},{Año:2024,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:14},{Año:2024,Mes:8,Sede:"VALPARAISO",count:45},{Año:2024,Mes:8,Sede:"VINA DEL MAR",count:228},{Año:2024,Mes:9,Sede:"ALAMEDA",count:117},{Año:2024,Mes:9,Sede:"ANTONIO VARAS",count:679},{Año:2024,Mes:9,Sede:"CONCEPCION",count:101},{Año:2024,Mes:9,Sede:"MAIPU",count:77},{Año:2024,Mes:9,Sede:"No Informado",count:16},{Año:2024,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:149},{Año:2024,Mes:9,Sede:"PLAZA NORTE",count:109},{Año:2024,Mes:9,Sede:"PLAZA OESTE",count:9},{Año:2024,Mes:9,Sede:"PLAZA VESPUCIO",count:455},{Año:2024,Mes:9,Sede:"PUENTE ALTO",count:11},{Año:2024,Mes:9,Sede:"PUERTO MONTT",count:18},{Año:2024,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:12},{Año:2024,Mes:9,Sede:"VALPARAISO",count:40},{Año:2024,Mes:9,Sede:"VINA DEL MAR",count:196},{Año:2024,Mes:10,Sede:"ALAMEDA",count:51},{Año:2024,Mes:10,Sede:"ANTONIO VARAS",count:300},{Año:2024,Mes:10,Sede:"CONCEPCION",count:240},{Año:2024,Mes:10,Sede:"MAIPU",count:19},{Año:2024,Mes:10,Sede:"No Informado",count:13},{Año:2024,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:164},{Año:2024,Mes:10,Sede:"PLAZA NORTE",count:36},{Año:2024,Mes:10,Sede:"PLAZA VESPUCIO",count:340},{Año:2024,Mes:10,Sede:"PUENTE ALTO",count:4},{Año:2024,Mes:10,Sede:"PUERTO MONTT",count:37},{Año:2024,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2024,Mes:10,Sede:"VALPARAISO",count:50},{Año:2024,Mes:10,Sede:"VINA DEL MAR",count:185},{Año:2024,Mes:11,Sede:"ALAMEDA",count:19},{Año:2024,Mes:11,Sede:"ANTONIO VARAS",count:338},{Año:2024,Mes:11,Sede:"CONCEPCION",count:51},{Año:2024,Mes:11,Sede:"MAIPU",count:14},{Año:2024,Mes:11,Sede:"No Informado",count:11},{Año:2024,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:69},{Año:2024,Mes:11,Sede:"PLAZA NORTE",count:29},{Año:2024,Mes:11,Sede:"PLAZA OESTE",count:5},{Año:2024,Mes:11,Sede:"PLAZA VESPUCIO",count:173},{Año:2024,Mes:11,Sede:"PUENTE ALTO",count:3},{Año:2024,Mes:11,Sede:"PUERTO MONTT",count:19},{Año:2024,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2024,Mes:11,Sede:"VALPARAISO",count:139},{Año:2024,Mes:11,Sede:"VINA DEL MAR",count:192},{Año:2024,Mes:12,Sede:"ALAMEDA",count:39},{Año:2024,Mes:12,Sede:"ANTONIO VARAS",count:261},{Año:2024,Mes:12,Sede:"CONCEPCION",count:30},{Año:2024,Mes:12,Sede:"MAIPU",count:7},{Año:2024,Mes:12,Sede:"No Informado",count:5},{Año:2024,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:31},{Año:2024,Mes:12,Sede:"PLAZA NORTE",count:12},{Año:2024,Mes:12,Sede:"PLAZA VESPUCIO",count:113},{Año:2024,Mes:12,Sede:"PUERTO MONTT",count:15},{Año:2024,Mes:12,Sede:"VALPARAISO",count:90},{Año:2024,Mes:12,Sede:"VINA DEL MAR",count:55}],
@@ -382,449 +382,500 @@ const DATA = {
   años:[2021,2022,2023,2024]
 };
 
-const MESES_LABEL = ["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-const YEAR_CFG = {
-  2021:{color:"#818cf8",bg:"rgba(129,140,248,0.15)"},
-  2022:{color:"#34d399",bg:"rgba(52,211,153,0.15)"},
-  2023:{color:"#fbbf24",bg:"rgba(251,191,36,0.15)"},
-  2024:{color:"#f87171",bg:"rgba(248,113,113,0.15)"}
+const ML = ["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const YCFG = {
+  2021:{c:"#6366f1",bg:"rgba(99,102,241,.12)"},
+  2022:{c:"#0ea5e9",bg:"rgba(14,165,233,.12)"},
+  2023:{c:"#FCB32E",bg:"rgba(252,179,46,.12)"},
+  2024:{c:"#ef4444",bg:"rgba(239,68,68,.12)"}
 };
-const PALETTE = ["#00c8ff","#818cf8","#34d399","#fbbf24","#f87171","#a78bfa","#38bdf8","#fb923c","#4ade80","#e879f9","#f472b6","#60a5fa"];
+const PAL = ["#FCB32E","#6366f1","#0ea5e9","#10b981","#f43f5e","#8b5cf6","#06b6d4","#f97316","#84cc16","#ec4899","#14b8a6","#a78bfa"];
 
-// State
-let selectedYears = [2021,2022,2023,2024];
-let selectedSedes = new Set(["ANTONIO VARAS","VINA DEL MAR","PLAZA VESPUCIO","PADRE ALONSO DE OVALLE","CONCEPCION","PLAZA NORTE","VALPARAISO","ALAMEDA","SAN CARLOS DE APOQUINDO","MAIPU"]);
+let selYears = [2021,2022,2023,2024];
+let selSedes = new Set();  // start empty so user selects
 let activeTab = 0;
-const charts = {};
+const CH = {};
 
-// ═══════════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════════
-const fmt = n => n.toLocaleString('es-CL');
+const fmt = n => n ? n.toLocaleString('es-CL') : '0';
 const pct = (a,b) => b ? ((a-b)/b*100).toFixed(1) : null;
+function sdColor(s){ return PAL[DATA.sedes.indexOf(s) % PAL.length]; }
+function destroy(id){ if(CH[id]){ CH[id].destroy(); delete CH[id]; } }
 
-function sedeColor(sede) {
-  const idx = DATA.sedes.indexOf(sede);
-  return PALETTE[idx % PALETTE.length];
-}
-
-function getFilteredTotal(rows) {
-  return rows
-    .filter(r => selectedYears.includes(r.Año) && (selectedSedes.size === 0 || selectedSedes.has(r.Sede)))
-    .reduce((s,r) => s+r.count, 0);
-}
-
-function destroyChart(id) {
-  if(charts[id]) { charts[id].destroy(); delete charts[id]; }
-}
-
-// ═══════════════════════════════════════════════════
-// INIT SIDEBAR
-// ═══════════════════════════════════════════════════
-function initFilters() {
-  // Years
-  const yc = document.getElementById('year-filters');
-  DATA.años.forEach(y => {
-    const total = DATA.total_sede_año.filter(r=>r.Año===y).reduce((s,r)=>s+r.count,0);
-    const btn = document.createElement('button');
-    btn.className = `year-btn active-${y-2000}`;
-    btn.innerHTML = `${y}<br><small>${fmt(total)}</small>`;
-    btn.dataset.year = y;
-    btn.addEventListener('click', () => toggleYear(y, btn));
-    yc.appendChild(btn);
+// ── INIT ──
+function init(){
+  // year buttons
+  const yg = document.getElementById('yr-grid');
+  DATA.años.forEach(y=>{
+    const tot = DATA.total_sede_año.filter(r=>r.Año===y).reduce((s,r)=>s+r.count,0);
+    const b = document.createElement('button');
+    b.className = `yr-btn on-${y-2000}`;
+    b.dataset.y = y;
+    b.innerHTML = `${y}<br><small style="font-weight:400;opacity:.7">${fmt(tot)}</small>`;
+    b.addEventListener('click',()=>toggleYear(y,b));
+    yg.appendChild(b);
   });
 
-  // Sedes
-  const sc = document.getElementById('sede-filters');
-  DATA.sedes.forEach(s => {
-    const total = DATA.total_sede_año.filter(r=>r.Sede===s).reduce((s2,r)=>s2+r.count,0);
+  // sede list — sorted by total desc
+  const sedeTotals = DATA.sedes.map(s=>({
+    s, tot: DATA.total_sede_año.filter(r=>r.Sede===s).reduce((a,r)=>a+r.count,0)
+  })).sort((a,b)=>b.tot-a.tot);
+
+  const sl = document.getElementById('sede-list');
+  sedeTotals.forEach(({s,tot})=>{
     const item = document.createElement('label');
-    item.className = 'sede-item' + (selectedSedes.has(s) ? ' checked' : '');
-    item.innerHTML = `
-      <input type="checkbox" ${selectedSedes.has(s)?'checked':''}>
-      <span class="sede-dot" style="background:${sedeColor(s)}"></span>
-      <span class="sede-name">${s}</span>
-      <span class="sede-count">${fmt(total)}</span>
-    `;
-    item.querySelector('input').addEventListener('change', e => {
-      if(e.target.checked) { selectedSedes.add(s); item.classList.add('checked'); }
-      else { selectedSedes.delete(s); item.classList.remove('checked'); }
+    item.className = 'sede-item';
+    item.innerHTML = `<input type="checkbox"><span class="sdot" style="background:${sdColor(s)}"></span><span class="sname" title="${s}">${s}</span><span class="scount">${fmt(tot)}</span>`;
+    item.querySelector('input').addEventListener('change',e=>{
+      if(e.target.checked){ selSedes.add(s); item.classList.add('on'); }
+      else { selSedes.delete(s); item.classList.remove('on'); }
       refresh();
     });
-    sc.appendChild(item);
+    sl.appendChild(item);
   });
+
+  refresh();
 }
 
-function toggleYear(y, btn) {
-  if(selectedYears.includes(y)) {
-    if(selectedYears.length === 1) return;
-    selectedYears = selectedYears.filter(x=>x!==y);
-    btn.classList.remove(`active-${y-2000}`);
+function toggleYear(y,b){
+  if(selYears.includes(y)){
+    if(selYears.length===1) return;
+    selYears = selYears.filter(x=>x!==y);
+    b.classList.remove(`on-${y-2000}`);
   } else {
-    selectedYears.push(y); selectedYears.sort();
-    btn.classList.add(`active-${y-2000}`);
+    selYears.push(y); selYears.sort();
+    b.classList.add(`on-${y-2000}`);
   }
   refresh();
 }
 
-function selectAllSedes() {
-  document.querySelectorAll('.sede-item input').forEach(cb => { cb.checked = true; cb.closest('.sede-item').classList.add('checked'); });
-  selectedSedes = new Set(DATA.sedes);
+function allSedes(){
+  document.querySelectorAll('.sede-item').forEach(item=>{
+    const cb = item.querySelector('input');
+    const sn = item.querySelector('.sname').textContent;
+    cb.checked = true; item.classList.add('on'); selSedes.add(sn);
+  });
   refresh();
 }
-function clearSedes() {
-  document.querySelectorAll('.sede-item input').forEach(cb => { cb.checked = false; cb.closest('.sede-item').classList.remove('checked'); });
-  selectedSedes.clear();
-  refresh();
+function noneSedes(){
+  document.querySelectorAll('.sede-item').forEach(item=>{
+    item.querySelector('input').checked = false;
+    item.classList.remove('on');
+  });
+  selSedes.clear(); refresh();
 }
 
-function switchTab(idx) {
-  activeTab = idx;
-  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
-  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  renderActiveTab();
+function switchTab(i){
+  activeTab = i;
+  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));
+  document.querySelectorAll('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
+  renderTab();
 }
 
-// ═══════════════════════════════════════════════════
-// KPI BAR
-// ═══════════════════════════════════════════════════
-function renderKPI() {
-  const bar = document.getElementById('kpi-bar');
-  bar.innerHTML = '';
-  DATA.años.forEach((y,i) => {
-    const total = DATA.total_sede_año
-      .filter(r=>r.Año===y && (selectedSedes.size===0||selectedSedes.has(r.Sede)))
+// ── REFRESH ──
+function refresh(){
+  const grand = DATA.total_sede_año
+    .filter(r=>selYears.includes(r.Año) && selSedes.has(r.Sede))
+    .reduce((s,r)=>s+r.count,0);
+  document.getElementById('total-num').textContent = fmt(grand);
+  renderKPI();
+  renderTab();
+}
+
+function renderKPI(){
+  const strip = document.getElementById('kpi-strip');
+  strip.innerHTML = '';
+  DATA.años.forEach((y,i)=>{
+    const tot = DATA.total_sede_año
+      .filter(r=>r.Año===y && selSedes.has(r.Sede))
       .reduce((s,r)=>s+r.count,0);
-    const prev = i>0 ? DATA.total_sede_año.filter(r=>r.Año===DATA.años[i-1]&&(selectedSedes.size===0||selectedSedes.has(r.Sede))).reduce((s,r)=>s+r.count,0) : null;
-    const delta = prev ? pct(total,prev) : null;
-    const on = selectedYears.includes(y);
+    const prevY = DATA.años[i-1];
+    const prev = prevY ? DATA.total_sede_año.filter(r=>r.Año===prevY && selSedes.has(r.Sede)).reduce((s,r)=>s+r.count,0) : null;
+    const d = prev!==null ? pct(tot,prev) : null;
+    const on = selYears.includes(y);
     const card = document.createElement('div');
-    card.className='kpi-card'; card.style.opacity=on?1:0.4;
-    card.style.borderBottom=`3px solid ${on?YEAR_CFG[y].color:'transparent'}`;
-    card.innerHTML=`
-      <div class="kpi-year">${y}</div>
-      <div class="kpi-value" style="color:${YEAR_CFG[y].color}">${fmt(total)}</div>
-      ${delta!==null?`<div class="kpi-delta ${parseFloat(delta)>=0?'up':'down'}">${parseFloat(delta)>=0?'↑':'↓'} ${Math.abs(delta)}% vs ${y-1}</div>`:'<div class="kpi-delta neutral">Año base</div>'}
-    `;
-    bar.appendChild(card);
+    card.className = 'kpi-card';
+    card.style.opacity = on ? 1 : 0.35;
+    card.style.borderBottomColor = on ? YCFG[y].c : 'transparent';
+    card.innerHTML = `<div class="kpi-yr">${y}</div>
+      <div class="kpi-val" style="color:${YCFG[y].c}">${fmt(tot)}</div>
+      ${d!==null
+        ? `<div class="kpi-sub ${parseFloat(d)>=0?'up':'dn'}">${parseFloat(d)>=0?'▲':'▼'} ${Math.abs(d)}% vs ${y-1}</div>`
+        : '<div class="kpi-sub na">Año base</div>'}`;
+    strip.appendChild(card);
   });
 }
 
-// ═══════════════════════════════════════════════════
-// TAB 0: TOTAL SEDE
-// ═══════════════════════════════════════════════════
-function renderTab0() {
+function renderTab(){
+  if(activeTab===0) tab0();
+  else if(activeTab===1) tab1();
+  else if(activeTab===2) tab2();
+  else tab3();
+}
+
+// ── TAB 0: SEDE ──
+function tab0(){
   const map = {};
-  DATA.total_sede_año.forEach(r => {
-    if(!selectedYears.includes(r.Año)) return;
-    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+  DATA.total_sede_año.forEach(r=>{
+    if(!selYears.includes(r.Año)) return;
+    if(!selSedes.has(r.Sede)) return;
     map[r.Sede] = (map[r.Sede]||0)+r.count;
   });
   const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]);
-  const top15 = sorted.slice(0,15);
-  const grandTotal = sorted.reduce((s,x)=>s+x[1],0);
+  const total = sorted.reduce((s,x)=>s+x[1],0);
+  const n = sorted.length;
 
-  document.getElementById('p0-subtitle').textContent = `${sorted.length} sedes · ${fmt(grandTotal)} préstamos totales en periodo seleccionado`;
+  // subtitle
+  document.getElementById('p0-sub').textContent =
+    n===0 ? 'Selecciona al menos una sede en el panel izquierdo'
+    : `${n} sede${n>1?'s':''} seleccionada${n>1?'s':''} · ${fmt(total)} préstamos`;
 
-  // Bar chart
-  destroyChart('bar-sede');
-  const ctx0 = document.getElementById('chart-bar-sede').getContext('2d');
-  charts['bar-sede'] = new Chart(ctx0, {
-    type:'bar',
-    data:{
-      labels: top15.map(x=>x[0].length>14?x[0].substring(0,13)+'…':x[0]),
-      datasets:[{
-        label:'Préstamos',
-        data: top15.map(x=>x[1]),
-        backgroundColor: top15.map(x=>sedeColor(x[0])+'bb'),
-        borderColor: top15.map(x=>sedeColor(x[0])),
-        borderWidth:1, borderRadius:4
-      }]
-    },
-    options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
-      scales:{
-        x:{grid:{color:'#1c2d42'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
-        y:{grid:{display:false},ticks:{color:'#e8f0f8',font:{size:10}}}
+  // empty state
+  const showEmpty = n===0;
+
+  // Bar chart — dynamic, only selected sedes
+  destroy('bar');
+  const ctx0 = document.getElementById('c-bar').getContext('2d');
+  if(showEmpty){
+    document.getElementById('c-bar').closest('.card').querySelector('.cw').innerHTML =
+      '<div class="empty-state"><span class="big">🏫</span><p>Selecciona sedes para ver el gráfico</p></div>';
+  } else {
+    document.getElementById('c-bar').closest('.card').querySelector('.cw').innerHTML =
+      '<canvas id="c-bar"></canvas>';
+    CH['bar'] = new Chart(document.getElementById('c-bar').getContext('2d'),{
+      type:'bar',
+      data:{
+        labels: sorted.map(x=> x[0].length>15 ? x[0].slice(0,14)+'…':x[0]),
+        datasets:[{
+          label:'Préstamos',
+          data: sorted.map(x=>x[1]),
+          backgroundColor: sorted.map(x=>sdColor(x[0])+'22'),
+          borderColor: sorted.map(x=>sdColor(x[0])),
+          borderWidth:1.5, borderRadius:5
+        }]
+      },
+      options:{
+        indexAxis:'y', responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmt(c.raw)} préstamos`}}},
+        scales:{
+          x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
+          y:{grid:{display:false},ticks:{color:'#0f1724',font:{size:10,weight:'600'}}}
+        }
       }
-    }
-  });
+    });
+  }
 
-  // Doughnut
-  destroyChart('doughnut');
-  const ctx1 = document.getElementById('chart-doughnut').getContext('2d');
-  const top8 = sorted.slice(0,8);
-  const resto = sorted.slice(8).reduce((s,x)=>s+x[1],0);
-  charts['doughnut'] = new Chart(ctx1, {
-    type:'doughnut',
-    data:{
-      labels:[...top8.map(x=>x[0]),'Resto'],
-      datasets:[{
-        data:[...top8.map(x=>x[1]),resto],
-        backgroundColor:[...top8.map(x=>sedeColor(x[0])+'cc'),'#3f5a72'],
-        borderColor:'#080c14', borderWidth:3, hoverOffset:8
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false, cutout:'65%',
-      plugins:{
-        legend:{position:'right',labels:{color:'#7a9bb8',font:{size:10},padding:8,boxWidth:12}},
-        tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} (${(c.raw/grandTotal*100).toFixed(1)}%)`}}
+  // Donut
+  destroy('donut');
+  if(showEmpty){
+    document.getElementById('c-donut').closest('.card').querySelector('.cw').innerHTML =
+      '<div class="empty-state"><span class="big">🍩</span><p>Selecciona sedes para ver distribución</p></div>';
+  } else {
+    document.getElementById('c-donut').closest('.card').querySelector('.cw').innerHTML =
+      '<canvas id="c-donut"></canvas>';
+    CH['donut'] = new Chart(document.getElementById('c-donut').getContext('2d'),{
+      type:'doughnut',
+      data:{
+        labels: sorted.map(x=>x[0]),
+        datasets:[{
+          data: sorted.map(x=>x[1]),
+          backgroundColor: sorted.map(x=>sdColor(x[0])+'cc'),
+          borderColor:'#ffffff', borderWidth:2.5, hoverOffset:8
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false, cutout:'62%',
+        plugins:{
+          legend:{position:'right',labels:{color:'#5a6478',font:{size:10},padding:8,boxWidth:11}},
+          tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} (${(c.raw/total*100).toFixed(1)}%)`}}
+        }
       }
-    }
-  });
+    });
+  }
 
   // Progress bars
-  const pb = document.getElementById('progress-bars');
-  pb.innerHTML = top15.map((x,i)=>`
-    <div class="progress-row">
-      <span class="progress-sede">${x[0]}</span>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" style="width:${grandTotal?(x[1]/sorted[0][1]*100):0}%;background:${sedeColor(x[0])}"></div>
-      </div>
-      <span class="progress-val">${fmt(x[1])}</span>
-    </div>
-  `).join('');
+  const pl = document.getElementById('prog-list');
+  if(showEmpty){ pl.innerHTML=''; }
+  else {
+    pl.innerHTML = '<div class="prog-list">' + sorted.map(x=>`
+      <div class="prog-row">
+        <span class="prog-dot" style="background:${sdColor(x[0])}"></span>
+        <span class="prog-sede">${x[0]}</span>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar-fill" style="width:${(x[1]/sorted[0][1]*100).toFixed(1)}%;background:${sdColor(x[0])}"></div>
+        </div>
+        <span class="prog-val">${fmt(x[1])}</span>
+        <span class="prog-pct">${(x[1]/total*100).toFixed(1)}%</span>
+      </div>`).join('') + '</div>';
+  }
 
   // Table
-  const t = document.getElementById('table-sede');
-  t.innerHTML=`
+  const t = document.getElementById('tbl-sede');
+  if(showEmpty){ t.innerHTML=''; return; }
+  t.innerHTML = `
     <thead><tr>
       <th>#</th><th>Sede</th>
-      ${selectedYears.map(y=>`<th class="r">${y}</th>`).join('')}
+      ${selYears.map(y=>`<th class="r">${y}</th>`).join('')}
       <th class="r">Total</th><th class="r">%</th>
     </tr></thead>
-    <tbody>${sorted.slice(0,20).map((x,i)=>{
-      const yVals = selectedYears.map(y=>{
-        const v=DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===x[0]);
-        return v?v.count:0;
+    <tbody>${sorted.map((x,i)=>{
+      const yv = selYears.map(y=>{
+        const r=DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===x[0]);
+        return r?r.count:0;
       });
       return `<tr>
-        <td class="rank-num">${i+1}</td>
-        <td><span class="badge" style="background:${sedeColor(x[0])}22;color:${sedeColor(x[0])}">${x[0]}</span></td>
-        ${yVals.map(v=>`<td class="r" style="color:${v?'#e8f0f8':'#3f5a72'}">${v?fmt(v):'—'}</td>`).join('')}
-        <td class="r bold">${fmt(x[1])}</td>
-        <td class="r" style="color:#7a9bb8">${grandTotal?(x[1]/grandTotal*100).toFixed(1):0}%</td>
+        <td class="rn">${i+1}</td>
+        <td><span class="badge" style="background:${sdColor(x[0])}18;color:${sdColor(x[0])};border:1px solid ${sdColor(x[0])}33">${x[0]}</span></td>
+        ${yv.map(v=>`<td class="r" style="color:${v?'#0f1724':'#c8d0dc'}">${v?fmt(v):'—'}</td>`).join('')}
+        <td class="r b">${fmt(x[1])}</td>
+        <td class="r" style="color:var(--txt3)">${(x[1]/total*100).toFixed(1)}%</td>
       </tr>`;
     }).join('')}</tbody>
-    <tfoot><tr><td colspan="2">TOTAL</td>
-      ${selectedYears.map(y=>{const s=DATA.total_sede_año.filter(r=>r.Año===y&&(selectedSedes.size===0||selectedSedes.has(r.Sede))).reduce((s,r)=>s+r.count,0);return`<td class="r" style="color:${YEAR_CFG[y].color}">${fmt(s)}</td>`;}).join('')}
-      <td class="r" style="color:#00c8ff">${fmt(grandTotal)}</td><td class="r">100%</td>
+    <tfoot><tr>
+      <td colspan="2">TOTAL</td>
+      ${selYears.map(y=>{
+        const s=DATA.total_sede_año.filter(r=>r.Año===y&&selSedes.has(r.Sede)).reduce((s,r)=>s+r.count,0);
+        return `<td class="r" style="color:${YCFG[y].c}">${fmt(s)}</td>`;
+      }).join('')}
+      <td class="r" style="color:var(--gold-d)">${fmt(total)}</td>
+      <td class="r">100%</td>
     </tr></tfoot>`;
 }
 
-// ═══════════════════════════════════════════════════
-// TAB 1: MES/AÑO
-// ═══════════════════════════════════════════════════
-function renderTab1() {
-  // Aggregate by año+mes
-  const byYearMes = {};
-  DATA.años.forEach(y=>{ byYearMes[y]={}; });
+// ── TAB 1: MES/AÑO ──
+function tab1(){
+  const byYM = {};
+  DATA.años.forEach(y=>{ byYM[y]={}; });
   DATA.mes_sede_año.forEach(r=>{
-    if(!selectedYears.includes(r.Año)) return;
-    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
-    byYearMes[r.Año][r.Mes]=(byYearMes[r.Año][r.Mes]||0)+r.count;
+    if(!selYears.includes(r.Año)) return;
+    if(!selSedes.has(r.Sede)) return;
+    byYM[r.Año][r.Mes] = (byYM[r.Año][r.Mes]||0)+r.count;
   });
 
-  // Legend
-  const leg = document.getElementById('legend-year');
-  leg.innerHTML = selectedYears.map(y=>`
-    <div class="legend-item">
-      <div class="legend-dot" style="background:${YEAR_CFG[y].color}"></div>
-      ${y} — Total: ${fmt(Object.values(byYearMes[y]).reduce((s,v)=>s+v,0))}
-    </div>`).join('');
+  // Value highlights
+  let maxMesVal=0,maxMesName='',maxYrVal=0,maxYrName='';
+  selYears.forEach(y=>{
+    const ytot = Object.values(byYM[y]).reduce((s,v)=>s+v,0);
+    if(ytot>maxYrVal){ maxYrVal=ytot; maxYrName=String(y); }
+    for(let m=1;m<=12;m++){
+      const v=byYM[y][m]||0;
+      if(v>maxMesVal){ maxMesVal=v; maxMesName=ML[m]; }
+    }
+  });
+  document.getElementById('mes-max-display').innerHTML = maxMesVal>0
+    ? `<div class="val-display"><span class="val-big">${maxMesName}</span><span class="val-label">${fmt(maxMesVal)} préstamos</span></div><p style="font-size:11px;color:var(--txt3);margin-top:4px">Mes con mayor volumen en selección</p>`
+    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
+  document.getElementById('yr-max-display').innerHTML = maxYrVal>0
+    ? `<div class="val-display"><span class="val-big">${maxYrName}</span><span class="val-label">${fmt(maxYrVal)} totales</span></div><p style="font-size:11px;color:var(--txt3);margin-top:4px">Año con mayor actividad en sedes</p>`
+    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
 
-  // Line chart
-  destroyChart('line');
-  const ctx = document.getElementById('chart-line').getContext('2d');
-  charts['line'] = new Chart(ctx, {
+  // Legend
+  document.getElementById('leg-yr').innerHTML = selYears.map(y=>`
+    <div class="leg-item"><div class="leg-dot" style="background:${YCFG[y].c}"></div>${y} — ${fmt(Object.values(byYM[y]).reduce((s,v)=>s+v,0))}</div>`).join('');
+
+  // Line
+  destroy('line');
+  const ctx = document.getElementById('c-line').getContext('2d');
+  CH['line'] = new Chart(ctx,{
     type:'line',
     data:{
-      labels: MESES_LABEL.slice(1),
-      datasets: selectedYears.map(y=>({
+      labels:ML.slice(1),
+      datasets:selYears.map(y=>({
         label:String(y),
-        data: Array.from({length:12},(_,i)=>byYearMes[y][i+1]||0),
-        borderColor: YEAR_CFG[y].color,
-        backgroundColor: YEAR_CFG[y].bg,
-        fill:true, tension:0.4, pointRadius:4, pointHoverRadius:6,
-        borderWidth:2, pointBackgroundColor: YEAR_CFG[y].color
+        data:Array.from({length:12},(_,i)=>byYM[y][i+1]||0),
+        borderColor:YCFG[y].c, backgroundColor:YCFG[y].bg,
+        fill:true, tension:.4, pointRadius:4, pointHoverRadius:6,
+        borderWidth:2, pointBackgroundColor:YCFG[y].c
       }))
     },
     options:{
       responsive:true, maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{legend:{labels:{color:'#7a9bb8',font:{size:11}}},
+      plugins:{legend:{labels:{color:'#5a6478',font:{size:11,weight:'600'}}},
         tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
       scales:{
-        x:{grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:11}}},
-        y:{grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
+        x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:11}}},
+        y:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
       }
     }
   });
 
   // Bar grouped
-  destroyChart('bar-month');
-  const ctx2 = document.getElementById('chart-bar-month').getContext('2d');
-  charts['bar-month'] = new Chart(ctx2,{
+  destroy('barm');
+  CH['barm'] = new Chart(document.getElementById('c-barm').getContext('2d'),{
     type:'bar',
     data:{
-      labels:MESES_LABEL.slice(1),
-      datasets:selectedYears.map(y=>({
+      labels:ML.slice(1),
+      datasets:selYears.map(y=>({
         label:String(y),
-        data:Array.from({length:12},(_,i)=>byYearMes[y][i+1]||0),
-        backgroundColor:YEAR_CFG[y].bg,
-        borderColor:YEAR_CFG[y].color,
-        borderWidth:1, borderRadius:3
+        data:Array.from({length:12},(_,i)=>byYM[y][i+1]||0),
+        backgroundColor:YCFG[y].bg, borderColor:YCFG[y].c,
+        borderWidth:1.5, borderRadius:3
       }))
     },
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#7a9bb8',font:{size:11}}},
+      plugins:{legend:{labels:{color:'#5a6478',font:{size:11,weight:'600'}}},
         tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
       scales:{
-        x:{grid:{color:'#1c2d4240'},ticks:{color:'#7a9bb8',font:{size:10}}},
-        y:{grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
+        x:{grid:{display:false},ticks:{color:'#5a6478',font:{size:10}}},
+        y:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
       }
     }
   });
 
   // Table
-  const t = document.getElementById('table-mes');
-  const rowTotals = selectedYears.map(y=>Object.values(byYearMes[y]).reduce((s,v)=>s+v,0));
-  t.innerHTML=`
-    <thead><tr><th>Mes</th>${selectedYears.map((y,i)=>`<th class="r" style="color:${YEAR_CFG[y].color}">${y}</th>`).join('')}<th class="r">Total Fila</th></tr></thead>
+  const totRow = selYears.map(y=>Object.values(byYM[y]).reduce((s,v)=>s+v,0));
+  document.getElementById('tbl-mes').innerHTML = `
+    <thead><tr><th>Mes</th>${selYears.map(y=>`<th class="r" style="color:${YCFG[y].c}">${y}</th>`).join('')}<th class="r">Total</th></tr></thead>
     <tbody>${Array.from({length:12},(_,mi)=>{
-      const vals=selectedYears.map(y=>byYearMes[y][mi+1]||0);
-      const rowTotal=vals.reduce((s,v)=>s+v,0);
-      return `<tr><td class="bold">${MESES_LABEL[mi+1]}</td>${vals.map((v,i)=>`<td class="r" style="color:${v?YEAR_CFG[selectedYears[i]].color+'cc':'#3f5a72'}">${v?fmt(v):'—'}</td>`).join('')}<td class="r bold">${fmt(rowTotal)}</td></tr>`;
+      const vs=selYears.map(y=>byYM[y][mi+1]||0);
+      const rt=vs.reduce((s,v)=>s+v,0);
+      return `<tr><td class="b">${ML[mi+1]}</td>${vs.map((v,i)=>`<td class="r" style="color:${v?YCFG[selYears[i]].c+'cc':'#c8d0dc'}">${v?fmt(v):'—'}</td>`).join('')}<td class="r b">${fmt(rt)}</td></tr>`;
     }).join('')}</tbody>
-    <tfoot><tr><td>TOTAL</td>${selectedYears.map((y,i)=>`<td class="r" style="color:${YEAR_CFG[y].color}">${fmt(rowTotals[i])}</td>`).join('')}<td class="r" style="color:#00c8ff">${fmt(rowTotals.reduce((s,v)=>s+v,0))}</td></tr></tfoot>`;
+    <tfoot><tr><td>TOTAL</td>${totRow.map((v,i)=>`<td class="r" style="color:${YCFG[selYears[i]].c}">${fmt(v)}</td>`).join('')}<td class="r" style="color:var(--gold-d)">${fmt(totRow.reduce((s,v)=>s+v,0))}</td></tr></tfoot>`;
 }
 
-// ═══════════════════════════════════════════════════
-// TAB 2: CARRERA/SEDE
-// ═══════════════════════════════════════════════════
-function renderTab2() {
+// ── TAB 2: CARRERA/SEDE ──
+function tab2(){
   const map = {};
   DATA.carrera_sede_año.forEach(r=>{
-    if(!selectedYears.includes(r.Año)) return;
-    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+    if(!selYears.includes(r.Año)) return;
+    if(!selSedes.has(r.Sede)) return;
     const k=`${r.Sede}||${r.Carrera}`;
-    if(!map[k]) map[k]={sede:r.Sede,carrera:r.Carrera,total:0};
-    map[k].total+=r.count;
+    if(!map[k]) map[k]={sede:r.Sede,carrera:r.Carrera,tot:0};
+    map[k].tot += r.count;
   });
-  const sorted=Object.values(map).sort((a,b)=>b.total-a.total).slice(0,20);
+  const sorted = Object.values(map).sort((a,b)=>b.tot-a.tot).slice(0,20);
 
-  destroyChart('carrera');
-  const ctx=document.getElementById('chart-carrera').getContext('2d');
-  charts['carrera']=new Chart(ctx,{
+  // Value highlights
+  const carMap={};
+  sorted.forEach(x=>{ carMap[x.carrera]=(carMap[x.carrera]||0)+x.tot; });
+  const topCar = Object.entries(carMap).sort((a,b)=>b[1]-a[1])[0];
+
+  const sedeDiv={};
+  DATA.carrera_sede_año.forEach(r=>{
+    if(!selYears.includes(r.Año)||!selSedes.has(r.Sede)) return;
+    if(!sedeDiv[r.Sede]) sedeDiv[r.Sede]=new Set();
+    sedeDiv[r.Sede].add(r.Carrera);
+  });
+  const topDiv = Object.entries(sedeDiv).sort((a,b)=>b[1].size-a[1].size)[0];
+
+  document.getElementById('top-carrera-display').innerHTML = topCar
+    ? `<div class="val-display"><span class="val-big" style="font-size:22px;line-height:1.3">${topCar[0]}</span></div><p style="font-size:11px;color:var(--txt3);margin-top:6px">${fmt(topCar[1])} préstamos totales</p>`
+    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
+  document.getElementById('top-sede-div-display').innerHTML = topDiv
+    ? `<div class="val-display"><span class="val-big" style="font-size:22px">${topDiv[0]}</span></div><p style="font-size:11px;color:var(--txt3);margin-top:6px">${topDiv[1].size} carreras distintas</p>`
+    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
+
+  // Chart
+  destroy('car');
+  CH['car'] = new Chart(document.getElementById('c-car').getContext('2d'),{
     type:'bar',
     data:{
-      labels:sorted.map(x=>{const c=x.carrera.length>28?x.carrera.substring(0,27)+'…':x.carrera;return`${x.sede.substring(0,8)} · ${c}`;} ),
+      labels:sorted.map(x=>{
+        const c=x.carrera.length>26?x.carrera.slice(0,25)+'…':x.carrera;
+        return `${x.sede.slice(0,8)} · ${c}`;
+      }),
       datasets:[{
         label:'Préstamos',
-        data:sorted.map(x=>x.total),
-        backgroundColor:sorted.map(x=>sedeColor(x.sede)+'99'),
-        borderColor:sorted.map(x=>sedeColor(x.sede)),
-        borderWidth:1,borderRadius:3
+        data:sorted.map(x=>x.tot),
+        backgroundColor:sorted.map(x=>sdColor(x.sede)+'22'),
+        borderColor:sorted.map(x=>sdColor(x.sede)),
+        borderWidth:1.5, borderRadius:4
       }]
     },
     options:{
-      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{
-        title:items=>{const d=sorted[items[0].dataIndex];return`${d.sede}`;},
-        label:items=>{const d=sorted[items.dataIndex];return[` Carrera: ${d.carrera}`,` Total: ${fmt(d.total)}`];}
+        title:it=>`${sorted[it[0].dataIndex].sede}`,
+        label:it=>[` Carrera: ${sorted[it.dataIndex].carrera}`,` Total: ${fmt(sorted[it.dataIndex].tot)}`]
       }}},
       scales:{
-        x:{grid:{color:'#1c2d42'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
-        y:{grid:{display:false},ticks:{color:'#e8f0f8',font:{size:9}}}
+        x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
+        y:{grid:{display:false},ticks:{color:'#0f1724',font:{size:9.5,weight:'500'}}}
       }
     }
   });
 
-  const t=document.getElementById('table-carrera');
-  t.innerHTML=`
+  document.getElementById('tbl-car').innerHTML = `
     <thead><tr><th>#</th><th>Sede</th><th>Carrera</th><th class="r">Total</th></tr></thead>
     <tbody>${sorted.map((d,i)=>`<tr>
-      <td class="rank-num">${i+1}</td>
-      <td><span class="badge" style="background:${sedeColor(d.sede)}22;color:${sedeColor(d.sede)}">${d.sede}</span></td>
-      <td style="color:#c8dff0;max-width:300px">${d.carrera}</td>
-      <td class="r bold" style="color:#00c8ff">${fmt(d.total)}</td>
+      <td class="rn">${i+1}</td>
+      <td><span class="badge" style="background:${sdColor(d.sede)}18;color:${sdColor(d.sede)};border:1px solid ${sdColor(d.sede)}30">${d.sede}</span></td>
+      <td style="color:var(--txt2)">${d.carrera}</td>
+      <td class="r b" style="color:var(--gold-d)">${fmt(d.tot)}</td>
     </tr>`).join('')}</tbody>`;
 }
 
-// ═══════════════════════════════════════════════════
-// TAB 3: ACUMULADO
-// ═══════════════════════════════════════════════════
-function renderTab3() {
-  // Build sede totals per year
+// ── TAB 3: ACUMULADO ──
+function tab3(){
   const map={};
   DATA.total_sede_año.forEach(r=>{
-    if(!selectedYears.includes(r.Año)) return;
-    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+    if(!selYears.includes(r.Año)||!selSedes.has(r.Sede)) return;
     if(!map[r.Sede]) map[r.Sede]={sede:r.Sede};
     map[r.Sede][r.Año]=(map[r.Sede][r.Año]||0)+r.count;
   });
-  const rows=Object.values(map).map(row=>{
-    row.total=selectedYears.reduce((s,y)=>s+(row[y]||0),0); return row;
-  }).sort((a,b)=>b.total-a.total);
+  const rows=Object.values(map).map(r=>{
+    r.tot=selYears.reduce((s,y)=>s+(r[y]||0),0); return r;
+  }).sort((a,b)=>b.tot-a.tot);
 
-  destroyChart('stacked');
-  const ctx=document.getElementById('chart-stacked').getContext('2d');
-  charts['stacked']=new Chart(ctx,{
+  const grandTot = rows.reduce((s,r)=>s+r.tot,0);
+
+  // Value highlights: mejor crecimiento 21->24 (or first->last)
+  let bestGrow=null, bestGrowPct=-Infinity;
+  rows.forEach(r=>{
+    const firstY=selYears[0], lastY=selYears[selYears.length-1];
+    if(r[firstY]&&r[lastY]&&selYears.length>1){
+      const g=(r[lastY]-r[firstY])/r[firstY]*100;
+      if(g>bestGrowPct){ bestGrowPct=g; bestGrow=r; }
+    }
+  });
+
+  document.getElementById('top-crecimiento-display').innerHTML = bestGrow
+    ? `<div class="val-display"><span class="val-big" style="font-size:22px">${bestGrow.sede}</span></div>
+       <p style="font-size:11px;color:var(--txt3);margin-top:6px">${bestGrowPct>=0?'▲':'▼'} ${Math.abs(bestGrowPct).toFixed(1)}% entre ${selYears[0]} y ${selYears[selYears.length-1]}</p>`
+    : '<div class="empty-state" style="padding:20px"><p>Sin datos comparables</p></div>';
+  document.getElementById('total-periodo-display').innerHTML = `
+    <div class="val-display"><span class="val-big">${fmt(grandTot)}</span></div>
+    <p style="font-size:11px;color:var(--txt3);margin-top:6px">${rows.length} sede${rows.length!==1?'s':''} · ${selYears.length} año${selYears.length!==1?'s':''}</p>`;
+
+  // Chart
+  destroy('stk');
+  CH['stk'] = new Chart(document.getElementById('c-stk').getContext('2d'),{
     type:'bar',
     data:{
-      labels:rows.map(r=>r.sede.length>14?r.sede.substring(0,13)+'…':r.sede),
-      datasets:selectedYears.map(y=>({
+      labels:rows.map(r=>r.sede.length>14?r.sede.slice(0,13)+'…':r.sede),
+      datasets:selYears.map(y=>({
         label:String(y),
         data:rows.map(r=>r[y]||0),
-        backgroundColor:YEAR_CFG[y].bg,
-        borderColor:YEAR_CFG[y].color,
-        borderWidth:1, borderRadius:2
+        backgroundColor:YCFG[y].bg,
+        borderColor:YCFG[y].c,
+        borderWidth:1.5, borderRadius:2
       }))
     },
     options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#7a9bb8',font:{size:11}}},
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#5a6478',font:{size:11,weight:'600'}}},
         tooltip:{mode:'index',intersect:false,callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
       scales:{
-        x:{stacked:true,grid:{display:false},ticks:{color:'#7a9bb8',font:{size:9},maxRotation:40}},
-        y:{stacked:true,grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
+        x:{stacked:true,grid:{display:false},ticks:{color:'#5a6478',font:{size:9.5},maxRotation:38}},
+        y:{stacked:true,grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
       }
     }
   });
 
-  const t=document.getElementById('table-acum');
-  const colTotals=selectedYears.map(y=>rows.reduce((s,r)=>s+(r[y]||0),0));
-  t.innerHTML=`
-    <thead><tr><th>Sede</th>${selectedYears.map(y=>`<th class="r" style="color:${YEAR_CFG[y].color}">${y}</th>`).join('')}<th class="r">Total</th></tr></thead>
-    <tbody>${rows.map((row,i)=>`<tr>
-      <td><span class="badge" style="background:${sedeColor(row.sede)}22;color:${sedeColor(row.sede)}">${row.sede}</span></td>
-      ${selectedYears.map(y=>`<td class="r" style="color:${row[y]?YEAR_CFG[y].color+'cc':'#3f5a72'}">${row[y]?fmt(row[y]):'—'}</td>`).join('')}
-      <td class="r bold">${fmt(row.total)}</td>
+  const colTots = selYears.map(y=>rows.reduce((s,r)=>s+(r[y]||0),0));
+  document.getElementById('tbl-acum').innerHTML=`
+    <thead><tr><th>Sede</th>${selYears.map(y=>`<th class="r" style="color:${YCFG[y].c}">${y}</th>`).join('')}<th class="r">Total</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr>
+      <td><span class="badge" style="background:${sdColor(r.sede)}18;color:${sdColor(r.sede)};border:1px solid ${sdColor(r.sede)}30">${r.sede}</span></td>
+      ${selYears.map(y=>`<td class="r" style="color:${r[y]?YCFG[y].c+'cc':'#c8d0dc'}">${r[y]?fmt(r[y]):'—'}</td>`).join('')}
+      <td class="r b">${fmt(r.tot)}</td>
     </tr>`).join('')}</tbody>
-    <tfoot><tr><td>TOTAL</td>${colTotals.map((v,i)=>`<td class="r" style="color:${YEAR_CFG[selectedYears[i]].color}">${fmt(v)}</td>`).join('')}<td class="r" style="color:#00c8ff">${fmt(colTotals.reduce((s,v)=>s+v,0))}</td></tr></tfoot>`;
+    <tfoot><tr><td>TOTAL</td>${colTots.map((v,i)=>`<td class="r" style="color:${YCFG[selYears[i]].c}">${fmt(v)}</td>`).join('')}<td class="r" style="color:var(--gold-d)">${fmt(grandTot)}</td></tr></tfoot>`;
 }
 
-// ═══════════════════════════════════════════════════
-// MAIN RENDER
-// ═══════════════════════════════════════════════════
-function renderActiveTab() {
-  if(activeTab===0) renderTab0();
-  else if(activeTab===1) renderTab1();
-  else if(activeTab===2) renderTab2();
-  else if(activeTab===3) renderTab3();
-}
-
-function refresh() {
-  renderKPI();
-  renderActiveTab();
-}
-
-// Boot
-initFilters();
-refresh();
+init();
 </script>
 </body>
 </html>
