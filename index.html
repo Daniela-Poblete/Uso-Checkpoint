@@ -272,7 +272,7 @@ body::before{
     <div class="grid2" style="margin-bottom:16px">
       <div class="card">
         <h3>Volumen por Sede</h3>
-        <div class="cw" style="height:340px;position:relative" id="bar-wrap"><canvas id="c-bar" style="position:absolute;inset:0"></canvas></div>
+        <div class="cw" style="position:relative" id="bar-wrap"><canvas id="c-bar" style="position:absolute;inset:0"></canvas></div>
       </div>
       <div class="card">
         <h3>Distribución Porcentual</h3>
@@ -525,6 +525,10 @@ function tab0(){
 
   const barWrap = document.getElementById('bar-wrap');
   const donutWrap = document.getElementById('donut-wrap');
+
+  // Dynamic height: 36px per sede, min 180px
+  const barH = Math.max(180, n * 36);
+  barWrap.style.height = barH + 'px';
 
   if(n===0){
     barWrap.innerHTML = '<div class="empty-state"><span class="big">🏫</span><p>Selecciona sedes para ver el gráfico</p></div>';
