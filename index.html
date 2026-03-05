@@ -526,8 +526,8 @@ function tab0(){
   const barWrap = document.getElementById('bar-wrap');
   const donutWrap = document.getElementById('donut-wrap');
 
-  // Dynamic height: 36px per sede, min 180px
-  const barH = Math.max(180, n * 36);
+  // Dynamic height: enough space per sede regardless of year count
+  const barH = Math.max(200, n * 44);
   barWrap.style.height = barH + 'px';
 
   if(n===0){
@@ -564,11 +564,31 @@ function tab0(){
       type:'bar',
       data:{
         labels,
-        datasets:[{ label:'Préstamos', data:dataVals, backgroundColor:bgColors, borderColor:bdColors, borderWidth:1.5, borderRadius:5 }]
+        datasets:[{
+          label:'Total préstamos',
+          data:dataVals,
+          backgroundColor:bgColors,
+          borderColor:bdColors,
+          borderWidth:1.5,
+          borderRadius:4,
+          barThickness:16
+        }]
       },
       options:{
         indexAxis:'y', responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmt(c.raw)} préstamos`}}},
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{
+            label: c => ` ${fmt(c.raw)} préstamos (${(c.raw/total*100).toFixed(1)}%)`,
+            afterLabel: c => {
+              const sede = sorted[c.dataIndex][0];
+              return selYears.map(y=>{
+                const r = DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===sede);
+                return r ? `  ${y}: ${fmt(r.count)}` : `  ${y}: —`;
+              }).join('\n');
+            }
+          }}
+        },
         scales:{
           x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
           y:{grid:{display:false},ticks:{color:'#0f1724',font:{size:10,weight:'600'}}}
