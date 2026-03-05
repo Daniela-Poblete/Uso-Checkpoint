@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkpoint DUOC · Panel de Préstamos</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0d1520;
+    --surface2: #111d2e;
+    --border: #1c2d42;
+    --border2: #243647;
+    --text: #e8f0f8;
+    --text2: #7a9bb8;
+    --text3: #3f5a72;
+    --accent: #00c8ff;
+    --accent2: #0090d4;
+    --y21: #818cf8;
+    --y22: #34d399;
+    --y23: #fbbf24;
+    --y24: #f87171;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  #app { position: relative; z-index: 1; display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: 260px; flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar-header {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-badge {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+  .logo-text h1 { font-size: 14px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; }
+  .logo-text p { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; }
+  .total-badge {
+    background: var(--surface2); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .total-badge .lbl { font-size: 11px; color: var(--text2); }
+  .total-badge .val { font-size: 18px; font-weight: 700; color: var(--accent); font-family: 'DM Mono', monospace; }
+
+  .filter-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .filter-section h3 { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+
+  /* Year toggles */
+  .year-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .year-btn {
+    padding: 8px 6px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border2);
+    background: transparent; color: var(--text2); font-size: 12px; font-weight: 600;
+    font-family: 'DM Mono', monospace; transition: all 0.18s; text-align: center;
+  }
+  .year-btn:hover { border-color: var(--accent); }
+  .year-btn.active-21 { background: #818cf822; border-color: #818cf8; color: #818cf8; }
+  .year-btn.active-22 { background: #34d39922; border-color: #34d399; color: #34d399; }
+  .year-btn.active-23 { background: #fbbf2422; border-color: #fbbf24; color: #fbbf24; }
+  .year-btn.active-24 { background: #f8717122; border-color: #f87171; color: #f87171; }
+
+  /* Sede checkboxes */
+  .sede-actions { display: flex; gap: 6px; margin-bottom: 8px; }
+  .sede-actions button {
+    flex: 1; padding: 5px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; border-radius: 5px; cursor: pointer; border: 1px solid var(--border2);
+    background: var(--surface2); color: var(--text2); transition: all 0.15s;
+  }
+  .sede-actions button:hover { border-color: var(--accent); color: var(--accent); }
+  .sede-list { max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+  .sede-list::-webkit-scrollbar { width: 4px; }
+  .sede-list::-webkit-scrollbar-track { background: transparent; }
+  .sede-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+  .sede-item {
+    display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px;
+    cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
+  }
+  .sede-item:hover { background: var(--surface2); }
+  .sede-item.checked { background: #00c8ff0d; border-color: #00c8ff22; }
+  .sede-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sede-item input { display: none; }
+  .sede-name { font-size: 11px; color: var(--text2); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sede-item.checked .sede-name { color: var(--text); }
+  .sede-count { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    padding: 16px 20px 0; border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .nav-tab {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+    cursor: pointer; border: 1px solid transparent; background: transparent; transition: all 0.18s;
+    text-align: left; width: 100%;
+  }
+  .nav-tab:hover { background: var(--surface2); }
+  .nav-tab.active { background: #00c8ff12; border-color: #00c8ff33; }
+  .nav-tab .tab-icon { font-size: 14px; flex-shrink: 0; }
+  .nav-tab .tab-label { font-size: 12px; font-weight: 500; color: var(--text2); }
+  .nav-tab.active .tab-label { color: var(--accent); font-weight: 600; }
+  .nav-tab .tab-count { margin-left: auto; font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); background: var(--surface2); padding: 2px 6px; border-radius: 4px; }
+
+  /* ── MAIN ── */
+  #main { flex: 1; overflow: auto; }
+
+  /* KPI bar */
+  .kpi-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; border-bottom: 1px solid var(--border);
+  }
+  .kpi-card {
+    padding: 20px 24px; border-right: 1px solid var(--border);
+    transition: background 0.2s; cursor: default;
+    animation: fadeIn 0.4s both;
+  }
+  .kpi-card:last-child { border-right: none; }
+  .kpi-card:hover { background: var(--surface); }
+  .kpi-year { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text2); margin-bottom: 4px; }
+  .kpi-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; font-family: 'DM Mono', monospace; }
+  .kpi-delta { font-size: 11px; margin-top: 4px; }
+  .kpi-delta.up { color: #34d399; }
+  .kpi-delta.down { color: #f87171; }
+  .kpi-delta.neutral { color: var(--text3); }
+
+  /* Tab panels */
+  .tab-panel { display: none; padding: 28px; animation: slideIn 0.25s ease both; }
+  .tab-panel.active { display: block; }
+  @keyframes slideIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .panel-header { margin-bottom: 24px; }
+  .panel-header h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .panel-header p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  /* Chart containers */
+  .chart-grid { display: grid; gap: 20px; }
+  .chart-grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .chart-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .chart-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), transparent);
+  }
+  .chart-card h3 { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-wrap { position: relative; }
+
+  /* Data table */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 20px; }
+  .data-table thead tr { border-bottom: 1px solid var(--border2); }
+  .data-table th { padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .data-table th.r { text-align: right; }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  .data-table tbody tr:hover { background: var(--surface2); }
+  .data-table td { padding: 9px 14px; color: var(--text2); }
+  .data-table td.r { text-align: right; font-family: 'DM Mono', monospace; }
+  .data-table td.bold { color: var(--text); font-weight: 600; }
+  .data-table tfoot tr { border-top: 2px solid var(--border2); }
+  .data-table tfoot td { font-weight: 700; color: var(--text); font-family: 'DM Mono', monospace; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .rank-num { font-family: 'DM Mono', monospace; color: var(--text3); font-size: 11px; }
+  .bar-mini { display: inline-block; height: 4px; background: var(--accent); border-radius: 2px; vertical-align: middle; margin-left: 8px; opacity: 0.5; }
+
+  /* scrollbar global */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 5px; }
+
+  /* Year dot legend */
+  .legend-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Progress bars in tab 1 */
+  .progress-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .progress-row:last-child { border-bottom: none; }
+  .progress-sede { font-size: 11px; color: var(--text2); width: 175px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .progress-bar-wrap { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(.22,1,.36,1); }
+  .progress-val { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text); width: 55px; text-align: right; flex-shrink: 0; }
+
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+
+  /* Responsive hint */
+  @media (max-width: 1100px) { .chart-grid.cols2 { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) {
+    #sidebar { width: 200px; }
+    .kpi-bar { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-badge">
+      <div class="logo-icon">📚</div>
+      <div class="logo-text">
+        <h1>Checkpoint DUOC</h1>
+        <p>2021 – 2024</p>
+      </div>
+    </div>
+    <div class="total-badge">
+      <span class="lbl">Total registros</span>
+      <span class="val" id="total-global">70,863</span>
+    </div>
+  </div>
+
+  <!-- Year filter -->
+  <div class="filter-section">
+    <h3>Año</h3>
+    <div class="year-grid" id="year-filters"></div>
+  </div>
+
+  <!-- Sede filter -->
+  <div class="filter-section">
+    <h3>Sede</h3>
+    <div class="sede-actions">
+      <button onclick="selectAllSedes()">Todas</button>
+      <button onclick="clearSedes()">Ninguna</button>
+    </div>
+    <div class="sede-list" id="sede-filters"></div>
+  </div>
+
+  <!-- Nav -->
+  <div class="nav-tabs" id="nav-tabs">
+    <button class="nav-tab active" data-tab="0" onclick="switchTab(0)">
+      <span class="tab-icon">📊</span>
+      <span class="tab-label">Total Préstamos</span>
+    </button>
+    <button class="nav-tab" data-tab="1" onclick="switchTab(1)">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">Resumen Mes/Año</span>
+    </button>
+    <button class="nav-tab" data-tab="2" onclick="switchTab(2)">
+      <span class="tab-icon">🎓</span>
+      <span class="tab-label">Carrera por Sede</span>
+    </button>
+    <button class="nav-tab" data-tab="3" onclick="switchTab(3)">
+      <span class="tab-icon">📈</span>
+      <span class="tab-label">Acumulado Sede</span>
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- KPI bar -->
+  <div class="kpi-bar" id="kpi-bar"></div>
+
+  <!-- Tab 0: Total -->
+  <div class="tab-panel active" id="panel-0">
+    <div class="panel-header">
+      <h2>Total Préstamos por Sede</h2>
+      <p id="p0-subtitle">Distribución acumulada de préstamos Checkpoint por sede · años seleccionados</p>
+    </div>
+    <div class="chart-grid cols2">
+      <div class="chart-card">
+        <h3>Top 15 Sedes — Volumen Total</h3>
+        <div class="chart-wrap" style="height:380px"><canvas id="chart-bar-sede"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Participación Porcentual</h3>
+        <div class="chart-wrap" style="height:380px"><canvas id="chart-doughnut"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-top:20px">
+      <h3>Detalle por Sede</h3>
+      <div id="progress-bars"></div>
+      <table class="data-table" id="table-sede"></table>
+    </div>
+  </div>
+
+  <!-- Tab 1: Mes/Año -->
+  <div class="tab-panel" id="panel-1">
+    <div class="panel-header">
+      <h2>Resumen Mes por Año</h2>
+      <p>Comparativa mensual de préstamos entre años seleccionados</p>
+    </div>
+    <div class="chart-card" style="margin-bottom:20px">
+      <h3>Tendencia Mensual por Año</h3>
+      <div class="legend-row" id="legend-year"></div>
+      <div class="chart-wrap" style="height:300px"><canvas id="chart-line"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Distribución Mensual Comparada</h3>
+      <div class="chart-wrap" style="height:260px"><canvas id="chart-bar-month"></canvas></div>
+    </div>
+    <div class="chart-card" style="margin-top:20px">
+      <h3>Tabla Mes × Año</h3>
+      <table class="data-table" id="table-mes"></table>
+    </div>
+  </div>
+
+  <!-- Tab 2: Carrera/Sede -->
+  <div class="tab-panel" id="panel-2">
+    <div class="panel-header">
+      <h2>Resumen Carrera por Sede</h2>
+      <p>Top combinaciones sede–carrera según selección de filtros</p>
+    </div>
+    <div class="chart-card" style="margin-bottom:20px">
+      <h3>Top 20 Sede / Carrera</h3>
+      <div class="chart-wrap" style="height:420px"><canvas id="chart-carrera"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Tabla Detallada</h3>
+      <table class="data-table" id="table-carrera"></table>
+    </div>
+  </div>
+
+  <!-- Tab 3: Acumulado -->
+  <div class="tab-panel" id="panel-3">
+    <div class="panel-header">
+      <h2>Acumulado por Sede y Año</h2>
+      <p>Evolución y comparación anual de préstamos por sede</p>
+    </div>
+    <div class="chart-card" style="margin-bottom:20px">
+      <h3>Barras Apiladas por Año</h3>
+      <div class="chart-wrap" style="height:340px"><canvas id="chart-stacked"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Tabla Resumen Acumulado</h3>
+      <table class="data-table" id="table-acum"></table>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const DATA = {
+  total_sede_año:[{Año:2021,Sede:"ALAMEDA",count:12},{Año:2021,Sede:"ANTONIO VARAS",count:5580},{Año:2021,Sede:"CASA CENTRAL",count:199},{Año:2021,Sede:"CONCEPCION",count:1039},{Año:2021,Sede:"LICEO RENCA",count:1},{Año:2021,Sede:"MAIPU",count:88},{Año:2021,Sede:"MELIPILLA",count:1},{Año:2021,Sede:"No Informado",count:690},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",count:1455},{Año:2021,Sede:"PLAZA NORTE",count:625},{Año:2021,Sede:"PLAZA OESTE",count:40},{Año:2021,Sede:"PLAZA VESPUCIO",count:1521},{Año:2021,Sede:"PUENTE ALTO",count:26},{Año:2021,Sede:"PUERTO MONTT",count:6},{Año:2021,Sede:"SAN BERNARDO",count:289},{Año:2021,Sede:"SAN CARLOS DE APOQUINDO",count:517},{Año:2021,Sede:"SAN JOAQUIN",count:5},{Año:2021,Sede:"VALPARAISO",count:710},{Año:2021,Sede:"VINA DEL MAR",count:2533},{Año:2022,Sede:"ALAMEDA",count:257},{Año:2022,Sede:"ANTONIO VARAS",count:5869},{Año:2022,Sede:"CAMPUS VILLARRICA",count:3},{Año:2022,Sede:"CASA CENTRAL",count:69},{Año:2022,Sede:"CONCEPCION",count:1801},{Año:2022,Sede:"MAIPU",count:82},{Año:2022,Sede:"MELIPILLA",count:2},{Año:2022,Sede:"No Informado",count:98},{Año:2022,Sede:"ONLINE",count:1},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",count:2146},{Año:2022,Sede:"PLAZA NORTE",count:608},{Año:2022,Sede:"PLAZA OESTE",count:51},{Año:2022,Sede:"PLAZA VESPUCIO",count:1438},{Año:2022,Sede:"PUENTE ALTO",count:46},{Año:2022,Sede:"PUERTO MONTT",count:97},{Año:2022,Sede:"SAN BERNARDO",count:98},{Año:2022,Sede:"SAN CARLOS DE APOQUINDO",count:497},{Año:2022,Sede:"SAN JOAQUIN",count:52},{Año:2022,Sede:"VALPARAISO",count:998},{Año:2022,Sede:"VINA DEL MAR",count:3960},{Año:2023,Sede:"ALAMEDA",count:232},{Año:2023,Sede:"ANTONIO VARAS",count:6431},{Año:2023,Sede:"CAMPUS ARAUCO",count:12},{Año:2023,Sede:"CAMPUS NACIMIENTO",count:2},{Año:2023,Sede:"CAMPUS VILLARRICA",count:1},{Año:2023,Sede:"CASA CENTRAL",count:25},{Año:2023,Sede:"CONCEPCION",count:2619},{Año:2023,Sede:"Educacion Continua",count:10},{Año:2023,Sede:"MAIPU",count:136},{Año:2023,Sede:"MELIPILLA",count:3},{Año:2023,Sede:"No Informado",count:127},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",count:2730},{Año:2023,Sede:"PLAZA NORTE",count:1626},{Año:2023,Sede:"PLAZA OESTE",count:11},{Año:2023,Sede:"PLAZA VESPUCIO",count:4298},{Año:2023,Sede:"PUENTE ALTO",count:94},{Año:2023,Sede:"PUERTO MONTT",count:181},{Año:2023,Sede:"SAN BERNARDO",count:95},{Año:2023,Sede:"SAN CARLOS DE APOQUINDO",count:371},{Año:2023,Sede:"SAN JOAQUIN",count:32},{Año:2023,Sede:"VALPARAISO",count:1112},{Año:2023,Sede:"VINA DEL MAR",count:3424},{Año:2024,Sede:"ALAMEDA",count:380},{Año:2024,Sede:"ANTONIO VARAS",count:3914},{Año:2024,Sede:"CAMPUS ARAUCO",count:30},{Año:2024,Sede:"CASA CENTRAL",count:45},{Año:2024,Sede:"CONCEPCION",count:1134},{Año:2024,Sede:"MAIPU",count:379},{Año:2024,Sede:"MELIPILLA",count:4},{Año:2024,Sede:"NACIMIENTO",count:4},{Año:2024,Sede:"No Informado",count:131},{Año:2024,Sede:"ONLINE",count:1},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",count:1336},{Año:2024,Sede:"PLAZA NORTE",count:611},{Año:2024,Sede:"PLAZA OESTE",count:46},{Año:2024,Sede:"PLAZA VESPUCIO",count:2416},{Año:2024,Sede:"PUENTE ALTO",count:43},{Año:2024,Sede:"PUERTO MONTT",count:263},{Año:2024,Sede:"SAN BERNARDO",count:76},{Año:2024,Sede:"SAN CARLOS DE APOQUINDO",count:212},{Año:2024,Sede:"SAN JOAQUIN",count:5},{Año:2024,Sede:"VALPARAISO",count:821},{Año:2024,Sede:"VINA DEL MAR",count:1930}],
+  mes_sede_año:[{Año:2021,Mes:1,Sede:"ANTONIO VARAS",count:74},{Año:2021,Mes:1,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:1,Sede:"CONCEPCION",count:26},{Año:2021,Mes:1,Sede:"MAIPU",count:3},{Año:2021,Mes:1,Sede:"No Informado",count:1},{Año:2021,Mes:1,Sede:"PADRE ALONSO DE OVALLE",count:36},{Año:2021,Mes:1,Sede:"PLAZA NORTE",count:17},{Año:2021,Mes:1,Sede:"PLAZA OESTE",count:5},{Año:2021,Mes:1,Sede:"PLAZA VESPUCIO",count:42},{Año:2021,Mes:1,Sede:"PUENTE ALTO",count:1},{Año:2021,Mes:1,Sede:"SAN BERNARDO",count:4},{Año:2021,Mes:1,Sede:"SAN CARLOS DE APOQUINDO",count:8},{Año:2021,Mes:1,Sede:"VALPARAISO",count:1},{Año:2021,Mes:1,Sede:"VINA DEL MAR",count:58},{Año:2021,Mes:2,Sede:"ANTONIO VARAS",count:51},{Año:2021,Mes:2,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:2,Sede:"CONCEPCION",count:8},{Año:2021,Mes:2,Sede:"MAIPU",count:3},{Año:2021,Mes:2,Sede:"No Informado",count:1},{Año:2021,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:31},{Año:2021,Mes:2,Sede:"PLAZA NORTE",count:4},{Año:2021,Mes:2,Sede:"PLAZA OESTE",count:2},{Año:2021,Mes:2,Sede:"PLAZA VESPUCIO",count:13},{Año:2021,Mes:2,Sede:"PUERTO MONTT",count:2},{Año:2021,Mes:2,Sede:"SAN BERNARDO",count:13},{Año:2021,Mes:2,Sede:"SAN CARLOS DE APOQUINDO",count:4},{Año:2021,Mes:2,Sede:"VALPARAISO",count:2},{Año:2021,Mes:2,Sede:"VINA DEL MAR",count:40},{Año:2021,Mes:3,Sede:"ALAMEDA",count:1},{Año:2021,Mes:3,Sede:"ANTONIO VARAS",count:670},{Año:2021,Mes:3,Sede:"CASA CENTRAL",count:93},{Año:2021,Mes:3,Sede:"CONCEPCION",count:13},{Año:2021,Mes:3,Sede:"MAIPU",count:7},{Año:2021,Mes:3,Sede:"No Informado",count:4},{Año:2021,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:111},{Año:2021,Mes:3,Sede:"PLAZA NORTE",count:7},{Año:2021,Mes:3,Sede:"PLAZA OESTE",count:2},{Año:2021,Mes:3,Sede:"PLAZA VESPUCIO",count:167},{Año:2021,Mes:3,Sede:"PUENTE ALTO",count:2},{Año:2021,Mes:3,Sede:"SAN BERNARDO",count:30},{Año:2021,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:71},{Año:2021,Mes:3,Sede:"VALPARAISO",count:5},{Año:2021,Mes:3,Sede:"VINA DEL MAR",count:258},{Año:2021,Mes:4,Sede:"ALAMEDA",count:4},{Año:2021,Mes:4,Sede:"ANTONIO VARAS",count:1299},{Año:2021,Mes:4,Sede:"CASA CENTRAL",count:7},{Año:2021,Mes:4,Sede:"CONCEPCION",count:69},{Año:2021,Mes:4,Sede:"MAIPU",count:26},{Año:2021,Mes:4,Sede:"No Informado",count:16},{Año:2021,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:181},{Año:2021,Mes:4,Sede:"PLAZA NORTE",count:23},{Año:2021,Mes:4,Sede:"PLAZA OESTE",count:7},{Año:2021,Mes:4,Sede:"PLAZA VESPUCIO",count:173},{Año:2021,Mes:4,Sede:"PUENTE ALTO",count:4},{Año:2021,Mes:4,Sede:"SAN BERNARDO",count:13},{Año:2021,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:112},{Año:2021,Mes:4,Sede:"SAN JOAQUIN",count:3},{Año:2021,Mes:4,Sede:"VALPARAISO",count:148},{Año:2021,Mes:4,Sede:"VINA DEL MAR",count:331},{Año:2021,Mes:5,Sede:"ALAMEDA",count:1},{Año:2021,Mes:5,Sede:"ANTONIO VARAS",count:492},{Año:2021,Mes:5,Sede:"CASA CENTRAL",count:23},{Año:2021,Mes:5,Sede:"CONCEPCION",count:139},{Año:2021,Mes:5,Sede:"MAIPU",count:18},{Año:2021,Mes:5,Sede:"MELIPILLA",count:1},{Año:2021,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:84},{Año:2021,Mes:5,Sede:"PLAZA NORTE",count:63},{Año:2021,Mes:5,Sede:"PLAZA OESTE",count:6},{Año:2021,Mes:5,Sede:"PLAZA VESPUCIO",count:236},{Año:2021,Mes:5,Sede:"SAN BERNARDO",count:11},{Año:2021,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:22},{Año:2021,Mes:5,Sede:"VALPARAISO",count:42},{Año:2021,Mes:5,Sede:"VINA DEL MAR",count:240},{Año:2021,Mes:6,Sede:"ALAMEDA",count:1},{Año:2021,Mes:6,Sede:"ANTONIO VARAS",count:447},{Año:2021,Mes:6,Sede:"CASA CENTRAL",count:4},{Año:2021,Mes:6,Sede:"CONCEPCION",count:64},{Año:2021,Mes:6,Sede:"MAIPU",count:16},{Año:2021,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:92},{Año:2021,Mes:6,Sede:"PLAZA NORTE",count:34},{Año:2021,Mes:6,Sede:"PLAZA OESTE",count:11},{Año:2021,Mes:6,Sede:"PLAZA VESPUCIO",count:152},{Año:2021,Mes:6,Sede:"SAN BERNARDO",count:4},{Año:2021,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:32},{Año:2021,Mes:6,Sede:"VALPARAISO",count:42},{Año:2021,Mes:6,Sede:"VINA DEL MAR",count:177},{Año:2021,Mes:7,Sede:"ANTONIO VARAS",count:143},{Año:2021,Mes:7,Sede:"CASA CENTRAL",count:6},{Año:2021,Mes:7,Sede:"CONCEPCION",count:27},{Año:2021,Mes:7,Sede:"LICEO RENCA",count:1},{Año:2021,Mes:7,Sede:"MAIPU",count:8},{Año:2021,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:39},{Año:2021,Mes:7,Sede:"PLAZA NORTE",count:19},{Año:2021,Mes:7,Sede:"PLAZA OESTE",count:3},{Año:2021,Mes:7,Sede:"PLAZA VESPUCIO",count:145},{Año:2021,Mes:7,Sede:"PUENTE ALTO",count:3},{Año:2021,Mes:7,Sede:"SAN BERNARDO",count:8},{Año:2021,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:2},{Año:2021,Mes:7,Sede:"SAN JOAQUIN",count:1},{Año:2021,Mes:7,Sede:"VALPARAISO",count:23},{Año:2021,Mes:7,Sede:"VINA DEL MAR",count:85},{Año:2021,Mes:8,Sede:"ALAMEDA",count:3},{Año:2021,Mes:8,Sede:"ANTONIO VARAS",count:263},{Año:2021,Mes:8,Sede:"CASA CENTRAL",count:6},{Año:2021,Mes:8,Sede:"CONCEPCION",count:43},{Año:2021,Mes:8,Sede:"No Informado",count:628},{Año:2021,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:127},{Año:2021,Mes:8,Sede:"PLAZA NORTE",count:81},{Año:2021,Mes:8,Sede:"PLAZA VESPUCIO",count:85},{Año:2021,Mes:8,Sede:"PUENTE ALTO",count:1},{Año:2021,Mes:8,Sede:"SAN BERNARDO",count:17},{Año:2021,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:55},{Año:2021,Mes:8,Sede:"VALPARAISO",count:40},{Año:2021,Mes:8,Sede:"VINA DEL MAR",count:250},{Año:2021,Mes:9,Sede:"ALAMEDA",count:1},{Año:2021,Mes:9,Sede:"ANTONIO VARAS",count:1232},{Año:2021,Mes:9,Sede:"CASA CENTRAL",count:51},{Año:2021,Mes:9,Sede:"CONCEPCION",count:427},{Año:2021,Mes:9,Sede:"MAIPU",count:1},{Año:2021,Mes:9,Sede:"No Informado",count:7},{Año:2021,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:446},{Año:2021,Mes:9,Sede:"PLAZA NORTE",count:258},{Año:2021,Mes:9,Sede:"PLAZA VESPUCIO",count:245},{Año:2021,Mes:9,Sede:"PUENTE ALTO",count:6},{Año:2021,Mes:9,Sede:"PUERTO MONTT",count:1},{Año:2021,Mes:9,Sede:"SAN BERNARDO",count:84},{Año:2021,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:134},{Año:2021,Mes:9,Sede:"VALPARAISO",count:119},{Año:2021,Mes:9,Sede:"VINA DEL MAR",count:522},{Año:2021,Mes:10,Sede:"ANTONIO VARAS",count:288},{Año:2021,Mes:10,Sede:"CONCEPCION",count:80},{Año:2021,Mes:10,Sede:"MAIPU",count:3},{Año:2021,Mes:10,Sede:"No Informado",count:7},{Año:2021,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:206},{Año:2021,Mes:10,Sede:"PLAZA NORTE",count:79},{Año:2021,Mes:10,Sede:"PLAZA VESPUCIO",count:75},{Año:2021,Mes:10,Sede:"PUENTE ALTO",count:9},{Año:2021,Mes:10,Sede:"SAN BERNARDO",count:52},{Año:2021,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:30},{Año:2021,Mes:10,Sede:"VALPARAISO",count:98},{Año:2021,Mes:10,Sede:"VINA DEL MAR",count:186},{Año:2021,Mes:11,Sede:"ALAMEDA",count:1},{Año:2021,Mes:11,Sede:"ANTONIO VARAS",count:405},{Año:2021,Mes:11,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:11,Sede:"CONCEPCION",count:77},{Año:2021,Mes:11,Sede:"MAIPU",count:1},{Año:2021,Mes:11,Sede:"No Informado",count:20},{Año:2021,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:78},{Año:2021,Mes:11,Sede:"PLAZA NORTE",count:17},{Año:2021,Mes:11,Sede:"PLAZA OESTE",count:3},{Año:2021,Mes:11,Sede:"PLAZA VESPUCIO",count:141},{Año:2021,Mes:11,Sede:"PUERTO MONTT",count:2},{Año:2021,Mes:11,Sede:"SAN BERNARDO",count:39},{Año:2021,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:38},{Año:2021,Mes:11,Sede:"SAN JOAQUIN",count:1},{Año:2021,Mes:11,Sede:"VALPARAISO",count:83},{Año:2021,Mes:11,Sede:"VINA DEL MAR",count:251},{Año:2021,Mes:12,Sede:"ANTONIO VARAS",count:216},{Año:2021,Mes:12,Sede:"CASA CENTRAL",count:3},{Año:2021,Mes:12,Sede:"CONCEPCION",count:66},{Año:2021,Mes:12,Sede:"MAIPU",count:2},{Año:2021,Mes:12,Sede:"No Informado",count:6},{Año:2021,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:24},{Año:2021,Mes:12,Sede:"PLAZA NORTE",count:23},{Año:2021,Mes:12,Sede:"PLAZA OESTE",count:1},{Año:2021,Mes:12,Sede:"PLAZA VESPUCIO",count:47},{Año:2021,Mes:12,Sede:"PUERTO MONTT",count:1},{Año:2021,Mes:12,Sede:"SAN BERNARDO",count:14},{Año:2021,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:9},{Año:2021,Mes:12,Sede:"VALPARAISO",count:107},{Año:2021,Mes:12,Sede:"VINA DEL MAR",count:135},{Año:2022,Mes:2,Sede:"ANTONIO VARAS",count:35},{Año:2022,Mes:2,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:2,Sede:"CONCEPCION",count:4},{Año:2022,Mes:2,Sede:"MAIPU",count:4},{Año:2022,Mes:2,Sede:"MELIPILLA",count:1},{Año:2022,Mes:2,Sede:"No Informado",count:1},{Año:2022,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:5},{Año:2022,Mes:2,Sede:"PLAZA NORTE",count:5},{Año:2022,Mes:2,Sede:"PLAZA OESTE",count:1},{Año:2022,Mes:2,Sede:"PLAZA VESPUCIO",count:8},{Año:2022,Mes:2,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:2,Sede:"SAN JOAQUIN",count:1},{Año:2022,Mes:2,Sede:"VALPARAISO",count:1},{Año:2022,Mes:2,Sede:"VINA DEL MAR",count:15},{Año:2022,Mes:3,Sede:"ALAMEDA",count:1},{Año:2022,Mes:3,Sede:"ANTONIO VARAS",count:1343},{Año:2022,Mes:3,Sede:"CASA CENTRAL",count:12},{Año:2022,Mes:3,Sede:"CONCEPCION",count:54},{Año:2022,Mes:3,Sede:"MAIPU",count:6},{Año:2022,Mes:3,Sede:"ONLINE",count:1},{Año:2022,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:135},{Año:2022,Mes:3,Sede:"PLAZA NORTE",count:17},{Año:2022,Mes:3,Sede:"PLAZA OESTE",count:2},{Año:2022,Mes:3,Sede:"PLAZA VESPUCIO",count:56},{Año:2022,Mes:3,Sede:"PUENTE ALTO",count:6},{Año:2022,Mes:3,Sede:"SAN BERNARDO",count:26},{Año:2022,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:61},{Año:2022,Mes:3,Sede:"VALPARAISO",count:70},{Año:2022,Mes:3,Sede:"VINA DEL MAR",count:472},{Año:2022,Mes:4,Sede:"ALAMEDA",count:2},{Año:2022,Mes:4,Sede:"ANTONIO VARAS",count:475},{Año:2022,Mes:4,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:4,Sede:"CONCEPCION",count:97},{Año:2022,Mes:4,Sede:"MAIPU",count:2},{Año:2022,Mes:4,Sede:"No Informado",count:9},{Año:2022,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:99},{Año:2022,Mes:4,Sede:"PLAZA NORTE",count:4},{Año:2022,Mes:4,Sede:"PLAZA VESPUCIO",count:85},{Año:2022,Mes:4,Sede:"PUENTE ALTO",count:8},{Año:2022,Mes:4,Sede:"PUERTO MONTT",count:1},{Año:2022,Mes:4,Sede:"SAN BERNARDO",count:13},{Año:2022,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:45},{Año:2022,Mes:4,Sede:"VALPARAISO",count:35},{Año:2022,Mes:4,Sede:"VINA DEL MAR",count:272},{Año:2022,Mes:5,Sede:"ALAMEDA",count:5},{Año:2022,Mes:5,Sede:"ANTONIO VARAS",count:626},{Año:2022,Mes:5,Sede:"CAMPUS VILLARRICA",count:2},{Año:2022,Mes:5,Sede:"CASA CENTRAL",count:32},{Año:2022,Mes:5,Sede:"CONCEPCION",count:80},{Año:2022,Mes:5,Sede:"MAIPU",count:9},{Año:2022,Mes:5,Sede:"No Informado",count:22},{Año:2022,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:167},{Año:2022,Mes:5,Sede:"PLAZA NORTE",count:97},{Año:2022,Mes:5,Sede:"PLAZA OESTE",count:1},{Año:2022,Mes:5,Sede:"PLAZA VESPUCIO",count:75},{Año:2022,Mes:5,Sede:"PUENTE ALTO",count:10},{Año:2022,Mes:5,Sede:"PUERTO MONTT",count:22},{Año:2022,Mes:5,Sede:"SAN BERNARDO",count:14},{Año:2022,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:10},{Año:2022,Mes:5,Sede:"SAN JOAQUIN",count:11},{Año:2022,Mes:5,Sede:"VALPARAISO",count:36},{Año:2022,Mes:5,Sede:"VINA DEL MAR",count:152},{Año:2022,Mes:6,Sede:"ALAMEDA",count:5},{Año:2022,Mes:6,Sede:"ANTONIO VARAS",count:386},{Año:2022,Mes:6,Sede:"CASA CENTRAL",count:5},{Año:2022,Mes:6,Sede:"CONCEPCION",count:88},{Año:2022,Mes:6,Sede:"MAIPU",count:5},{Año:2022,Mes:6,Sede:"No Informado",count:26},{Año:2022,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:298},{Año:2022,Mes:6,Sede:"PLAZA NORTE",count:24},{Año:2022,Mes:6,Sede:"PLAZA OESTE",count:3},{Año:2022,Mes:6,Sede:"PLAZA VESPUCIO",count:80},{Año:2022,Mes:6,Sede:"PUENTE ALTO",count:6},{Año:2022,Mes:6,Sede:"SAN BERNARDO",count:13},{Año:2022,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:15},{Año:2022,Mes:6,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:6,Sede:"VALPARAISO",count:43},{Año:2022,Mes:6,Sede:"VINA DEL MAR",count:195},{Año:2022,Mes:7,Sede:"ALAMEDA",count:17},{Año:2022,Mes:7,Sede:"ANTONIO VARAS",count:59},{Año:2022,Mes:7,Sede:"CASA CENTRAL",count:2},{Año:2022,Mes:7,Sede:"CONCEPCION",count:17},{Año:2022,Mes:7,Sede:"MAIPU",count:4},{Año:2022,Mes:7,Sede:"No Informado",count:3},{Año:2022,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:47},{Año:2022,Mes:7,Sede:"PLAZA NORTE",count:25},{Año:2022,Mes:7,Sede:"PLAZA VESPUCIO",count:26},{Año:2022,Mes:7,Sede:"PUENTE ALTO",count:4},{Año:2022,Mes:7,Sede:"PUERTO MONTT",count:1},{Año:2022,Mes:7,Sede:"SAN BERNARDO",count:5},{Año:2022,Mes:7,Sede:"SAN JOAQUIN",count:5},{Año:2022,Mes:7,Sede:"VALPARAISO",count:25},{Año:2022,Mes:7,Sede:"VINA DEL MAR",count:45},{Año:2022,Mes:8,Sede:"ALAMEDA",count:203},{Año:2022,Mes:8,Sede:"ANTONIO VARAS",count:803},{Año:2022,Mes:8,Sede:"CASA CENTRAL",count:1},{Año:2022,Mes:8,Sede:"CONCEPCION",count:591},{Año:2022,Mes:8,Sede:"MAIPU",count:6},{Año:2022,Mes:8,Sede:"MELIPILLA",count:1},{Año:2022,Mes:8,Sede:"No Informado",count:9},{Año:2022,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:667},{Año:2022,Mes:8,Sede:"PLAZA NORTE",count:187},{Año:2022,Mes:8,Sede:"PLAZA OESTE",count:3},{Año:2022,Mes:8,Sede:"PLAZA VESPUCIO",count:555},{Año:2022,Mes:8,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:8,Sede:"PUERTO MONTT",count:56},{Año:2022,Mes:8,Sede:"SAN BERNARDO",count:7},{Año:2022,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:148},{Año:2022,Mes:8,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:8,Sede:"VALPARAISO",count:181},{Año:2022,Mes:8,Sede:"VINA DEL MAR",count:631},{Año:2022,Mes:9,Sede:"ALAMEDA",count:6},{Año:2022,Mes:9,Sede:"ANTONIO VARAS",count:812},{Año:2022,Mes:9,Sede:"CASA CENTRAL",count:5},{Año:2022,Mes:9,Sede:"CONCEPCION",count:447},{Año:2022,Mes:9,Sede:"MAIPU",count:4},{Año:2022,Mes:9,Sede:"No Informado",count:15},{Año:2022,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:226},{Año:2022,Mes:9,Sede:"PLAZA NORTE",count:96},{Año:2022,Mes:9,Sede:"PLAZA OESTE",count:4},{Año:2022,Mes:9,Sede:"PLAZA VESPUCIO",count:253},{Año:2022,Mes:9,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:9,Sede:"PUERTO MONTT",count:8},{Año:2022,Mes:9,Sede:"SAN BERNARDO",count:3},{Año:2022,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:147},{Año:2022,Mes:9,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:9,Sede:"VALPARAISO",count:211},{Año:2022,Mes:9,Sede:"VINA DEL MAR",count:1161},{Año:2022,Mes:10,Sede:"ALAMEDA",count:2},{Año:2022,Mes:10,Sede:"ANTONIO VARAS",count:370},{Año:2022,Mes:10,Sede:"CASA CENTRAL",count:1},{Año:2022,Mes:10,Sede:"CONCEPCION",count:127},{Año:2022,Mes:10,Sede:"MAIPU",count:6},{Año:2022,Mes:10,Sede:"No Informado",count:4},{Año:2022,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:124},{Año:2022,Mes:10,Sede:"PLAZA NORTE",count:45},{Año:2022,Mes:10,Sede:"PLAZA OESTE",count:8},{Año:2022,Mes:10,Sede:"PLAZA VESPUCIO",count:80},{Año:2022,Mes:10,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:10,Sede:"PUERTO MONTT",count:9},{Año:2022,Mes:10,Sede:"SAN BERNARDO",count:10},{Año:2022,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2022,Mes:10,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:10,Sede:"VALPARAISO",count:107},{Año:2022,Mes:10,Sede:"VINA DEL MAR",count:425},{Año:2022,Mes:11,Sede:"ALAMEDA",count:12},{Año:2022,Mes:11,Sede:"ANTONIO VARAS",count:611},{Año:2022,Mes:11,Sede:"CASA CENTRAL",count:2},{Año:2022,Mes:11,Sede:"CONCEPCION",count:152},{Año:2022,Mes:11,Sede:"MAIPU",count:20},{Año:2022,Mes:11,Sede:"No Informado",count:6},{Año:2022,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:161},{Año:2022,Mes:11,Sede:"PLAZA NORTE",count:68},{Año:2022,Mes:11,Sede:"PLAZA OESTE",count:22},{Año:2022,Mes:11,Sede:"PLAZA VESPUCIO",count:52},{Año:2022,Mes:11,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:11,Sede:"SAN BERNARDO",count:2},{Año:2022,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:23},{Año:2022,Mes:11,Sede:"SAN JOAQUIN",count:5},{Año:2022,Mes:11,Sede:"VALPARAISO",count:210},{Año:2022,Mes:11,Sede:"VINA DEL MAR",count:230},{Año:2022,Mes:12,Sede:"ALAMEDA",count:4},{Año:2022,Mes:12,Sede:"ANTONIO VARAS",count:349},{Año:2022,Mes:12,Sede:"CAMPUS VILLARRICA",count:1},{Año:2022,Mes:12,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:12,Sede:"CONCEPCION",count:144},{Año:2022,Mes:12,Sede:"MAIPU",count:16},{Año:2022,Mes:12,Sede:"No Informado",count:3},{Año:2022,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:217},{Año:2022,Mes:12,Sede:"PLAZA NORTE",count:40},{Año:2022,Mes:12,Sede:"PLAZA OESTE",count:7},{Año:2022,Mes:12,Sede:"PLAZA VESPUCIO",count:168},{Año:2022,Mes:12,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:12,Sede:"SAN BERNARDO",count:5},{Año:2022,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:31},{Año:2022,Mes:12,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:12,Sede:"VALPARAISO",count:79},{Año:2022,Mes:12,Sede:"VINA DEL MAR",count:362},{Año:2023,Mes:1,Sede:"ALAMEDA",count:2},{Año:2023,Mes:1,Sede:"ANTONIO VARAS",count:172},{Año:2023,Mes:1,Sede:"CAMPUS VILLARRICA",count:1},{Año:2023,Mes:1,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:1,Sede:"CONCEPCION",count:52},{Año:2023,Mes:1,Sede:"MAIPU",count:7},{Año:2023,Mes:1,Sede:"No Informado",count:10},{Año:2023,Mes:1,Sede:"PADRE ALONSO DE OVALLE",count:22},{Año:2023,Mes:1,Sede:"PLAZA NORTE",count:4},{Año:2023,Mes:1,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:1,Sede:"PLAZA VESPUCIO",count:47},{Año:2023,Mes:1,Sede:"SAN BERNARDO",count:4},{Año:2023,Mes:1,Sede:"SAN CARLOS DE APOQUINDO",count:3},{Año:2023,Mes:1,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:1,Sede:"VALPARAISO",count:21},{Año:2023,Mes:1,Sede:"VINA DEL MAR",count:36},{Año:2023,Mes:2,Sede:"ALAMEDA",count:4},{Año:2023,Mes:2,Sede:"ANTONIO VARAS",count:80},{Año:2023,Mes:2,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:2,Sede:"CONCEPCION",count:10},{Año:2023,Mes:2,Sede:"MAIPU",count:5},{Año:2023,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:13},{Año:2023,Mes:2,Sede:"PLAZA VESPUCIO",count:9},{Año:2023,Mes:2,Sede:"SAN BERNARDO",count:2},{Año:2023,Mes:2,Sede:"SAN CARLOS DE APOQUINDO",count:2},{Año:2023,Mes:2,Sede:"SAN JOAQUIN",count:3},{Año:2023,Mes:2,Sede:"VALPARAISO",count:5},{Año:2023,Mes:2,Sede:"VINA DEL MAR",count:5},{Año:2023,Mes:3,Sede:"ALAMEDA",count:131},{Año:2023,Mes:3,Sede:"ANTONIO VARAS",count:568},{Año:2023,Mes:3,Sede:"CONCEPCION",count:127},{Año:2023,Mes:3,Sede:"MAIPU",count:6},{Año:2023,Mes:3,Sede:"No Informado",count:8},{Año:2023,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:311},{Año:2023,Mes:3,Sede:"PLAZA NORTE",count:27},{Año:2023,Mes:3,Sede:"PLAZA OESTE",count:3},{Año:2023,Mes:3,Sede:"PLAZA VESPUCIO",count:132},{Año:2023,Mes:3,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:3,Sede:"PUERTO MONTT",count:23},{Año:2023,Mes:3,Sede:"SAN BERNARDO",count:20},{Año:2023,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:22},{Año:2023,Mes:3,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:3,Sede:"VALPARAISO",count:39},{Año:2023,Mes:3,Sede:"VINA DEL MAR",count:370},{Año:2023,Mes:4,Sede:"ALAMEDA",count:22},{Año:2023,Mes:4,Sede:"ANTONIO VARAS",count:507},{Año:2023,Mes:4,Sede:"CAMPUS ARAUCO",count:4},{Año:2023,Mes:4,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:4,Sede:"CONCEPCION",count:74},{Año:2023,Mes:4,Sede:"MAIPU",count:10},{Año:2023,Mes:4,Sede:"No Informado",count:12},{Año:2023,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:85},{Año:2023,Mes:4,Sede:"PLAZA NORTE",count:179},{Año:2023,Mes:4,Sede:"PLAZA OESTE",count:3},{Año:2023,Mes:4,Sede:"PLAZA VESPUCIO",count:106},{Año:2023,Mes:4,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:4,Sede:"PUERTO MONTT",count:28},{Año:2023,Mes:4,Sede:"SAN BERNARDO",count:22},{Año:2023,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:68},{Año:2023,Mes:4,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:4,Sede:"VALPARAISO",count:30},{Año:2023,Mes:4,Sede:"VINA DEL MAR",count:241},{Año:2023,Mes:5,Sede:"ALAMEDA",count:13},{Año:2023,Mes:5,Sede:"ANTONIO VARAS",count:545},{Año:2023,Mes:5,Sede:"CAMPUS NACIMIENTO",count:2},{Año:2023,Mes:5,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:5,Sede:"CONCEPCION",count:72},{Año:2023,Mes:5,Sede:"MAIPU",count:9},{Año:2023,Mes:5,Sede:"MELIPILLA",count:1},{Año:2023,Mes:5,Sede:"No Informado",count:18},{Año:2023,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:64},{Año:2023,Mes:5,Sede:"PLAZA NORTE",count:88},{Año:2023,Mes:5,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:5,Sede:"PLAZA VESPUCIO",count:105},{Año:2023,Mes:5,Sede:"PUERTO MONTT",count:2},{Año:2023,Mes:5,Sede:"SAN BERNARDO",count:6},{Año:2023,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:34},{Año:2023,Mes:5,Sede:"VALPARAISO",count:73},{Año:2023,Mes:5,Sede:"VINA DEL MAR",count:222},{Año:2023,Mes:6,Sede:"ALAMEDA",count:6},{Año:2023,Mes:6,Sede:"ANTONIO VARAS",count:436},{Año:2023,Mes:6,Sede:"CONCEPCION",count:150},{Año:2023,Mes:6,Sede:"MAIPU",count:7},{Año:2023,Mes:6,Sede:"MELIPILLA",count:1},{Año:2023,Mes:6,Sede:"No Informado",count:11},{Año:2023,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:78},{Año:2023,Mes:6,Sede:"PLAZA NORTE",count:35},{Año:2023,Mes:6,Sede:"PLAZA OESTE",count:2},{Año:2023,Mes:6,Sede:"PLAZA VESPUCIO",count:87},{Año:2023,Mes:6,Sede:"PUENTE ALTO",count:3},{Año:2023,Mes:6,Sede:"PUERTO MONTT",count:6},{Año:2023,Mes:6,Sede:"SAN BERNARDO",count:3},{Año:2023,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:4},{Año:2023,Mes:6,Sede:"SAN JOAQUIN",count:7},{Año:2023,Mes:6,Sede:"VALPARAISO",count:24},{Año:2023,Mes:6,Sede:"VINA DEL MAR",count:136},{Año:2023,Mes:7,Sede:"ALAMEDA",count:7},{Año:2023,Mes:7,Sede:"ANTONIO VARAS",count:133},{Año:2023,Mes:7,Sede:"CASA CENTRAL",count:3},{Año:2023,Mes:7,Sede:"CONCEPCION",count:94},{Año:2023,Mes:7,Sede:"Educacion Continua",count:10},{Año:2023,Mes:7,Sede:"MAIPU",count:6},{Año:2023,Mes:7,Sede:"No Informado",count:4},{Año:2023,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:20},{Año:2023,Mes:7,Sede:"PLAZA NORTE",count:5},{Año:2023,Mes:7,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:7,Sede:"PLAZA VESPUCIO",count:67},{Año:2023,Mes:7,Sede:"PUERTO MONTT",count:4},{Año:2023,Mes:7,Sede:"SAN BERNARDO",count:4},{Año:2023,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2023,Mes:7,Sede:"SAN JOAQUIN",count:4},{Año:2023,Mes:7,Sede:"VALPARAISO",count:17},{Año:2023,Mes:7,Sede:"VINA DEL MAR",count:79},{Año:2023,Mes:8,Sede:"ALAMEDA",count:14},{Año:2023,Mes:8,Sede:"ANTONIO VARAS",count:952},{Año:2023,Mes:8,Sede:"CAMPUS ARAUCO",count:7},{Año:2023,Mes:8,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:8,Sede:"CONCEPCION",count:572},{Año:2023,Mes:8,Sede:"MAIPU",count:6},{Año:2023,Mes:8,Sede:"No Informado",count:11},{Año:2023,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:889},{Año:2023,Mes:8,Sede:"PLAZA NORTE",count:622},{Año:2023,Mes:8,Sede:"PLAZA VESPUCIO",count:1102},{Año:2023,Mes:8,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:8,Sede:"PUERTO MONTT",count:10},{Año:2023,Mes:8,Sede:"SAN BERNARDO",count:5},{Año:2023,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:76},{Año:2023,Mes:8,Sede:"SAN JOAQUIN",count:8},{Año:2023,Mes:8,Sede:"VALPARAISO",count:211},{Año:2023,Mes:8,Sede:"VINA DEL MAR",count:555},{Año:2023,Mes:9,Sede:"ALAMEDA",count:12},{Año:2023,Mes:9,Sede:"ANTONIO VARAS",count:1570},{Año:2023,Mes:9,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:9,Sede:"CONCEPCION",count:688},{Año:2023,Mes:9,Sede:"MAIPU",count:10},{Año:2023,Mes:9,Sede:"No Informado",count:6},{Año:2023,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:422},{Año:2023,Mes:9,Sede:"PLAZA NORTE",count:421},{Año:2023,Mes:9,Sede:"PLAZA VESPUCIO",count:932},{Año:2023,Mes:9,Sede:"PUERTO MONTT",count:22},{Año:2023,Mes:9,Sede:"SAN BERNARDO",count:2},{Año:2023,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:92},{Año:2023,Mes:9,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:9,Sede:"VALPARAISO",count:255},{Año:2023,Mes:9,Sede:"VINA DEL MAR",count:744},{Año:2023,Mes:10,Sede:"ALAMEDA",count:12},{Año:2023,Mes:10,Sede:"ANTONIO VARAS",count:477},{Año:2023,Mes:10,Sede:"CASA CENTRAL",count:6},{Año:2023,Mes:10,Sede:"CONCEPCION",count:327},{Año:2023,Mes:10,Sede:"MAIPU",count:4},{Año:2023,Mes:10,Sede:"MELIPILLA",count:1},{Año:2023,Mes:10,Sede:"No Informado",count:19},{Año:2023,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:124},{Año:2023,Mes:10,Sede:"PLAZA NORTE",count:88},{Año:2023,Mes:10,Sede:"PLAZA VESPUCIO",count:421},{Año:2023,Mes:10,Sede:"PUERTO MONTT",count:15},{Año:2023,Mes:10,Sede:"SAN BERNARDO",count:7},{Año:2023,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2023,Mes:10,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:10,Sede:"VALPARAISO",count:170},{Año:2023,Mes:10,Sede:"VINA DEL MAR",count:340},{Año:2023,Mes:11,Sede:"ALAMEDA",count:3},{Año:2023,Mes:11,Sede:"ANTONIO VARAS",count:422},{Año:2023,Mes:11,Sede:"CASA CENTRAL",count:7},{Año:2023,Mes:11,Sede:"CONCEPCION",count:221},{Año:2023,Mes:11,Sede:"MAIPU",count:64},{Año:2023,Mes:11,Sede:"No Informado",count:19},{Año:2023,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:183},{Año:2023,Mes:11,Sede:"PLAZA NORTE",count:53},{Año:2023,Mes:11,Sede:"PLAZA VESPUCIO",count:674},{Año:2023,Mes:11,Sede:"PUENTE ALTO",count:55},{Año:2023,Mes:11,Sede:"PUERTO MONTT",count:56},{Año:2023,Mes:11,Sede:"SAN BERNARDO",count:20},{Año:2023,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2023,Mes:11,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:11,Sede:"VALPARAISO",count:173},{Año:2023,Mes:11,Sede:"VINA DEL MAR",count:411},{Año:2023,Mes:12,Sede:"ALAMEDA",count:6},{Año:2023,Mes:12,Sede:"ANTONIO VARAS",count:569},{Año:2023,Mes:12,Sede:"CONCEPCION",count:232},{Año:2023,Mes:12,Sede:"MAIPU",count:2},{Año:2023,Mes:12,Sede:"No Informado",count:9},{Año:2023,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:519},{Año:2023,Mes:12,Sede:"PLAZA NORTE",count:104},{Año:2023,Mes:12,Sede:"PLAZA VESPUCIO",count:616},{Año:2023,Mes:12,Sede:"PUENTE ALTO",count:30},{Año:2023,Mes:12,Sede:"PUERTO MONTT",count:15},{Año:2023,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:30},{Año:2023,Mes:12,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:12,Sede:"VALPARAISO",count:94},{Año:2023,Mes:12,Sede:"VINA DEL MAR",count:285},{Año:2024,Mes:2,Sede:"ANTONIO VARAS",count:64},{Año:2024,Mes:2,Sede:"CONCEPCION",count:10},{Año:2024,Mes:2,Sede:"No Informado",count:4},{Año:2024,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:22},{Año:2024,Mes:2,Sede:"PLAZA NORTE",count:2},{Año:2024,Mes:2,Sede:"PLAZA VESPUCIO",count:31},{Año:2024,Mes:2,Sede:"PUENTE ALTO",count:6},{Año:2024,Mes:2,Sede:"PUERTO MONTT",count:5},{Año:2024,Mes:2,Sede:"VALPARAISO",count:5},{Año:2024,Mes:2,Sede:"VINA DEL MAR",count:106},{Año:2024,Mes:3,Sede:"ANTONIO VARAS",count:437},{Año:2024,Mes:3,Sede:"CASA CENTRAL",count:23},{Año:2024,Mes:3,Sede:"CONCEPCION",count:41},{Año:2024,Mes:3,Sede:"MAIPU",count:4},{Año:2024,Mes:3,Sede:"No Informado",count:19},{Año:2024,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:100},{Año:2024,Mes:3,Sede:"PLAZA NORTE",count:18},{Año:2024,Mes:3,Sede:"PLAZA VESPUCIO",count:176},{Año:2024,Mes:3,Sede:"PUENTE ALTO",count:3},{Año:2024,Mes:3,Sede:"PUERTO MONTT",count:25},{Año:2024,Mes:3,Sede:"SAN BERNARDO",count:9},{Año:2024,Mes:3,Sede:"VALPARAISO",count:1},{Año:2024,Mes:3,Sede:"VINA DEL MAR",count:204},{Año:2024,Mes:4,Sede:"ANTONIO VARAS",count:577},{Año:2024,Mes:4,Sede:"CONCEPCION",count:296},{Año:2024,Mes:4,Sede:"MAIPU",count:31},{Año:2024,Mes:4,Sede:"No Informado",count:16},{Año:2024,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:292},{Año:2024,Mes:4,Sede:"PLAZA NORTE",count:92},{Año:2024,Mes:4,Sede:"PLAZA VESPUCIO",count:279},{Año:2024,Mes:4,Sede:"PUENTE ALTO",count:2},{Año:2024,Mes:4,Sede:"PUERTO MONTT",count:50},{Año:2024,Mes:4,Sede:"SAN BERNARDO",count:35},{Año:2024,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:96},{Año:2024,Mes:4,Sede:"VALPARAISO",count:42},{Año:2024,Mes:4,Sede:"VINA DEL MAR",count:320},{Año:2024,Mes:5,Sede:"ALAMEDA",count:3},{Año:2024,Mes:5,Sede:"ANTONIO VARAS",count:335},{Año:2024,Mes:5,Sede:"CONCEPCION",count:127},{Año:2024,Mes:5,Sede:"MAIPU",count:37},{Año:2024,Mes:5,Sede:"No Informado",count:9},{Año:2024,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:111},{Año:2024,Mes:5,Sede:"PLAZA NORTE",count:27},{Año:2024,Mes:5,Sede:"PLAZA VESPUCIO",count:244},{Año:2024,Mes:5,Sede:"PUENTE ALTO",count:5},{Año:2024,Mes:5,Sede:"PUERTO MONTT",count:24},{Año:2024,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:57},{Año:2024,Mes:5,Sede:"VALPARAISO",count:86},{Año:2024,Mes:5,Sede:"VINA DEL MAR",count:184},{Año:2024,Mes:6,Sede:"ALAMEDA",count:17},{Año:2024,Mes:6,Sede:"ANTONIO VARAS",count:386},{Año:2024,Mes:6,Sede:"CASA CENTRAL",count:6},{Año:2024,Mes:6,Sede:"CONCEPCION",count:62},{Año:2024,Mes:6,Sede:"MAIPU",count:91},{Año:2024,Mes:6,Sede:"No Informado",count:10},{Año:2024,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:165},{Año:2024,Mes:6,Sede:"PLAZA NORTE",count:134},{Año:2024,Mes:6,Sede:"PLAZA OESTE",count:9},{Año:2024,Mes:6,Sede:"PLAZA VESPUCIO",count:313},{Año:2024,Mes:6,Sede:"PUENTE ALTO",count:1},{Año:2024,Mes:6,Sede:"PUERTO MONTT",count:45},{Año:2024,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:9},{Año:2024,Mes:6,Sede:"VALPARAISO",count:230},{Año:2024,Mes:6,Sede:"VINA DEL MAR",count:159},{Año:2024,Mes:7,Sede:"ALAMEDA",count:4},{Año:2024,Mes:7,Sede:"ANTONIO VARAS",count:174},{Año:2024,Mes:7,Sede:"CASA CENTRAL",count:3},{Año:2024,Mes:7,Sede:"CONCEPCION",count:84},{Año:2024,Mes:7,Sede:"MAIPU",count:83},{Año:2024,Mes:7,Sede:"No Informado",count:17},{Año:2024,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:81},{Año:2024,Mes:7,Sede:"PLAZA NORTE",count:37},{Año:2024,Mes:7,Sede:"PLAZA OESTE",count:8},{Año:2024,Mes:7,Sede:"PLAZA VESPUCIO",count:103},{Año:2024,Mes:7,Sede:"PUENTE ALTO",count:2},{Año:2024,Mes:7,Sede:"PUERTO MONTT",count:7},{Año:2024,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:5},{Año:2024,Mes:7,Sede:"VALPARAISO",count:93},{Año:2024,Mes:7,Sede:"VINA DEL MAR",count:101},{Año:2024,Mes:8,Sede:"ALAMEDA",count:128},{Año:2024,Mes:8,Sede:"ANTONIO VARAS",count:363},{Año:2024,Mes:8,Sede:"CAMPUS ARAUCO",count:20},{Año:2024,Mes:8,Sede:"CONCEPCION",count:92},{Año:2024,Mes:8,Sede:"MAIPU",count:16},{Año:2024,Mes:8,Sede:"No Informado",count:11},{Año:2024,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:152},{Año:2024,Mes:8,Sede:"PLAZA NORTE",count:115},{Año:2024,Mes:8,Sede:"PLAZA OESTE",count:7},{Año:2024,Mes:8,Sede:"PLAZA VESPUCIO",count:189},{Año:2024,Mes:8,Sede:"PUENTE ALTO",count:5},{Año:2024,Mes:8,Sede:"PUERTO MONTT",count:18},{Año:2024,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:14},{Año:2024,Mes:8,Sede:"VALPARAISO",count:45},{Año:2024,Mes:8,Sede:"VINA DEL MAR",count:228},{Año:2024,Mes:9,Sede:"ALAMEDA",count:117},{Año:2024,Mes:9,Sede:"ANTONIO VARAS",count:679},{Año:2024,Mes:9,Sede:"CONCEPCION",count:101},{Año:2024,Mes:9,Sede:"MAIPU",count:77},{Año:2024,Mes:9,Sede:"No Informado",count:16},{Año:2024,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:149},{Año:2024,Mes:9,Sede:"PLAZA NORTE",count:109},{Año:2024,Mes:9,Sede:"PLAZA OESTE",count:9},{Año:2024,Mes:9,Sede:"PLAZA VESPUCIO",count:455},{Año:2024,Mes:9,Sede:"PUENTE ALTO",count:11},{Año:2024,Mes:9,Sede:"PUERTO MONTT",count:18},{Año:2024,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:12},{Año:2024,Mes:9,Sede:"VALPARAISO",count:40},{Año:2024,Mes:9,Sede:"VINA DEL MAR",count:196},{Año:2024,Mes:10,Sede:"ALAMEDA",count:51},{Año:2024,Mes:10,Sede:"ANTONIO VARAS",count:300},{Año:2024,Mes:10,Sede:"CONCEPCION",count:240},{Año:2024,Mes:10,Sede:"MAIPU",count:19},{Año:2024,Mes:10,Sede:"No Informado",count:13},{Año:2024,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:164},{Año:2024,Mes:10,Sede:"PLAZA NORTE",count:36},{Año:2024,Mes:10,Sede:"PLAZA VESPUCIO",count:340},{Año:2024,Mes:10,Sede:"PUENTE ALTO",count:4},{Año:2024,Mes:10,Sede:"PUERTO MONTT",count:37},{Año:2024,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2024,Mes:10,Sede:"VALPARAISO",count:50},{Año:2024,Mes:10,Sede:"VINA DEL MAR",count:185},{Año:2024,Mes:11,Sede:"ALAMEDA",count:19},{Año:2024,Mes:11,Sede:"ANTONIO VARAS",count:338},{Año:2024,Mes:11,Sede:"CONCEPCION",count:51},{Año:2024,Mes:11,Sede:"MAIPU",count:14},{Año:2024,Mes:11,Sede:"No Informado",count:11},{Año:2024,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:69},{Año:2024,Mes:11,Sede:"PLAZA NORTE",count:29},{Año:2024,Mes:11,Sede:"PLAZA OESTE",count:5},{Año:2024,Mes:11,Sede:"PLAZA VESPUCIO",count:173},{Año:2024,Mes:11,Sede:"PUENTE ALTO",count:3},{Año:2024,Mes:11,Sede:"PUERTO MONTT",count:19},{Año:2024,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2024,Mes:11,Sede:"VALPARAISO",count:139},{Año:2024,Mes:11,Sede:"VINA DEL MAR",count:192},{Año:2024,Mes:12,Sede:"ALAMEDA",count:39},{Año:2024,Mes:12,Sede:"ANTONIO VARAS",count:261},{Año:2024,Mes:12,Sede:"CONCEPCION",count:30},{Año:2024,Mes:12,Sede:"MAIPU",count:7},{Año:2024,Mes:12,Sede:"No Informado",count:5},{Año:2024,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:31},{Año:2024,Mes:12,Sede:"PLAZA NORTE",count:12},{Año:2024,Mes:12,Sede:"PLAZA VESPUCIO",count:113},{Año:2024,Mes:12,Sede:"PUERTO MONTT",count:15},{Año:2024,Mes:12,Sede:"VALPARAISO",count:90},{Año:2024,Mes:12,Sede:"VINA DEL MAR",count:55}],
+  carrera_sede_año:[{Año:2021,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:5102},{Año:2021,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:2047},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:1024},{Año:2021,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:888},{Año:2021,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:840},{Año:2021,Sede:"VALPARAISO",Carrera:"COMERCIO EXTERIOR",count:364},{Año:2021,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:405},{Año:2021,Sede:"SAN CARLOS DE APOQUINDO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:453},{Año:2021,Sede:"ANTONIO VARAS",Carrera:"No Aplica",count:210},{Año:2021,Sede:"PLAZA VESPUCIO",Carrera:"AUDITORIA",count:135},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:231},{Año:2021,Sede:"VINA DEL MAR",Carrera:"COMERCIO EXTERIOR",count:209},{Año:2021,Sede:"VINA DEL MAR",Carrera:"No Aplica",count:186},{Año:2021,Sede:"ANTONIO VARAS",Carrera:"AUDITORIA",count:101},{Año:2022,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:5547},{Año:2022,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:3121},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:1127},{Año:2022,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:1026},{Año:2022,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1702},{Año:2022,Sede:"VALPARAISO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:810},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:717},{Año:2022,Sede:"VINA DEL MAR",Carrera:"COMERCIO EXTERIOR",count:589},{Año:2022,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:429},{Año:2022,Sede:"SAN CARLOS DE APOQUINDO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:475},{Año:2022,Sede:"ANTONIO VARAS",Carrera:"AUDITORIA",count:143},{Año:2023,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:5934},{Año:2023,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:3654},{Año:2023,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:2382},{Año:2023,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:2231},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1519},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:1023},{Año:2023,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1440},{Año:2023,Sede:"VALPARAISO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:968},{Año:2023,Sede:"VINA DEL MAR",Carrera:"AUDITORIA",count:262},{Año:2024,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:3632},{Año:2024,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:1822},{Año:2024,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1024},{Año:2024,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1213},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:399},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:576},{Año:2024,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:484},{Año:2024,Sede:"VALPARAISO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:687},{Año:2024,Sede:"VINA DEL MAR",Carrera:"AUDITORIA",count:253},{Año:2024,Sede:"PLAZA VESPUCIO",Carrera:"AUDITORIA",count:220},{Año:2024,Sede:"ALAMEDA",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:371}],
+  sedes:["ALAMEDA","ANTONIO VARAS","CAMPUS ARAUCO","CAMPUS NACIMIENTO","CAMPUS VILLARRICA","CASA CENTRAL","CONCEPCION","Educacion Continua","LICEO RENCA","MAIPU","MELIPILLA","NACIMIENTO","No Informado","ONLINE","PADRE ALONSO DE OVALLE","PLAZA NORTE","PLAZA OESTE","PLAZA VESPUCIO","PUENTE ALTO","PUERTO MONTT","SAN BERNARDO","SAN CARLOS DE APOQUINDO","SAN JOAQUIN","VALPARAISO","VINA DEL MAR"],
+  años:[2021,2022,2023,2024]
+};
+
+const MESES_LABEL = ["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const YEAR_CFG = {
+  2021:{color:"#818cf8",bg:"rgba(129,140,248,0.15)"},
+  2022:{color:"#34d399",bg:"rgba(52,211,153,0.15)"},
+  2023:{color:"#fbbf24",bg:"rgba(251,191,36,0.15)"},
+  2024:{color:"#f87171",bg:"rgba(248,113,113,0.15)"}
+};
+const PALETTE = ["#00c8ff","#818cf8","#34d399","#fbbf24","#f87171","#a78bfa","#38bdf8","#fb923c","#4ade80","#e879f9","#f472b6","#60a5fa"];
+
+// State
+let selectedYears = [2021,2022,2023,2024];
+let selectedSedes = new Set(["ANTONIO VARAS","VINA DEL MAR","PLAZA VESPUCIO","PADRE ALONSO DE OVALLE","CONCEPCION","PLAZA NORTE","VALPARAISO","ALAMEDA","SAN CARLOS DE APOQUINDO","MAIPU"]);
+let activeTab = 0;
+const charts = {};
+
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+const fmt = n => n.toLocaleString('es-CL');
+const pct = (a,b) => b ? ((a-b)/b*100).toFixed(1) : null;
+
+function sedeColor(sede) {
+  const idx = DATA.sedes.indexOf(sede);
+  return PALETTE[idx % PALETTE.length];
+}
+
+function getFilteredTotal(rows) {
+  return rows
+    .filter(r => selectedYears.includes(r.Año) && (selectedSedes.size === 0 || selectedSedes.has(r.Sede)))
+    .reduce((s,r) => s+r.count, 0);
+}
+
+function destroyChart(id) {
+  if(charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+// ═══════════════════════════════════════════════════
+// INIT SIDEBAR
+// ═══════════════════════════════════════════════════
+function initFilters() {
+  // Years
+  const yc = document.getElementById('year-filters');
+  DATA.años.forEach(y => {
+    const total = DATA.total_sede_año.filter(r=>r.Año===y).reduce((s,r)=>s+r.count,0);
+    const btn = document.createElement('button');
+    btn.className = `year-btn active-${y-2000}`;
+    btn.innerHTML = `${y}<br><small>${fmt(total)}</small>`;
+    btn.dataset.year = y;
+    btn.addEventListener('click', () => toggleYear(y, btn));
+    yc.appendChild(btn);
+  });
+
+  // Sedes
+  const sc = document.getElementById('sede-filters');
+  DATA.sedes.forEach(s => {
+    const total = DATA.total_sede_año.filter(r=>r.Sede===s).reduce((s2,r)=>s2+r.count,0);
+    const item = document.createElement('label');
+    item.className = 'sede-item' + (selectedSedes.has(s) ? ' checked' : '');
+    item.innerHTML = `
+      <input type="checkbox" ${selectedSedes.has(s)?'checked':''}>
+      <span class="sede-dot" style="background:${sedeColor(s)}"></span>
+      <span class="sede-name">${s}</span>
+      <span class="sede-count">${fmt(total)}</span>
+    `;
+    item.querySelector('input').addEventListener('change', e => {
+      if(e.target.checked) { selectedSedes.add(s); item.classList.add('checked'); }
+      else { selectedSedes.delete(s); item.classList.remove('checked'); }
+      refresh();
+    });
+    sc.appendChild(item);
+  });
+}
+
+function toggleYear(y, btn) {
+  if(selectedYears.includes(y)) {
+    if(selectedYears.length === 1) return;
+    selectedYears = selectedYears.filter(x=>x!==y);
+    btn.classList.remove(`active-${y-2000}`);
+  } else {
+    selectedYears.push(y); selectedYears.sort();
+    btn.classList.add(`active-${y-2000}`);
+  }
+  refresh();
+}
+
+function selectAllSedes() {
+  document.querySelectorAll('.sede-item input').forEach(cb => { cb.checked = true; cb.closest('.sede-item').classList.add('checked'); });
+  selectedSedes = new Set(DATA.sedes);
+  refresh();
+}
+function clearSedes() {
+  document.querySelectorAll('.sede-item input').forEach(cb => { cb.checked = false; cb.closest('.sede-item').classList.remove('checked'); });
+  selectedSedes.clear();
+  refresh();
+}
+
+function switchTab(idx) {
+  activeTab = idx;
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  renderActiveTab();
+}
+
+// ═══════════════════════════════════════════════════
+// KPI BAR
+// ═══════════════════════════════════════════════════
+function renderKPI() {
+  const bar = document.getElementById('kpi-bar');
+  bar.innerHTML = '';
+  DATA.años.forEach((y,i) => {
+    const total = DATA.total_sede_año
+      .filter(r=>r.Año===y && (selectedSedes.size===0||selectedSedes.has(r.Sede)))
+      .reduce((s,r)=>s+r.count,0);
+    const prev = i>0 ? DATA.total_sede_año.filter(r=>r.Año===DATA.años[i-1]&&(selectedSedes.size===0||selectedSedes.has(r.Sede))).reduce((s,r)=>s+r.count,0) : null;
+    const delta = prev ? pct(total,prev) : null;
+    const on = selectedYears.includes(y);
+    const card = document.createElement('div');
+    card.className='kpi-card'; card.style.opacity=on?1:0.4;
+    card.style.borderBottom=`3px solid ${on?YEAR_CFG[y].color:'transparent'}`;
+    card.innerHTML=`
+      <div class="kpi-year">${y}</div>
+      <div class="kpi-value" style="color:${YEAR_CFG[y].color}">${fmt(total)}</div>
+      ${delta!==null?`<div class="kpi-delta ${parseFloat(delta)>=0?'up':'down'}">${parseFloat(delta)>=0?'↑':'↓'} ${Math.abs(delta)}% vs ${y-1}</div>`:'<div class="kpi-delta neutral">Año base</div>'}
+    `;
+    bar.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// TAB 0: TOTAL SEDE
+// ═══════════════════════════════════════════════════
+function renderTab0() {
+  const map = {};
+  DATA.total_sede_año.forEach(r => {
+    if(!selectedYears.includes(r.Año)) return;
+    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+    map[r.Sede] = (map[r.Sede]||0)+r.count;
+  });
+  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  const top15 = sorted.slice(0,15);
+  const grandTotal = sorted.reduce((s,x)=>s+x[1],0);
+
+  document.getElementById('p0-subtitle').textContent = `${sorted.length} sedes · ${fmt(grandTotal)} préstamos totales en periodo seleccionado`;
+
+  // Bar chart
+  destroyChart('bar-sede');
+  const ctx0 = document.getElementById('chart-bar-sede').getContext('2d');
+  charts['bar-sede'] = new Chart(ctx0, {
+    type:'bar',
+    data:{
+      labels: top15.map(x=>x[0].length>14?x[0].substring(0,13)+'…':x[0]),
+      datasets:[{
+        label:'Préstamos',
+        data: top15.map(x=>x[1]),
+        backgroundColor: top15.map(x=>sedeColor(x[0])+'bb'),
+        borderColor: top15.map(x=>sedeColor(x[0])),
+        borderWidth:1, borderRadius:4
+      }]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
+      scales:{
+        x:{grid:{color:'#1c2d42'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
+        y:{grid:{display:false},ticks:{color:'#e8f0f8',font:{size:10}}}
+      }
+    }
+  });
+
+  // Doughnut
+  destroyChart('doughnut');
+  const ctx1 = document.getElementById('chart-doughnut').getContext('2d');
+  const top8 = sorted.slice(0,8);
+  const resto = sorted.slice(8).reduce((s,x)=>s+x[1],0);
+  charts['doughnut'] = new Chart(ctx1, {
+    type:'doughnut',
+    data:{
+      labels:[...top8.map(x=>x[0]),'Resto'],
+      datasets:[{
+        data:[...top8.map(x=>x[1]),resto],
+        backgroundColor:[...top8.map(x=>sedeColor(x[0])+'cc'),'#3f5a72'],
+        borderColor:'#080c14', borderWidth:3, hoverOffset:8
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{
+        legend:{position:'right',labels:{color:'#7a9bb8',font:{size:10},padding:8,boxWidth:12}},
+        tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} (${(c.raw/grandTotal*100).toFixed(1)}%)`}}
+      }
+    }
+  });
+
+  // Progress bars
+  const pb = document.getElementById('progress-bars');
+  pb.innerHTML = top15.map((x,i)=>`
+    <div class="progress-row">
+      <span class="progress-sede">${x[0]}</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${grandTotal?(x[1]/sorted[0][1]*100):0}%;background:${sedeColor(x[0])}"></div>
+      </div>
+      <span class="progress-val">${fmt(x[1])}</span>
+    </div>
+  `).join('');
+
+  // Table
+  const t = document.getElementById('table-sede');
+  t.innerHTML=`
+    <thead><tr>
+      <th>#</th><th>Sede</th>
+      ${selectedYears.map(y=>`<th class="r">${y}</th>`).join('')}
+      <th class="r">Total</th><th class="r">%</th>
+    </tr></thead>
+    <tbody>${sorted.slice(0,20).map((x,i)=>{
+      const yVals = selectedYears.map(y=>{
+        const v=DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===x[0]);
+        return v?v.count:0;
+      });
+      return `<tr>
+        <td class="rank-num">${i+1}</td>
+        <td><span class="badge" style="background:${sedeColor(x[0])}22;color:${sedeColor(x[0])}">${x[0]}</span></td>
+        ${yVals.map(v=>`<td class="r" style="color:${v?'#e8f0f8':'#3f5a72'}">${v?fmt(v):'—'}</td>`).join('')}
+        <td class="r bold">${fmt(x[1])}</td>
+        <td class="r" style="color:#7a9bb8">${grandTotal?(x[1]/grandTotal*100).toFixed(1):0}%</td>
+      </tr>`;
+    }).join('')}</tbody>
+    <tfoot><tr><td colspan="2">TOTAL</td>
+      ${selectedYears.map(y=>{const s=DATA.total_sede_año.filter(r=>r.Año===y&&(selectedSedes.size===0||selectedSedes.has(r.Sede))).reduce((s,r)=>s+r.count,0);return`<td class="r" style="color:${YEAR_CFG[y].color}">${fmt(s)}</td>`;}).join('')}
+      <td class="r" style="color:#00c8ff">${fmt(grandTotal)}</td><td class="r">100%</td>
+    </tr></tfoot>`;
+}
+
+// ═══════════════════════════════════════════════════
+// TAB 1: MES/AÑO
+// ═══════════════════════════════════════════════════
+function renderTab1() {
+  // Aggregate by año+mes
+  const byYearMes = {};
+  DATA.años.forEach(y=>{ byYearMes[y]={}; });
+  DATA.mes_sede_año.forEach(r=>{
+    if(!selectedYears.includes(r.Año)) return;
+    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+    byYearMes[r.Año][r.Mes]=(byYearMes[r.Año][r.Mes]||0)+r.count;
+  });
+
+  // Legend
+  const leg = document.getElementById('legend-year');
+  leg.innerHTML = selectedYears.map(y=>`
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${YEAR_CFG[y].color}"></div>
+      ${y} — Total: ${fmt(Object.values(byYearMes[y]).reduce((s,v)=>s+v,0))}
+    </div>`).join('');
+
+  // Line chart
+  destroyChart('line');
+  const ctx = document.getElementById('chart-line').getContext('2d');
+  charts['line'] = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels: MESES_LABEL.slice(1),
+      datasets: selectedYears.map(y=>({
+        label:String(y),
+        data: Array.from({length:12},(_,i)=>byYearMes[y][i+1]||0),
+        borderColor: YEAR_CFG[y].color,
+        backgroundColor: YEAR_CFG[y].bg,
+        fill:true, tension:0.4, pointRadius:4, pointHoverRadius:6,
+        borderWidth:2, pointBackgroundColor: YEAR_CFG[y].color
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{labels:{color:'#7a9bb8',font:{size:11}}},
+        tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
+      scales:{
+        x:{grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:11}}},
+        y:{grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
+      }
+    }
+  });
+
+  // Bar grouped
+  destroyChart('bar-month');
+  const ctx2 = document.getElementById('chart-bar-month').getContext('2d');
+  charts['bar-month'] = new Chart(ctx2,{
+    type:'bar',
+    data:{
+      labels:MESES_LABEL.slice(1),
+      datasets:selectedYears.map(y=>({
+        label:String(y),
+        data:Array.from({length:12},(_,i)=>byYearMes[y][i+1]||0),
+        backgroundColor:YEAR_CFG[y].bg,
+        borderColor:YEAR_CFG[y].color,
+        borderWidth:1, borderRadius:3
+      }))
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#7a9bb8',font:{size:11}}},
+        tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
+      scales:{
+        x:{grid:{color:'#1c2d4240'},ticks:{color:'#7a9bb8',font:{size:10}}},
+        y:{grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
+      }
+    }
+  });
+
+  // Table
+  const t = document.getElementById('table-mes');
+  const rowTotals = selectedYears.map(y=>Object.values(byYearMes[y]).reduce((s,v)=>s+v,0));
+  t.innerHTML=`
+    <thead><tr><th>Mes</th>${selectedYears.map((y,i)=>`<th class="r" style="color:${YEAR_CFG[y].color}">${y}</th>`).join('')}<th class="r">Total Fila</th></tr></thead>
+    <tbody>${Array.from({length:12},(_,mi)=>{
+      const vals=selectedYears.map(y=>byYearMes[y][mi+1]||0);
+      const rowTotal=vals.reduce((s,v)=>s+v,0);
+      return `<tr><td class="bold">${MESES_LABEL[mi+1]}</td>${vals.map((v,i)=>`<td class="r" style="color:${v?YEAR_CFG[selectedYears[i]].color+'cc':'#3f5a72'}">${v?fmt(v):'—'}</td>`).join('')}<td class="r bold">${fmt(rowTotal)}</td></tr>`;
+    }).join('')}</tbody>
+    <tfoot><tr><td>TOTAL</td>${selectedYears.map((y,i)=>`<td class="r" style="color:${YEAR_CFG[y].color}">${fmt(rowTotals[i])}</td>`).join('')}<td class="r" style="color:#00c8ff">${fmt(rowTotals.reduce((s,v)=>s+v,0))}</td></tr></tfoot>`;
+}
+
+// ═══════════════════════════════════════════════════
+// TAB 2: CARRERA/SEDE
+// ═══════════════════════════════════════════════════
+function renderTab2() {
+  const map = {};
+  DATA.carrera_sede_año.forEach(r=>{
+    if(!selectedYears.includes(r.Año)) return;
+    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+    const k=`${r.Sede}||${r.Carrera}`;
+    if(!map[k]) map[k]={sede:r.Sede,carrera:r.Carrera,total:0};
+    map[k].total+=r.count;
+  });
+  const sorted=Object.values(map).sort((a,b)=>b.total-a.total).slice(0,20);
+
+  destroyChart('carrera');
+  const ctx=document.getElementById('chart-carrera').getContext('2d');
+  charts['carrera']=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:sorted.map(x=>{const c=x.carrera.length>28?x.carrera.substring(0,27)+'…':x.carrera;return`${x.sede.substring(0,8)} · ${c}`;} ),
+      datasets:[{
+        label:'Préstamos',
+        data:sorted.map(x=>x.total),
+        backgroundColor:sorted.map(x=>sedeColor(x.sede)+'99'),
+        borderColor:sorted.map(x=>sedeColor(x.sede)),
+        borderWidth:1,borderRadius:3
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{
+        title:items=>{const d=sorted[items[0].dataIndex];return`${d.sede}`;},
+        label:items=>{const d=sorted[items.dataIndex];return[` Carrera: ${d.carrera}`,` Total: ${fmt(d.total)}`];}
+      }}},
+      scales:{
+        x:{grid:{color:'#1c2d42'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
+        y:{grid:{display:false},ticks:{color:'#e8f0f8',font:{size:9}}}
+      }
+    }
+  });
+
+  const t=document.getElementById('table-carrera');
+  t.innerHTML=`
+    <thead><tr><th>#</th><th>Sede</th><th>Carrera</th><th class="r">Total</th></tr></thead>
+    <tbody>${sorted.map((d,i)=>`<tr>
+      <td class="rank-num">${i+1}</td>
+      <td><span class="badge" style="background:${sedeColor(d.sede)}22;color:${sedeColor(d.sede)}">${d.sede}</span></td>
+      <td style="color:#c8dff0;max-width:300px">${d.carrera}</td>
+      <td class="r bold" style="color:#00c8ff">${fmt(d.total)}</td>
+    </tr>`).join('')}</tbody>`;
+}
+
+// ═══════════════════════════════════════════════════
+// TAB 3: ACUMULADO
+// ═══════════════════════════════════════════════════
+function renderTab3() {
+  // Build sede totals per year
+  const map={};
+  DATA.total_sede_año.forEach(r=>{
+    if(!selectedYears.includes(r.Año)) return;
+    if(selectedSedes.size && !selectedSedes.has(r.Sede)) return;
+    if(!map[r.Sede]) map[r.Sede]={sede:r.Sede};
+    map[r.Sede][r.Año]=(map[r.Sede][r.Año]||0)+r.count;
+  });
+  const rows=Object.values(map).map(row=>{
+    row.total=selectedYears.reduce((s,y)=>s+(row[y]||0),0); return row;
+  }).sort((a,b)=>b.total-a.total);
+
+  destroyChart('stacked');
+  const ctx=document.getElementById('chart-stacked').getContext('2d');
+  charts['stacked']=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:rows.map(r=>r.sede.length>14?r.sede.substring(0,13)+'…':r.sede),
+      datasets:selectedYears.map(y=>({
+        label:String(y),
+        data:rows.map(r=>r[y]||0),
+        backgroundColor:YEAR_CFG[y].bg,
+        borderColor:YEAR_CFG[y].color,
+        borderWidth:1, borderRadius:2
+      }))
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#7a9bb8',font:{size:11}}},
+        tooltip:{mode:'index',intersect:false,callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
+      scales:{
+        x:{stacked:true,grid:{display:false},ticks:{color:'#7a9bb8',font:{size:9},maxRotation:40}},
+        y:{stacked:true,grid:{color:'#1c2d4260'},ticks:{color:'#7a9bb8',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
+      }
+    }
+  });
+
+  const t=document.getElementById('table-acum');
+  const colTotals=selectedYears.map(y=>rows.reduce((s,r)=>s+(r[y]||0),0));
+  t.innerHTML=`
+    <thead><tr><th>Sede</th>${selectedYears.map(y=>`<th class="r" style="color:${YEAR_CFG[y].color}">${y}</th>`).join('')}<th class="r">Total</th></tr></thead>
+    <tbody>${rows.map((row,i)=>`<tr>
+      <td><span class="badge" style="background:${sedeColor(row.sede)}22;color:${sedeColor(row.sede)}">${row.sede}</span></td>
+      ${selectedYears.map(y=>`<td class="r" style="color:${row[y]?YEAR_CFG[y].color+'cc':'#3f5a72'}">${row[y]?fmt(row[y]):'—'}</td>`).join('')}
+      <td class="r bold">${fmt(row.total)}</td>
+    </tr>`).join('')}</tbody>
+    <tfoot><tr><td>TOTAL</td>${colTotals.map((v,i)=>`<td class="r" style="color:${YEAR_CFG[selectedYears[i]].color}">${fmt(v)}</td>`).join('')}<td class="r" style="color:#00c8ff">${fmt(colTotals.reduce((s,v)=>s+v,0))}</td></tr></tfoot>`;
+}
+
+// ═══════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════
+function renderActiveTab() {
+  if(activeTab===0) renderTab0();
+  else if(activeTab===1) renderTab1();
+  else if(activeTab===2) renderTab2();
+  else if(activeTab===3) renderTab3();
+}
+
+function refresh() {
+  renderKPI();
+  renderActiveTab();
+}
+
+// Boot
+initFilters();
+refresh();
+</script>
+</body>
+</html>
