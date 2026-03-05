@@ -272,11 +272,11 @@ body::before{
     <div class="grid2" style="margin-bottom:16px">
       <div class="card">
         <h3>Volumen por Sede</h3>
-        <div class="cw" style="height:340px"><canvas id="c-bar"></canvas></div>
+        <div class="cw" style="height:340px;position:relative" id="bar-wrap"><canvas id="c-bar" style="position:absolute;inset:0"></canvas></div>
       </div>
       <div class="card">
         <h3>Distribución Porcentual</h3>
-        <div class="cw" style="height:340px"><canvas id="c-donut"></canvas></div>
+        <div class="cw" style="height:340px;position:relative" id="donut-wrap"><canvas id="c-donut" style="position:absolute;inset:0"></canvas></div>
       </div>
     </div>
     <div class="card">
@@ -325,15 +325,9 @@ body::before{
       <p>Top combinaciones sede–carrera según selección</p>
     </div>
     <!-- valor destacado -->
-    <div class="grid2" style="margin-bottom:16px">
-      <div class="card">
-        <h3>Carrera líder</h3>
-        <div id="top-carrera-display"></div>
-      </div>
-      <div class="card">
-        <h3>Sede con más diversidad</h3>
-        <div id="top-sede-div-display"></div>
-      </div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Carrera más solicitada</h3>
+      <div id="top-carrera-display"></div>
     </div>
     <div class="card" style="margin-bottom:16px">
       <h3>Top 20 combinaciones sede / carrera</h3>
@@ -354,12 +348,12 @@ body::before{
     <!-- valor destacado -->
     <div class="grid2" style="margin-bottom:16px">
       <div class="card">
-        <h3>Sede con mayor crecimiento</h3>
-        <div id="top-crecimiento-display"></div>
+        <h3>Total periodo</h3>
+        <div id="total-periodo-display"></div>
       </div>
       <div class="card">
-        <h3>Total periodo seleccionado</h3>
-        <div id="total-periodo-display"></div>
+        <h3>Variación global</h3>
+        <div id="variacion-global-display"></div>
       </div>
     </div>
     <div class="card" style="margin-bottom:16px">
@@ -520,38 +514,53 @@ function tab0(){
     if(!selSedes.has(r.Sede)) return;
     map[r.Sede] = (map[r.Sede]||0)+r.count;
   });
-  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  // sorted alphabetically to avoid implying ranking
+  const sorted = Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
   const total = sorted.reduce((s,x)=>s+x[1],0);
   const n = sorted.length;
 
-  // subtitle
   document.getElementById('p0-sub').textContent =
     n===0 ? 'Selecciona al menos una sede en el panel izquierdo'
     : `${n} sede${n>1?'s':''} seleccionada${n>1?'s':''} · ${fmt(total)} préstamos`;
 
-  // empty state
-  const showEmpty = n===0;
+  const barWrap = document.getElementById('bar-wrap');
+  const donutWrap = document.getElementById('donut-wrap');
 
-  // Bar chart — dynamic, only selected sedes
-  destroy('bar');
-  const ctx0 = document.getElementById('c-bar').getContext('2d');
-  if(showEmpty){
-    document.getElementById('c-bar').closest('.card').querySelector('.cw').innerHTML =
-      '<div class="empty-state"><span class="big">🏫</span><p>Selecciona sedes para ver el gráfico</p></div>';
+  if(n===0){
+    barWrap.innerHTML = '<div class="empty-state"><span class="big">🏫</span><p>Selecciona sedes para ver el gráfico</p></div>';
+    donutWrap.innerHTML = '<div class="empty-state"><span class="big">🍩</span><p>Selecciona sedes para ver distribución</p></div>';
+    destroy('bar'); destroy('donut');
+    document.getElementById('prog-list').innerHTML = '';
+    document.getElementById('tbl-sede').innerHTML = '';
+    return;
+  }
+
+  // Ensure canvas exists
+  if(!barWrap.querySelector('canvas')){
+    barWrap.innerHTML = '<canvas id="c-bar" style="position:absolute;inset:0"></canvas>';
+  }
+  if(!donutWrap.querySelector('canvas')){
+    donutWrap.innerHTML = '<canvas id="c-donut" style="position:absolute;inset:0"></canvas>';
+  }
+
+  // Bar chart — update if exists, create if not
+  const labels = sorted.map(x=> x[0].length>15 ? x[0].slice(0,14)+'…':x[0]);
+  const dataVals = sorted.map(x=>x[1]);
+  const bgColors = sorted.map(x=>sdColor(x[0])+'22');
+  const bdColors = sorted.map(x=>sdColor(x[0]));
+
+  if(CH['bar']){
+    CH['bar'].data.labels = labels;
+    CH['bar'].data.datasets[0].data = dataVals;
+    CH['bar'].data.datasets[0].backgroundColor = bgColors;
+    CH['bar'].data.datasets[0].borderColor = bdColors;
+    CH['bar'].update();
   } else {
-    document.getElementById('c-bar').closest('.card').querySelector('.cw').innerHTML =
-      '<canvas id="c-bar"></canvas>';
-    CH['bar'] = new Chart(document.getElementById('c-bar').getContext('2d'),{
+    CH['bar'] = new Chart(document.getElementById('c-bar'),{
       type:'bar',
       data:{
-        labels: sorted.map(x=> x[0].length>15 ? x[0].slice(0,14)+'…':x[0]),
-        datasets:[{
-          label:'Préstamos',
-          data: sorted.map(x=>x[1]),
-          backgroundColor: sorted.map(x=>sdColor(x[0])+'22'),
-          borderColor: sorted.map(x=>sdColor(x[0])),
-          borderWidth:1.5, borderRadius:5
-        }]
+        labels,
+        datasets:[{ label:'Préstamos', data:dataVals, backgroundColor:bgColors, borderColor:bdColors, borderWidth:1.5, borderRadius:5 }]
       },
       options:{
         indexAxis:'y', responsive:true, maintainAspectRatio:false,
@@ -564,23 +573,18 @@ function tab0(){
     });
   }
 
-  // Donut
-  destroy('donut');
-  if(showEmpty){
-    document.getElementById('c-donut').closest('.card').querySelector('.cw').innerHTML =
-      '<div class="empty-state"><span class="big">🍩</span><p>Selecciona sedes para ver distribución</p></div>';
+  // Donut — update if exists, create if not
+  if(CH['donut']){
+    CH['donut'].data.labels = sorted.map(x=>x[0]);
+    CH['donut'].data.datasets[0].data = sorted.map(x=>x[1]);
+    CH['donut'].data.datasets[0].backgroundColor = sorted.map(x=>sdColor(x[0])+'cc');
+    CH['donut'].update();
   } else {
-    document.getElementById('c-donut').closest('.card').querySelector('.cw').innerHTML =
-      '<canvas id="c-donut"></canvas>';
-    CH['donut'] = new Chart(document.getElementById('c-donut').getContext('2d'),{
+    CH['donut'] = new Chart(document.getElementById('c-donut'),{
       type:'doughnut',
       data:{
         labels: sorted.map(x=>x[0]),
-        datasets:[{
-          data: sorted.map(x=>x[1]),
-          backgroundColor: sorted.map(x=>sdColor(x[0])+'cc'),
-          borderColor:'#ffffff', borderWidth:2.5, hoverOffset:8
-        }]
+        datasets:[{ data:sorted.map(x=>x[1]), backgroundColor:sorted.map(x=>sdColor(x[0])+'cc'), borderColor:'#ffffff', borderWidth:2.5, hoverOffset:8 }]
       },
       options:{
         responsive:true, maintainAspectRatio:false, cutout:'62%',
@@ -592,38 +596,32 @@ function tab0(){
     });
   }
 
-  // Progress bars
-  const pl = document.getElementById('prog-list');
-  if(showEmpty){ pl.innerHTML=''; }
-  else {
-    pl.innerHTML = '<div class="prog-list">' + sorted.map(x=>`
-      <div class="prog-row">
-        <span class="prog-dot" style="background:${sdColor(x[0])}"></span>
-        <span class="prog-sede">${x[0]}</span>
-        <div class="prog-bar-wrap">
-          <div class="prog-bar-fill" style="width:${(x[1]/sorted[0][1]*100).toFixed(1)}%;background:${sdColor(x[0])}"></div>
-        </div>
-        <span class="prog-val">${fmt(x[1])}</span>
-        <span class="prog-pct">${(x[1]/total*100).toFixed(1)}%</span>
-      </div>`).join('') + '</div>';
-  }
+  // Progress bars — use common reference (average) not max sede
+  const avg = total / n;
+  document.getElementById('prog-list').innerHTML = '<div class="prog-list">' + sorted.map(x=>`
+    <div class="prog-row">
+      <span class="prog-dot" style="background:${sdColor(x[0])}"></span>
+      <span class="prog-sede">${x[0]}</span>
+      <div class="prog-bar-wrap">
+        <div class="prog-bar-fill" style="width:${Math.min(100,(x[1]/avg*50)).toFixed(1)}%;background:${sdColor(x[0])}"></div>
+      </div>
+      <span class="prog-val">${fmt(x[1])}</span>
+      <span class="prog-pct">${(x[1]/total*100).toFixed(1)}%</span>
+    </div>`).join('') + '</div>';
 
-  // Table
-  const t = document.getElementById('tbl-sede');
-  if(showEmpty){ t.innerHTML=''; return; }
-  t.innerHTML = `
+  // Table — no rank column to avoid positioning competition
+  document.getElementById('tbl-sede').innerHTML = `
     <thead><tr>
-      <th>#</th><th>Sede</th>
+      <th>Sede</th>
       ${selYears.map(y=>`<th class="r">${y}</th>`).join('')}
       <th class="r">Total</th><th class="r">%</th>
     </tr></thead>
-    <tbody>${sorted.map((x,i)=>{
+    <tbody>${sorted.map((x)=>{
       const yv = selYears.map(y=>{
         const r=DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===x[0]);
         return r?r.count:0;
       });
       return `<tr>
-        <td class="rn">${i+1}</td>
         <td><span class="badge" style="background:${sdColor(x[0])}18;color:${sdColor(x[0])};border:1px solid ${sdColor(x[0])}33">${x[0]}</span></td>
         ${yv.map(v=>`<td class="r" style="color:${v?'#0f1724':'#c8d0dc'}">${v?fmt(v):'—'}</td>`).join('')}
         <td class="r b">${fmt(x[1])}</td>
@@ -631,7 +629,7 @@ function tab0(){
       </tr>`;
     }).join('')}</tbody>
     <tfoot><tr>
-      <td colspan="2">TOTAL</td>
+      <td>TOTAL</td>
       ${selYears.map(y=>{
         const s=DATA.total_sede_año.filter(r=>r.Año===y&&selSedes.has(r.Sede)).reduce((s,r)=>s+r.count,0);
         return `<td class="r" style="color:${YCFG[y].c}">${fmt(s)}</td>`;
@@ -761,10 +759,7 @@ function tab2(){
   const topDiv = Object.entries(sedeDiv).sort((a,b)=>b[1].size-a[1].size)[0];
 
   document.getElementById('top-carrera-display').innerHTML = topCar
-    ? `<div class="val-display"><span class="val-big" style="font-size:22px;line-height:1.3">${topCar[0]}</span></div><p style="font-size:11px;color:var(--txt3);margin-top:6px">${fmt(topCar[1])} préstamos totales</p>`
-    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
-  document.getElementById('top-sede-div-display').innerHTML = topDiv
-    ? `<div class="val-display"><span class="val-big" style="font-size:22px">${topDiv[0]}</span></div><p style="font-size:11px;color:var(--txt3);margin-top:6px">${topDiv[1].size} carreras distintas</p>`
+    ? `<div class="val-display"><span class="val-big" style="font-size:22px;line-height:1.3">${topCar[0]}</span></div><p style="font-size:11px;color:var(--txt3);margin-top:6px">${fmt(topCar[1])} préstamos en sedes seleccionadas</p>`
     : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
 
   // Chart
@@ -821,23 +816,20 @@ function tab3(){
 
   const grandTot = rows.reduce((s,r)=>s+r.tot,0);
 
-  // Value highlights: mejor crecimiento 21->24 (or first->last)
-  let bestGrow=null, bestGrowPct=-Infinity;
-  rows.forEach(r=>{
-    const firstY=selYears[0], lastY=selYears[selYears.length-1];
-    if(r[firstY]&&r[lastY]&&selYears.length>1){
-      const g=(r[lastY]-r[firstY])/r[firstY]*100;
-      if(g>bestGrowPct){ bestGrowPct=g; bestGrow=r; }
-    }
-  });
+  // Global variation first->last year across all selected sedes
+  const firstY=selYears[0], lastY=selYears[selYears.length-1];
+  const totFirst = rows.reduce((s,r)=>s+(r[firstY]||0),0);
+  const totLast  = rows.reduce((s,r)=>s+(r[lastY]||0),0);
+  const globalPct = totFirst>0 ? ((totLast-totFirst)/totFirst*100).toFixed(1) : null;
 
-  document.getElementById('top-crecimiento-display').innerHTML = bestGrow
-    ? `<div class="val-display"><span class="val-big" style="font-size:22px">${bestGrow.sede}</span></div>
-       <p style="font-size:11px;color:var(--txt3);margin-top:6px">${bestGrowPct>=0?'▲':'▼'} ${Math.abs(bestGrowPct).toFixed(1)}% entre ${selYears[0]} y ${selYears[selYears.length-1]}</p>`
-    : '<div class="empty-state" style="padding:20px"><p>Sin datos comparables</p></div>';
   document.getElementById('total-periodo-display').innerHTML = `
     <div class="val-display"><span class="val-big">${fmt(grandTot)}</span></div>
     <p style="font-size:11px;color:var(--txt3);margin-top:6px">${rows.length} sede${rows.length!==1?'s':''} · ${selYears.length} año${selYears.length!==1?'s':''}</p>`;
+
+  document.getElementById('variacion-global-display').innerHTML = globalPct!==null && selYears.length>1
+    ? `<div class="val-display"><span class="val-big" style="color:${parseFloat(globalPct)>=0?'#16a34a':'#dc2626'}">${parseFloat(globalPct)>=0?'+':''}${globalPct}%</span></div>
+       <p style="font-size:11px;color:var(--txt3);margin-top:6px">Variación total entre ${firstY} y ${lastY}</p>`
+    : '<div class="empty-state" style="padding:20px"><p>Selecciona más de un año para comparar</p></div>';
 
   // Chart
   destroy('stk');
