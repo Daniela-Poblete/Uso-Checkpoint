@@ -3,1025 +3,920 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkpoint DUOC · Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Check Point · Sistema de Bibliotecas DUOC UC</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --gold:#FCB32E;
-  --gold-d:#d4921f;
-  --gold-l:#FCB32E15;
-  --gold-m:#FCB32E28;
-  --bg:#f7f8fa;
-  --white:#ffffff;
-  --s1:#f0f2f5;
-  --border:#e5e8ef;
-  --border2:#dde1ea;
-  --txt:#0f1724;
-  --txt2:#5a6478;
-  --txt3:#9ba5b5;
-  --y21:#6366f1; --y21b:#6366f115;
-  --y22:#0ea5e9; --y22b:#0ea5e915;
-  --y23:#FCB32E; --y23b:#FCB32E18;
-  --y24:#ef4444; --y24b:#ef444415;
-  --r:10px;
-  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.06);
-  --sh2:0 2px 8px rgba(0,0,0,.07),0 8px 28px rgba(0,0,0,.08);
+:root {
+  --yellow: #F5C300;
+  --black: #0D0D0D;
+  --dark: #161616;
+  --surface: #1E1E1E;
+  --card: #242424;
+  --border: #2E2E2E;
+  --text: #F0F0F0;
+  --muted: #7A7A7A;
+  --cyan: #00C8D7;
+  --violet: #9B6DFF;
+  --green: #22D19E;
+  --orange: #FF6B35;
+  --white: #FFFFFF;
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:radial-gradient(#cbd2de 1px,transparent 1px);
-  background-size:22px 22px;opacity:.45
-}
-#app{position:relative;z-index:1;display:flex;min-height:100vh}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;line-height:1.5;}
 
-/* ── SIDEBAR ── */
-#sb{
-  width:252px;flex-shrink:0;background:var(--white);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  position:sticky;top:0;height:100vh;overflow-y:auto;
-  box-shadow:2px 0 10px rgba(0,0,0,.04)
-}
-#sb::-webkit-scrollbar{width:3px}
-#sb::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+/* NAVBAR */
+.navbar{background:var(--black);height:46px;display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;border-bottom:1px solid #222;}
+.nav-brand{display:flex;align-items:baseline;margin-right:28px;}
+.nav-brand .duoc{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:21px;color:var(--yellow);letter-spacing:-0.5px;}
+.nav-brand .uc{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:21px;color:var(--white);letter-spacing:-0.5px;}
+.nav-sep{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:0 18px;border-left:1px solid #282828;}
+.nav-tabs{display:flex;gap:2px;margin-left:6px;}
+.nav-tab{background:none;border:none;color:var(--muted);font-family:'Barlow',sans-serif;font-size:13px;font-weight:500;padding:0 18px;height:46px;cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--yellow);background:rgba(245,195,0,0.05);border-bottom-color:var(--yellow);}
+.nav-year{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--muted);letter-spacing:2px;}
 
-.sb-top{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
-.logo-row{display:flex;align-items:center;gap:9px;margin-bottom:12px}
-.logo-ico{
-  width:36px;height:36px;border-radius:9px;flex-shrink:0;
-  background:var(--gold);display:flex;align-items:center;justify-content:center;
-  font-size:16px;box-shadow:0 2px 8px rgba(252,179,46,.3)
-}
-.logo-txt h1{font-size:12.5px;font-weight:800;letter-spacing:-.2px;line-height:1.3}
-.logo-txt p{font-size:9.5px;color:var(--txt3);font-family:'JetBrains Mono',monospace}
-.total-chip{
-  background:var(--gold-l);border:1.5px solid var(--gold-m);border-radius:8px;
-  padding:8px 12px;display:flex;justify-content:space-between;align-items:center
-}
-.total-chip .lbl{font-size:10px;color:var(--txt2);font-weight:500}
-.total-chip .num{font-size:16px;font-weight:800;color:var(--gold-d);font-family:'JetBrains Mono',monospace}
+/* HERO */
+.hero{background:var(--yellow);padding:44px 48px 38px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;right:-100px;bottom:-100px;width:420px;height:420px;background:rgba(0,0,0,0.07);border-radius:50%;}
+.hero-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(0,0,0,0.45);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.hero-tag::before{content:'';display:inline-block;width:28px;height:2px;background:rgba(0,0,0,0.3);}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-size:58px;font-weight:800;color:var(--black);line-height:1;letter-spacing:-1px;}
+.hero h1 em{font-style:italic;font-weight:400;}
+.hero-desc{font-size:13px;color:rgba(0,0,0,0.5);margin-top:12px;max-width:540px;line-height:1.65;}
 
-.sb-sec{padding:12px 16px;border-bottom:1px solid var(--border)}
-.sb-sec h3{font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:9px}
+/* KPI BAR */
+.kpi-bar{background:var(--black);display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #1a1a1a;}
+.kpi-item{padding:26px 34px;border-right:1px solid #1a1a1a;}
+.kpi-item:last-child{border-right:none;}
+.kpi-value{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:42px;line-height:1;letter-spacing:-1px;}
+.kpi-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:5px;}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:3px;}
 
-/* years */
-.yr-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.yr-btn{
-  padding:7px 4px;border-radius:7px;cursor:pointer;border:1.5px solid var(--border2);
-  background:var(--white);color:var(--txt3);font-size:11px;font-weight:700;
-  font-family:'JetBrains Mono',monospace;transition:all .15s;line-height:1.3;text-align:center
-}
-.yr-btn:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-l)}
-.yr-btn.on-21{background:var(--y21b);border-color:var(--y21);color:var(--y21)}
-.yr-btn.on-22{background:var(--y22b);border-color:var(--y22);color:#0284c7}
-.yr-btn.on-23{background:var(--y23b);border-color:var(--y23);color:var(--gold-d)}
-.yr-btn.on-24{background:var(--y24b);border-color:var(--y24);color:#dc2626}
+/* SECTIONS */
+.section-wrap{display:none;}
+.section-wrap.active{display:block;}
 
-/* sedes */
-.sede-acts{display:flex;gap:4px;margin-bottom:7px}
-.sede-acts button{
-  flex:1;padding:5px;font-size:9px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.5px;border-radius:5px;cursor:pointer;border:1px solid var(--border2);
-  background:var(--s1);color:var(--txt2);transition:all .13s
-}
-.sede-acts button:hover{border-color:var(--gold);color:var(--gold-d);background:var(--gold-l)}
-.sede-list{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:1px}
-.sede-list::-webkit-scrollbar{width:3px}
-.sede-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-.sede-item{
-  display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:6px;
-  cursor:pointer;border:1px solid transparent;transition:all .12s
-}
-.sede-item:hover{background:var(--s1)}
-.sede-item.on{background:var(--gold-l);border-color:var(--gold-m)}
-.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.sede-item input{display:none}
-.sname{font-size:10px;color:var(--txt3);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.sede-item.on .sname{color:var(--txt2)}
-.scount{font-size:9.5px;font-family:'JetBrains Mono',monospace;color:var(--txt3)}
+/* SECTION HEADER */
+.section-header{background:var(--dark);padding:20px 48px 0;border-bottom:1px solid var(--border);}
+.sec-inner{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:14px;}
+.sec-tag{display:inline-flex;align-items:center;gap:8px;}
+.sec-badge{background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 8px;border-radius:2px;}
+.sec-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.3px;margin-top:4px;}
+.sec-period{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sec-line{height:2px;background:var(--yellow);}
 
-/* nav */
-.sb-nav{padding:12px 16px 0;flex:1}
-.sb-nav h3{font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:8px}
-.nav-btn{
-  display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border-radius:8px;
-  cursor:pointer;border:1px solid transparent;background:transparent;
-  text-align:left;margin-bottom:3px;transition:all .15s
-}
-.nav-btn:hover{background:var(--s1)}
-.nav-btn.active{background:var(--gold-l);border-color:var(--gold-m)}
-.nav-ico{font-size:14px;flex-shrink:0}
-.nav-lbl{font-size:11.5px;font-weight:600;color:var(--txt2)}
-.nav-btn.active .nav-lbl{color:var(--gold-d)}
+/* CONTENT */
+.content{padding:30px 48px;}
 
-/* ── MAIN ── */
-#main{flex:1;min-width:0;overflow:auto}
+/* FILTERS */
+.filter-row{display:flex;align-items:center;gap:14px;margin-bottom:26px;flex-wrap:wrap;}
+.filter-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.filter-btn-group{display:flex;gap:3px;}
+.filter-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:6px 16px;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;letter-spacing:.3px;cursor:pointer;border-radius:2px;transition:all .15s;}
+.filter-btn:hover{color:var(--text);border-color:#444;}
+.filter-btn.active{background:var(--yellow);color:var(--black);border-color:var(--yellow);}
+select.sel{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:7px 32px 7px 13px;font-family:'Barlow',sans-serif;font-size:13px;cursor:pointer;border-radius:2px;outline:none;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237A7A7A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;min-width:190px;}
+select.sel:hover,select.sel:focus{border-color:var(--yellow);}
 
-/* KPI strip */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);background:var(--white)}
-.kpi-card{
-  padding:18px 20px;border-right:1px solid var(--border);
-  border-bottom:3px solid transparent;transition:all .2s;cursor:default
-}
-.kpi-card:last-child{border-right:none}
-.kpi-card:hover{background:var(--s1)}
-.kpi-yr{font-size:10px;font-weight:600;color:var(--txt3);margin-bottom:3px;font-family:'JetBrains Mono',monospace}
-.kpi-val{font-size:26px;font-weight:800;letter-spacing:-1.2px;font-family:'JetBrains Mono',monospace}
-.kpi-sub{font-size:10.5px;margin-top:3px;font-weight:500}
-.kpi-sub.up{color:#16a34a}.kpi-sub.dn{color:#dc2626}.kpi-sub.na{color:var(--txt3)}
+/* VXU CARDS */
+.vxu-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:30px;background:var(--border);}
+.vxu-card{background:var(--card);padding:22px 24px;position:relative;}
+.vxu-card.hl{background:#1b1900;}
+.vxu-cycle{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.vxu-main{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:44px;line-height:1;letter-spacing:-1px;}
+.vxu-desc{font-size:11px;color:var(--muted);margin-top:3px;}
+.vxu-usos{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.vxu-usos strong{color:var(--text);font-weight:600;}
+.vxu-badge{position:absolute;top:13px;right:13px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+.bc{background:var(--yellow);color:var(--black);}
+.bp{background:var(--border);color:var(--muted);}
 
-/* panels */
-.panel{display:none;padding:24px;animation:fadeUp .2s ease both}
-.panel.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* CHART GRID */
+.cg2{display:grid;grid-template-columns:3fr 2fr;gap:18px;margin-bottom:18px;}
+.cg1{margin-bottom:18px;}
+.chart-box{background:var(--card);border:1px solid var(--border);padding:22px;border-radius:2px;}
+.cbt{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);margin-bottom:3px;}
+.cbs{font-size:11px;color:var(--muted);margin-bottom:16px;}
 
-.ph{margin-bottom:20px}
-.ph h2{font-size:19px;font-weight:800;letter-spacing:-.4px}
-.ph p{font-size:12px;color:var(--txt2);margin-top:3px}
+/* MINI KPIS */
+.mk-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;}
+.mk-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--mk-c,var(--yellow));padding:18px 22px;border-radius:2px;}
+.mk-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.mk-val{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:36px;line-height:1;color:var(--mk-c,var(--yellow));}
+.mk-sub{font-size:11px;color:var(--muted);margin-top:3px;}
 
-/* cards */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{
-  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
-  padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden
-}
-.card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--gold),var(--gold-d),transparent)
-}
-.card h3{font-size:10.5px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
-.cw{position:relative}
-
-/* empty state */
-.empty-state{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:48px 24px;color:var(--txt3);gap:10px;text-align:center
-}
-.empty-state .big{font-size:36px}
-.empty-state p{font-size:13px;max-width:220px;line-height:1.5}
-
-/* progress bars */
-.prog-list{display:flex;flex-direction:column;gap:0}
-.prog-row{
-  display:flex;align-items:center;gap:10px;padding:8px 0;
-  border-bottom:1px solid var(--border)
-}
-.prog-row:last-child{border-bottom:none}
-.prog-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.prog-sede{font-size:11px;color:var(--txt2);width:160px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.prog-bar-wrap{flex:1;height:5px;background:var(--s1);border-radius:3px;overflow:hidden}
-.prog-bar-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.22,1,.36,1)}
-.prog-val{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--txt);font-weight:600;width:52px;text-align:right;flex-shrink:0}
-.prog-pct{font-size:10px;color:var(--txt3);width:36px;text-align:right;flex-shrink:0}
-
-/* tables */
-.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:16px}
-.tbl thead tr{border-bottom:2px solid var(--border)}
-.tbl th{padding:9px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px}
-.tbl th.r{text-align:right}
-.tbl tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
-.tbl tbody tr:last-child{border-bottom:none}
-.tbl tbody tr:hover{background:var(--s1)}
-.tbl td{padding:8px 12px;color:var(--txt2)}
-.tbl td.r{text-align:right;font-family:'JetBrains Mono',monospace}
-.tbl td.b{color:var(--txt);font-weight:700}
-.tbl tfoot tr{border-top:2px solid var(--border2)}
-.tbl tfoot td{padding:9px 12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--txt)}
-.tbl tfoot td.r{text-align:right}
-
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
-.rn{font-family:'JetBrains Mono',monospace;color:var(--txt3);font-size:10px}
-
-/* legend */
-.leg-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--txt2);font-weight:500}
-.leg-dot{width:10px;height:10px;border-radius:50%}
-
-/* value highlight (new: uso display) */
-.val-display{
-  display:flex;align-items:baseline;gap:6px;padding:10px 0 4px
-}
-.val-big{font-size:36px;font-weight:800;letter-spacing:-1.5px;color:var(--gold-d);font-family:'JetBrains Mono',monospace}
-.val-label{font-size:12px;color:var(--txt3);font-weight:500}
-
-/* scroll */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-
-@media(max-width:1100px){.grid2{grid-template-columns:1fr}}
-@media(max-width:860px){#sb{width:200px}.kpi-strip{grid-template-columns:1fr 1fr}}
+/* TABLE */
+.dtw{background:var(--card);border:1px solid var(--border);border-radius:2px;overflow:hidden;margin-bottom:18px;}
+.dth{background:var(--surface);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.dtt{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.ox{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--surface);}
+thead th{padding:10px 18px;text-align:left;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+th.r,td.r{text-align:right;}
+tbody tr{border-bottom:1px solid rgba(46,46,46,0.5);transition:background .12s;}
+tbody tr:hover{background:rgba(245,195,0,0.03);}
+tbody tr:last-child{border-bottom:none;}
+td{padding:10px 18px;font-size:13px;}
+td.sede-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.5px;color:var(--yellow);text-transform:uppercase;}
+td.car-name{font-size:12px;color:var(--muted);padding-left:28px;}
+td.num{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;text-align:right;}
+.bar-wrap{display:flex;align-items:center;gap:8px;}
+.bar-bg{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;min-width:50px;}
+.bar-fill{height:100%;border-radius:2px;}
+.bar-pct{font-size:11px;color:var(--muted);min-width:34px;text-align:right;}
+tr.sede-row td{background:var(--surface);padding:12px 18px;}
+tr.tot-row td{color:var(--yellow);font-weight:700;background:rgba(245,195,0,0.05);border-top:1px solid rgba(245,195,0,0.15);}
+.pag{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;border-top:1px solid var(--border);}
+.pg-info{font-size:11px;color:var(--muted);}
+.pg-btns{display:flex;gap:4px;}
+.pg-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:4px 11px;font-size:12px;cursor:pointer;border-radius:2px;transition:all .15s;font-family:'Barlow',sans-serif;}
+.pg-btn:hover{color:var(--text);border-color:#444;}
+.pg-btn.active{background:var(--yellow);color:var(--black);border-color:var(--yellow);font-weight:700;}
+.pg-btn:disabled{opacity:.3;cursor:default;}
+::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:var(--dark);}::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}::-webkit-scrollbar-thumb:hover{background:#444;}
+@media(max-width:900px){.kpi-bar,.vxu-row{grid-template-columns:1fr 1fr;}.cg2,.mk-row{grid-template-columns:1fr;}.content,.section-header{padding-left:20px;padding-right:20px;}.hero{padding:30px 22px;}.hero h1{font-size:38px;}.kpi-item{padding:18px 20px;}}
 </style>
 </head>
 <body>
-<div id="app">
 
-<!-- SIDEBAR -->
-<aside id="sb">
-  <div class="sb-top">
-    <div class="logo-row">
-      <div class="logo-ico">📚</div>
-      <div class="logo-txt">
-        <h1>Checkpoint DUOC</h1>
-        <p>Panel 2021 – 2024</p>
-      </div>
-    </div>
-    <div class="total-chip">
-      <span class="lbl">Total préstamos</span>
-      <span class="num" id="total-num">—</span>
-    </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-brand"><span class="duoc">DUOC</span><span class="uc">UC</span></div>
+  <div class="nav-sep">Sistema de Bibliotecas</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSec('resumen',this)">Resumen Mes · Año</button>
+    <button class="nav-tab" onclick="showSec('carrera',this)">Carrera por Sede</button>
   </div>
+  <div class="nav-year">2021–2024</div>
+</nav>
 
-  <div class="sb-sec">
-    <h3>Año</h3>
-    <div class="yr-grid" id="yr-grid"></div>
-  </div>
-
-  <div class="sb-sec">
-    <h3>Sede</h3>
-    <div class="sede-acts">
-      <button onclick="allSedes()">Todas</button>
-      <button onclick="noneSedes()">Ninguna</button>
-    </div>
-    <div class="sede-list" id="sede-list"></div>
-  </div>
-
-  <div class="sb-nav">
-    <h3>Vistas</h3>
-    <button class="nav-btn active" onclick="switchTab(0)"><span class="nav-ico">📊</span><span class="nav-lbl">Préstamos x Sede</span></button>
-    <button class="nav-btn" onclick="switchTab(1)"><span class="nav-ico">📅</span><span class="nav-lbl">Mes por Año</span></button>
-    <button class="nav-btn" onclick="switchTab(2)"><span class="nav-ico">🎓</span><span class="nav-lbl">Carrera / Sede</span></button>
-    <button class="nav-btn" onclick="switchTab(3)"><span class="nav-ico">📈</span><span class="nav-lbl">Acumulado</span></button>
-  </div>
-</aside>
-
-<!-- MAIN -->
-<main id="main">
-  <!-- KPI -->
-  <div class="kpi-strip" id="kpi-strip"></div>
-
-  <!-- TAB 0 -->
-  <div class="panel active" id="p0">
-    <div class="ph">
-      <h2>Préstamos por Sede</h2>
-      <p id="p0-sub">Selecciona sedes en el panel izquierdo para visualizar datos</p>
-    </div>
-    <div class="grid2" style="margin-bottom:16px">
-      <div class="card">
-        <h3>Volumen por Sede</h3>
-        <div class="cw" style="position:relative" id="bar-wrap"><canvas id="c-bar" style="position:absolute;inset:0"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>Distribución Porcentual</h3>
-        <div class="cw" style="height:340px;position:relative" id="donut-wrap"><canvas id="c-donut" style="position:absolute;inset:0"></canvas></div>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Detalle comparativo</h3>
-      <div id="prog-list"></div>
-      <table class="tbl" id="tbl-sede"></table>
-    </div>
-  </div>
-
-  <!-- TAB 1 -->
-  <div class="panel" id="p1">
-    <div class="ph">
-      <h2>Préstamos por Mes y Año</h2>
-      <p>Evolución mensual comparada entre años seleccionados</p>
-    </div>
-    <!-- valor destacado -->
-    <div class="grid2" style="margin-bottom:16px">
-      <div class="card">
-        <h3>Mes más activo</h3>
-        <div id="mes-max-display"></div>
-      </div>
-      <div class="card">
-        <h3>Año con mayor actividad</h3>
-        <div id="yr-max-display"></div>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:16px">
-      <h3>Tendencia mensual por año</h3>
-      <div class="leg-row" id="leg-yr"></div>
-      <div class="cw" style="height:280px"><canvas id="c-line"></canvas></div>
-    </div>
-    <div class="card" style="margin-bottom:16px">
-      <h3>Comparación mensual (barras)</h3>
-      <div class="cw" style="height:240px"><canvas id="c-barm"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Tabla mes × año</h3>
-      <table class="tbl" id="tbl-mes"></table>
-    </div>
-  </div>
-
-  <!-- TAB 2 -->
-  <div class="panel" id="p2">
-    <div class="ph">
-      <h2>Carrera por Sede</h2>
-      <p>Filtra de forma independiente por año, sede y carrera</p>
-    </div>
-
-    <!-- FILTROS PROPIOS TAB2 -->
-    <div class="card" style="margin-bottom:16px;padding:16px 18px">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
-
-        <div>
-          <div style="font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px">Año</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px" id="f2-yr"></div>
-        </div>
-
-        <div>
-          <div style="font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px">Sede</div>
-          <div style="display:flex;gap:4px;margin-bottom:6px">
-            <button onclick="f2SedeAll()" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);background:var(--s1);color:var(--txt2);cursor:pointer">Todas</button>
-            <button onclick="f2SedeNone()" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);background:var(--s1);color:var(--txt2);cursor:pointer">Ninguna</button>
-          </div>
-          <div style="max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:2px" id="f2-sede"></div>
-        </div>
-
-        <div>
-          <div style="font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px">Carrera</div>
-          <div style="display:flex;gap:4px;margin-bottom:6px">
-            <button onclick="f2CarAll()" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);background:var(--s1);color:var(--txt2);cursor:pointer">Todas</button>
-            <button onclick="f2CarNone()" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);background:var(--s1);color:var(--txt2);cursor:pointer">Ninguna</button>
-          </div>
-          <div style="max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:2px" id="f2-car"></div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- destacado carrera -->
-    <div class="card" style="margin-bottom:16px">
-      <h3>Carrera más solicitada (selección)</h3>
-      <div id="top-carrera-display"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:16px">
-      <h3>Combinaciones sede / carrera</h3>
-      <div style="position:relative" id="car-wrap"><canvas id="c-car" style="position:absolute;inset:0"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Tabla detallada</h3>
-      <table class="tbl" id="tbl-car"></table>
-    </div>
-  </div>
-
-  <!-- TAB 3 -->
-  <div class="panel" id="p3">
-    <div class="ph">
-      <h2>Acumulado por Sede y Año</h2>
-      <p>Evolución anual de préstamos por sede seleccionada</p>
-    </div>
-    <!-- valor destacado -->
-    <div class="grid2" style="margin-bottom:16px">
-      <div class="card">
-        <h3>Total periodo</h3>
-        <div id="total-periodo-display"></div>
-      </div>
-      <div class="card">
-        <h3>Variación global</h3>
-        <div id="variacion-global-display"></div>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:16px">
-      <h3>Barras apiladas por año</h3>
-      <div class="cw" style="height:320px"><canvas id="c-stk"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Tabla resumen</h3>
-      <table class="tbl" id="tbl-acum"></table>
-    </div>
-  </div>
-</main>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Informe · Check Point · Thomson Reuters</div>
+  <h1>Check Point &amp; <em>Uso</em><br>DUOC UC 2021–2024</h1>
+  <p class="hero-desc">Análisis de acceso al recurso Check Point — usos mensuales por ciclo académico, valor por uso destacado y distribución completa por carrera y sede para todo el período disponible.</p>
 </div>
-<script>
-const DATA = {
-  total_sede_año:[{Año:2021,Sede:"ALAMEDA",count:12},{Año:2021,Sede:"ANTONIO VARAS",count:5580},{Año:2021,Sede:"CASA CENTRAL",count:199},{Año:2021,Sede:"CONCEPCION",count:1039},{Año:2021,Sede:"LICEO RENCA",count:1},{Año:2021,Sede:"MAIPU",count:88},{Año:2021,Sede:"MELIPILLA",count:1},{Año:2021,Sede:"No Informado",count:690},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",count:1455},{Año:2021,Sede:"PLAZA NORTE",count:625},{Año:2021,Sede:"PLAZA OESTE",count:40},{Año:2021,Sede:"PLAZA VESPUCIO",count:1521},{Año:2021,Sede:"PUENTE ALTO",count:26},{Año:2021,Sede:"PUERTO MONTT",count:6},{Año:2021,Sede:"SAN BERNARDO",count:289},{Año:2021,Sede:"SAN CARLOS DE APOQUINDO",count:517},{Año:2021,Sede:"SAN JOAQUIN",count:5},{Año:2021,Sede:"VALPARAISO",count:710},{Año:2021,Sede:"VINA DEL MAR",count:2533},{Año:2022,Sede:"ALAMEDA",count:257},{Año:2022,Sede:"ANTONIO VARAS",count:5869},{Año:2022,Sede:"CAMPUS VILLARRICA",count:3},{Año:2022,Sede:"CASA CENTRAL",count:69},{Año:2022,Sede:"CONCEPCION",count:1801},{Año:2022,Sede:"MAIPU",count:82},{Año:2022,Sede:"MELIPILLA",count:2},{Año:2022,Sede:"No Informado",count:98},{Año:2022,Sede:"ONLINE",count:1},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",count:2146},{Año:2022,Sede:"PLAZA NORTE",count:608},{Año:2022,Sede:"PLAZA OESTE",count:51},{Año:2022,Sede:"PLAZA VESPUCIO",count:1438},{Año:2022,Sede:"PUENTE ALTO",count:46},{Año:2022,Sede:"PUERTO MONTT",count:97},{Año:2022,Sede:"SAN BERNARDO",count:98},{Año:2022,Sede:"SAN CARLOS DE APOQUINDO",count:497},{Año:2022,Sede:"SAN JOAQUIN",count:52},{Año:2022,Sede:"VALPARAISO",count:998},{Año:2022,Sede:"VINA DEL MAR",count:3960},{Año:2023,Sede:"ALAMEDA",count:232},{Año:2023,Sede:"ANTONIO VARAS",count:6431},{Año:2023,Sede:"CAMPUS ARAUCO",count:12},{Año:2023,Sede:"CAMPUS NACIMIENTO",count:2},{Año:2023,Sede:"CAMPUS VILLARRICA",count:1},{Año:2023,Sede:"CASA CENTRAL",count:25},{Año:2023,Sede:"CONCEPCION",count:2619},{Año:2023,Sede:"Educacion Continua",count:10},{Año:2023,Sede:"MAIPU",count:136},{Año:2023,Sede:"MELIPILLA",count:3},{Año:2023,Sede:"No Informado",count:127},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",count:2730},{Año:2023,Sede:"PLAZA NORTE",count:1626},{Año:2023,Sede:"PLAZA OESTE",count:11},{Año:2023,Sede:"PLAZA VESPUCIO",count:4298},{Año:2023,Sede:"PUENTE ALTO",count:94},{Año:2023,Sede:"PUERTO MONTT",count:181},{Año:2023,Sede:"SAN BERNARDO",count:95},{Año:2023,Sede:"SAN CARLOS DE APOQUINDO",count:371},{Año:2023,Sede:"SAN JOAQUIN",count:32},{Año:2023,Sede:"VALPARAISO",count:1112},{Año:2023,Sede:"VINA DEL MAR",count:3424},{Año:2024,Sede:"ALAMEDA",count:380},{Año:2024,Sede:"ANTONIO VARAS",count:3914},{Año:2024,Sede:"CAMPUS ARAUCO",count:30},{Año:2024,Sede:"CASA CENTRAL",count:45},{Año:2024,Sede:"CONCEPCION",count:1134},{Año:2024,Sede:"MAIPU",count:379},{Año:2024,Sede:"MELIPILLA",count:4},{Año:2024,Sede:"NACIMIENTO",count:4},{Año:2024,Sede:"No Informado",count:131},{Año:2024,Sede:"ONLINE",count:1},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",count:1336},{Año:2024,Sede:"PLAZA NORTE",count:611},{Año:2024,Sede:"PLAZA OESTE",count:46},{Año:2024,Sede:"PLAZA VESPUCIO",count:2416},{Año:2024,Sede:"PUENTE ALTO",count:43},{Año:2024,Sede:"PUERTO MONTT",count:263},{Año:2024,Sede:"SAN BERNARDO",count:76},{Año:2024,Sede:"SAN CARLOS DE APOQUINDO",count:212},{Año:2024,Sede:"SAN JOAQUIN",count:5},{Año:2024,Sede:"VALPARAISO",count:821},{Año:2024,Sede:"VINA DEL MAR",count:1930}],
-  mes_sede_año:[{Año:2021,Mes:1,Sede:"ANTONIO VARAS",count:74},{Año:2021,Mes:1,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:1,Sede:"CONCEPCION",count:26},{Año:2021,Mes:1,Sede:"MAIPU",count:3},{Año:2021,Mes:1,Sede:"No Informado",count:1},{Año:2021,Mes:1,Sede:"PADRE ALONSO DE OVALLE",count:36},{Año:2021,Mes:1,Sede:"PLAZA NORTE",count:17},{Año:2021,Mes:1,Sede:"PLAZA OESTE",count:5},{Año:2021,Mes:1,Sede:"PLAZA VESPUCIO",count:42},{Año:2021,Mes:1,Sede:"PUENTE ALTO",count:1},{Año:2021,Mes:1,Sede:"SAN BERNARDO",count:4},{Año:2021,Mes:1,Sede:"SAN CARLOS DE APOQUINDO",count:8},{Año:2021,Mes:1,Sede:"VALPARAISO",count:1},{Año:2021,Mes:1,Sede:"VINA DEL MAR",count:58},{Año:2021,Mes:2,Sede:"ANTONIO VARAS",count:51},{Año:2021,Mes:2,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:2,Sede:"CONCEPCION",count:8},{Año:2021,Mes:2,Sede:"MAIPU",count:3},{Año:2021,Mes:2,Sede:"No Informado",count:1},{Año:2021,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:31},{Año:2021,Mes:2,Sede:"PLAZA NORTE",count:4},{Año:2021,Mes:2,Sede:"PLAZA OESTE",count:2},{Año:2021,Mes:2,Sede:"PLAZA VESPUCIO",count:13},{Año:2021,Mes:2,Sede:"PUERTO MONTT",count:2},{Año:2021,Mes:2,Sede:"SAN BERNARDO",count:13},{Año:2021,Mes:2,Sede:"SAN CARLOS DE APOQUINDO",count:4},{Año:2021,Mes:2,Sede:"VALPARAISO",count:2},{Año:2021,Mes:2,Sede:"VINA DEL MAR",count:40},{Año:2021,Mes:3,Sede:"ALAMEDA",count:1},{Año:2021,Mes:3,Sede:"ANTONIO VARAS",count:670},{Año:2021,Mes:3,Sede:"CASA CENTRAL",count:93},{Año:2021,Mes:3,Sede:"CONCEPCION",count:13},{Año:2021,Mes:3,Sede:"MAIPU",count:7},{Año:2021,Mes:3,Sede:"No Informado",count:4},{Año:2021,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:111},{Año:2021,Mes:3,Sede:"PLAZA NORTE",count:7},{Año:2021,Mes:3,Sede:"PLAZA OESTE",count:2},{Año:2021,Mes:3,Sede:"PLAZA VESPUCIO",count:167},{Año:2021,Mes:3,Sede:"PUENTE ALTO",count:2},{Año:2021,Mes:3,Sede:"SAN BERNARDO",count:30},{Año:2021,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:71},{Año:2021,Mes:3,Sede:"VALPARAISO",count:5},{Año:2021,Mes:3,Sede:"VINA DEL MAR",count:258},{Año:2021,Mes:4,Sede:"ALAMEDA",count:4},{Año:2021,Mes:4,Sede:"ANTONIO VARAS",count:1299},{Año:2021,Mes:4,Sede:"CASA CENTRAL",count:7},{Año:2021,Mes:4,Sede:"CONCEPCION",count:69},{Año:2021,Mes:4,Sede:"MAIPU",count:26},{Año:2021,Mes:4,Sede:"No Informado",count:16},{Año:2021,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:181},{Año:2021,Mes:4,Sede:"PLAZA NORTE",count:23},{Año:2021,Mes:4,Sede:"PLAZA OESTE",count:7},{Año:2021,Mes:4,Sede:"PLAZA VESPUCIO",count:173},{Año:2021,Mes:4,Sede:"PUENTE ALTO",count:4},{Año:2021,Mes:4,Sede:"SAN BERNARDO",count:13},{Año:2021,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:112},{Año:2021,Mes:4,Sede:"SAN JOAQUIN",count:3},{Año:2021,Mes:4,Sede:"VALPARAISO",count:148},{Año:2021,Mes:4,Sede:"VINA DEL MAR",count:331},{Año:2021,Mes:5,Sede:"ALAMEDA",count:1},{Año:2021,Mes:5,Sede:"ANTONIO VARAS",count:492},{Año:2021,Mes:5,Sede:"CASA CENTRAL",count:23},{Año:2021,Mes:5,Sede:"CONCEPCION",count:139},{Año:2021,Mes:5,Sede:"MAIPU",count:18},{Año:2021,Mes:5,Sede:"MELIPILLA",count:1},{Año:2021,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:84},{Año:2021,Mes:5,Sede:"PLAZA NORTE",count:63},{Año:2021,Mes:5,Sede:"PLAZA OESTE",count:6},{Año:2021,Mes:5,Sede:"PLAZA VESPUCIO",count:236},{Año:2021,Mes:5,Sede:"SAN BERNARDO",count:11},{Año:2021,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:22},{Año:2021,Mes:5,Sede:"VALPARAISO",count:42},{Año:2021,Mes:5,Sede:"VINA DEL MAR",count:240},{Año:2021,Mes:6,Sede:"ALAMEDA",count:1},{Año:2021,Mes:6,Sede:"ANTONIO VARAS",count:447},{Año:2021,Mes:6,Sede:"CASA CENTRAL",count:4},{Año:2021,Mes:6,Sede:"CONCEPCION",count:64},{Año:2021,Mes:6,Sede:"MAIPU",count:16},{Año:2021,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:92},{Año:2021,Mes:6,Sede:"PLAZA NORTE",count:34},{Año:2021,Mes:6,Sede:"PLAZA OESTE",count:11},{Año:2021,Mes:6,Sede:"PLAZA VESPUCIO",count:152},{Año:2021,Mes:6,Sede:"SAN BERNARDO",count:4},{Año:2021,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:32},{Año:2021,Mes:6,Sede:"VALPARAISO",count:42},{Año:2021,Mes:6,Sede:"VINA DEL MAR",count:177},{Año:2021,Mes:7,Sede:"ANTONIO VARAS",count:143},{Año:2021,Mes:7,Sede:"CASA CENTRAL",count:6},{Año:2021,Mes:7,Sede:"CONCEPCION",count:27},{Año:2021,Mes:7,Sede:"LICEO RENCA",count:1},{Año:2021,Mes:7,Sede:"MAIPU",count:8},{Año:2021,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:39},{Año:2021,Mes:7,Sede:"PLAZA NORTE",count:19},{Año:2021,Mes:7,Sede:"PLAZA OESTE",count:3},{Año:2021,Mes:7,Sede:"PLAZA VESPUCIO",count:145},{Año:2021,Mes:7,Sede:"PUENTE ALTO",count:3},{Año:2021,Mes:7,Sede:"SAN BERNARDO",count:8},{Año:2021,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:2},{Año:2021,Mes:7,Sede:"SAN JOAQUIN",count:1},{Año:2021,Mes:7,Sede:"VALPARAISO",count:23},{Año:2021,Mes:7,Sede:"VINA DEL MAR",count:85},{Año:2021,Mes:8,Sede:"ALAMEDA",count:3},{Año:2021,Mes:8,Sede:"ANTONIO VARAS",count:263},{Año:2021,Mes:8,Sede:"CASA CENTRAL",count:6},{Año:2021,Mes:8,Sede:"CONCEPCION",count:43},{Año:2021,Mes:8,Sede:"No Informado",count:628},{Año:2021,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:127},{Año:2021,Mes:8,Sede:"PLAZA NORTE",count:81},{Año:2021,Mes:8,Sede:"PLAZA VESPUCIO",count:85},{Año:2021,Mes:8,Sede:"PUENTE ALTO",count:1},{Año:2021,Mes:8,Sede:"SAN BERNARDO",count:17},{Año:2021,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:55},{Año:2021,Mes:8,Sede:"VALPARAISO",count:40},{Año:2021,Mes:8,Sede:"VINA DEL MAR",count:250},{Año:2021,Mes:9,Sede:"ALAMEDA",count:1},{Año:2021,Mes:9,Sede:"ANTONIO VARAS",count:1232},{Año:2021,Mes:9,Sede:"CASA CENTRAL",count:51},{Año:2021,Mes:9,Sede:"CONCEPCION",count:427},{Año:2021,Mes:9,Sede:"MAIPU",count:1},{Año:2021,Mes:9,Sede:"No Informado",count:7},{Año:2021,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:446},{Año:2021,Mes:9,Sede:"PLAZA NORTE",count:258},{Año:2021,Mes:9,Sede:"PLAZA VESPUCIO",count:245},{Año:2021,Mes:9,Sede:"PUENTE ALTO",count:6},{Año:2021,Mes:9,Sede:"PUERTO MONTT",count:1},{Año:2021,Mes:9,Sede:"SAN BERNARDO",count:84},{Año:2021,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:134},{Año:2021,Mes:9,Sede:"VALPARAISO",count:119},{Año:2021,Mes:9,Sede:"VINA DEL MAR",count:522},{Año:2021,Mes:10,Sede:"ANTONIO VARAS",count:288},{Año:2021,Mes:10,Sede:"CONCEPCION",count:80},{Año:2021,Mes:10,Sede:"MAIPU",count:3},{Año:2021,Mes:10,Sede:"No Informado",count:7},{Año:2021,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:206},{Año:2021,Mes:10,Sede:"PLAZA NORTE",count:79},{Año:2021,Mes:10,Sede:"PLAZA VESPUCIO",count:75},{Año:2021,Mes:10,Sede:"PUENTE ALTO",count:9},{Año:2021,Mes:10,Sede:"SAN BERNARDO",count:52},{Año:2021,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:30},{Año:2021,Mes:10,Sede:"VALPARAISO",count:98},{Año:2021,Mes:10,Sede:"VINA DEL MAR",count:186},{Año:2021,Mes:11,Sede:"ALAMEDA",count:1},{Año:2021,Mes:11,Sede:"ANTONIO VARAS",count:405},{Año:2021,Mes:11,Sede:"CASA CENTRAL",count:2},{Año:2021,Mes:11,Sede:"CONCEPCION",count:77},{Año:2021,Mes:11,Sede:"MAIPU",count:1},{Año:2021,Mes:11,Sede:"No Informado",count:20},{Año:2021,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:78},{Año:2021,Mes:11,Sede:"PLAZA NORTE",count:17},{Año:2021,Mes:11,Sede:"PLAZA OESTE",count:3},{Año:2021,Mes:11,Sede:"PLAZA VESPUCIO",count:141},{Año:2021,Mes:11,Sede:"PUERTO MONTT",count:2},{Año:2021,Mes:11,Sede:"SAN BERNARDO",count:39},{Año:2021,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:38},{Año:2021,Mes:11,Sede:"SAN JOAQUIN",count:1},{Año:2021,Mes:11,Sede:"VALPARAISO",count:83},{Año:2021,Mes:11,Sede:"VINA DEL MAR",count:251},{Año:2021,Mes:12,Sede:"ANTONIO VARAS",count:216},{Año:2021,Mes:12,Sede:"CASA CENTRAL",count:3},{Año:2021,Mes:12,Sede:"CONCEPCION",count:66},{Año:2021,Mes:12,Sede:"MAIPU",count:2},{Año:2021,Mes:12,Sede:"No Informado",count:6},{Año:2021,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:24},{Año:2021,Mes:12,Sede:"PLAZA NORTE",count:23},{Año:2021,Mes:12,Sede:"PLAZA OESTE",count:1},{Año:2021,Mes:12,Sede:"PLAZA VESPUCIO",count:47},{Año:2021,Mes:12,Sede:"PUERTO MONTT",count:1},{Año:2021,Mes:12,Sede:"SAN BERNARDO",count:14},{Año:2021,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:9},{Año:2021,Mes:12,Sede:"VALPARAISO",count:107},{Año:2021,Mes:12,Sede:"VINA DEL MAR",count:135},{Año:2022,Mes:2,Sede:"ANTONIO VARAS",count:35},{Año:2022,Mes:2,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:2,Sede:"CONCEPCION",count:4},{Año:2022,Mes:2,Sede:"MAIPU",count:4},{Año:2022,Mes:2,Sede:"MELIPILLA",count:1},{Año:2022,Mes:2,Sede:"No Informado",count:1},{Año:2022,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:5},{Año:2022,Mes:2,Sede:"PLAZA NORTE",count:5},{Año:2022,Mes:2,Sede:"PLAZA OESTE",count:1},{Año:2022,Mes:2,Sede:"PLAZA VESPUCIO",count:8},{Año:2022,Mes:2,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:2,Sede:"SAN JOAQUIN",count:1},{Año:2022,Mes:2,Sede:"VALPARAISO",count:1},{Año:2022,Mes:2,Sede:"VINA DEL MAR",count:15},{Año:2022,Mes:3,Sede:"ALAMEDA",count:1},{Año:2022,Mes:3,Sede:"ANTONIO VARAS",count:1343},{Año:2022,Mes:3,Sede:"CASA CENTRAL",count:12},{Año:2022,Mes:3,Sede:"CONCEPCION",count:54},{Año:2022,Mes:3,Sede:"MAIPU",count:6},{Año:2022,Mes:3,Sede:"ONLINE",count:1},{Año:2022,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:135},{Año:2022,Mes:3,Sede:"PLAZA NORTE",count:17},{Año:2022,Mes:3,Sede:"PLAZA OESTE",count:2},{Año:2022,Mes:3,Sede:"PLAZA VESPUCIO",count:56},{Año:2022,Mes:3,Sede:"PUENTE ALTO",count:6},{Año:2022,Mes:3,Sede:"SAN BERNARDO",count:26},{Año:2022,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:61},{Año:2022,Mes:3,Sede:"VALPARAISO",count:70},{Año:2022,Mes:3,Sede:"VINA DEL MAR",count:472},{Año:2022,Mes:4,Sede:"ALAMEDA",count:2},{Año:2022,Mes:4,Sede:"ANTONIO VARAS",count:475},{Año:2022,Mes:4,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:4,Sede:"CONCEPCION",count:97},{Año:2022,Mes:4,Sede:"MAIPU",count:2},{Año:2022,Mes:4,Sede:"No Informado",count:9},{Año:2022,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:99},{Año:2022,Mes:4,Sede:"PLAZA NORTE",count:4},{Año:2022,Mes:4,Sede:"PLAZA VESPUCIO",count:85},{Año:2022,Mes:4,Sede:"PUENTE ALTO",count:8},{Año:2022,Mes:4,Sede:"PUERTO MONTT",count:1},{Año:2022,Mes:4,Sede:"SAN BERNARDO",count:13},{Año:2022,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:45},{Año:2022,Mes:4,Sede:"VALPARAISO",count:35},{Año:2022,Mes:4,Sede:"VINA DEL MAR",count:272},{Año:2022,Mes:5,Sede:"ALAMEDA",count:5},{Año:2022,Mes:5,Sede:"ANTONIO VARAS",count:626},{Año:2022,Mes:5,Sede:"CAMPUS VILLARRICA",count:2},{Año:2022,Mes:5,Sede:"CASA CENTRAL",count:32},{Año:2022,Mes:5,Sede:"CONCEPCION",count:80},{Año:2022,Mes:5,Sede:"MAIPU",count:9},{Año:2022,Mes:5,Sede:"No Informado",count:22},{Año:2022,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:167},{Año:2022,Mes:5,Sede:"PLAZA NORTE",count:97},{Año:2022,Mes:5,Sede:"PLAZA OESTE",count:1},{Año:2022,Mes:5,Sede:"PLAZA VESPUCIO",count:75},{Año:2022,Mes:5,Sede:"PUENTE ALTO",count:10},{Año:2022,Mes:5,Sede:"PUERTO MONTT",count:22},{Año:2022,Mes:5,Sede:"SAN BERNARDO",count:14},{Año:2022,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:10},{Año:2022,Mes:5,Sede:"SAN JOAQUIN",count:11},{Año:2022,Mes:5,Sede:"VALPARAISO",count:36},{Año:2022,Mes:5,Sede:"VINA DEL MAR",count:152},{Año:2022,Mes:6,Sede:"ALAMEDA",count:5},{Año:2022,Mes:6,Sede:"ANTONIO VARAS",count:386},{Año:2022,Mes:6,Sede:"CASA CENTRAL",count:5},{Año:2022,Mes:6,Sede:"CONCEPCION",count:88},{Año:2022,Mes:6,Sede:"MAIPU",count:5},{Año:2022,Mes:6,Sede:"No Informado",count:26},{Año:2022,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:298},{Año:2022,Mes:6,Sede:"PLAZA NORTE",count:24},{Año:2022,Mes:6,Sede:"PLAZA OESTE",count:3},{Año:2022,Mes:6,Sede:"PLAZA VESPUCIO",count:80},{Año:2022,Mes:6,Sede:"PUENTE ALTO",count:6},{Año:2022,Mes:6,Sede:"SAN BERNARDO",count:13},{Año:2022,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:15},{Año:2022,Mes:6,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:6,Sede:"VALPARAISO",count:43},{Año:2022,Mes:6,Sede:"VINA DEL MAR",count:195},{Año:2022,Mes:7,Sede:"ALAMEDA",count:17},{Año:2022,Mes:7,Sede:"ANTONIO VARAS",count:59},{Año:2022,Mes:7,Sede:"CASA CENTRAL",count:2},{Año:2022,Mes:7,Sede:"CONCEPCION",count:17},{Año:2022,Mes:7,Sede:"MAIPU",count:4},{Año:2022,Mes:7,Sede:"No Informado",count:3},{Año:2022,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:47},{Año:2022,Mes:7,Sede:"PLAZA NORTE",count:25},{Año:2022,Mes:7,Sede:"PLAZA VESPUCIO",count:26},{Año:2022,Mes:7,Sede:"PUENTE ALTO",count:4},{Año:2022,Mes:7,Sede:"PUERTO MONTT",count:1},{Año:2022,Mes:7,Sede:"SAN BERNARDO",count:5},{Año:2022,Mes:7,Sede:"SAN JOAQUIN",count:5},{Año:2022,Mes:7,Sede:"VALPARAISO",count:25},{Año:2022,Mes:7,Sede:"VINA DEL MAR",count:45},{Año:2022,Mes:8,Sede:"ALAMEDA",count:203},{Año:2022,Mes:8,Sede:"ANTONIO VARAS",count:803},{Año:2022,Mes:8,Sede:"CASA CENTRAL",count:1},{Año:2022,Mes:8,Sede:"CONCEPCION",count:591},{Año:2022,Mes:8,Sede:"MAIPU",count:6},{Año:2022,Mes:8,Sede:"MELIPILLA",count:1},{Año:2022,Mes:8,Sede:"No Informado",count:9},{Año:2022,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:667},{Año:2022,Mes:8,Sede:"PLAZA NORTE",count:187},{Año:2022,Mes:8,Sede:"PLAZA OESTE",count:3},{Año:2022,Mes:8,Sede:"PLAZA VESPUCIO",count:555},{Año:2022,Mes:8,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:8,Sede:"PUERTO MONTT",count:56},{Año:2022,Mes:8,Sede:"SAN BERNARDO",count:7},{Año:2022,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:148},{Año:2022,Mes:8,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:8,Sede:"VALPARAISO",count:181},{Año:2022,Mes:8,Sede:"VINA DEL MAR",count:631},{Año:2022,Mes:9,Sede:"ALAMEDA",count:6},{Año:2022,Mes:9,Sede:"ANTONIO VARAS",count:812},{Año:2022,Mes:9,Sede:"CASA CENTRAL",count:5},{Año:2022,Mes:9,Sede:"CONCEPCION",count:447},{Año:2022,Mes:9,Sede:"MAIPU",count:4},{Año:2022,Mes:9,Sede:"No Informado",count:15},{Año:2022,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:226},{Año:2022,Mes:9,Sede:"PLAZA NORTE",count:96},{Año:2022,Mes:9,Sede:"PLAZA OESTE",count:4},{Año:2022,Mes:9,Sede:"PLAZA VESPUCIO",count:253},{Año:2022,Mes:9,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:9,Sede:"PUERTO MONTT",count:8},{Año:2022,Mes:9,Sede:"SAN BERNARDO",count:3},{Año:2022,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:147},{Año:2022,Mes:9,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:9,Sede:"VALPARAISO",count:211},{Año:2022,Mes:9,Sede:"VINA DEL MAR",count:1161},{Año:2022,Mes:10,Sede:"ALAMEDA",count:2},{Año:2022,Mes:10,Sede:"ANTONIO VARAS",count:370},{Año:2022,Mes:10,Sede:"CASA CENTRAL",count:1},{Año:2022,Mes:10,Sede:"CONCEPCION",count:127},{Año:2022,Mes:10,Sede:"MAIPU",count:6},{Año:2022,Mes:10,Sede:"No Informado",count:4},{Año:2022,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:124},{Año:2022,Mes:10,Sede:"PLAZA NORTE",count:45},{Año:2022,Mes:10,Sede:"PLAZA OESTE",count:8},{Año:2022,Mes:10,Sede:"PLAZA VESPUCIO",count:80},{Año:2022,Mes:10,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:10,Sede:"PUERTO MONTT",count:9},{Año:2022,Mes:10,Sede:"SAN BERNARDO",count:10},{Año:2022,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2022,Mes:10,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:10,Sede:"VALPARAISO",count:107},{Año:2022,Mes:10,Sede:"VINA DEL MAR",count:425},{Año:2022,Mes:11,Sede:"ALAMEDA",count:12},{Año:2022,Mes:11,Sede:"ANTONIO VARAS",count:611},{Año:2022,Mes:11,Sede:"CASA CENTRAL",count:2},{Año:2022,Mes:11,Sede:"CONCEPCION",count:152},{Año:2022,Mes:11,Sede:"MAIPU",count:20},{Año:2022,Mes:11,Sede:"No Informado",count:6},{Año:2022,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:161},{Año:2022,Mes:11,Sede:"PLAZA NORTE",count:68},{Año:2022,Mes:11,Sede:"PLAZA OESTE",count:22},{Año:2022,Mes:11,Sede:"PLAZA VESPUCIO",count:52},{Año:2022,Mes:11,Sede:"PUENTE ALTO",count:1},{Año:2022,Mes:11,Sede:"SAN BERNARDO",count:2},{Año:2022,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:23},{Año:2022,Mes:11,Sede:"SAN JOAQUIN",count:5},{Año:2022,Mes:11,Sede:"VALPARAISO",count:210},{Año:2022,Mes:11,Sede:"VINA DEL MAR",count:230},{Año:2022,Mes:12,Sede:"ALAMEDA",count:4},{Año:2022,Mes:12,Sede:"ANTONIO VARAS",count:349},{Año:2022,Mes:12,Sede:"CAMPUS VILLARRICA",count:1},{Año:2022,Mes:12,Sede:"CASA CENTRAL",count:3},{Año:2022,Mes:12,Sede:"CONCEPCION",count:144},{Año:2022,Mes:12,Sede:"MAIPU",count:16},{Año:2022,Mes:12,Sede:"No Informado",count:3},{Año:2022,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:217},{Año:2022,Mes:12,Sede:"PLAZA NORTE",count:40},{Año:2022,Mes:12,Sede:"PLAZA OESTE",count:7},{Año:2022,Mes:12,Sede:"PLAZA VESPUCIO",count:168},{Año:2022,Mes:12,Sede:"PUENTE ALTO",count:3},{Año:2022,Mes:12,Sede:"SAN BERNARDO",count:5},{Año:2022,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:31},{Año:2022,Mes:12,Sede:"SAN JOAQUIN",count:6},{Año:2022,Mes:12,Sede:"VALPARAISO",count:79},{Año:2022,Mes:12,Sede:"VINA DEL MAR",count:362},{Año:2023,Mes:1,Sede:"ALAMEDA",count:2},{Año:2023,Mes:1,Sede:"ANTONIO VARAS",count:172},{Año:2023,Mes:1,Sede:"CAMPUS VILLARRICA",count:1},{Año:2023,Mes:1,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:1,Sede:"CONCEPCION",count:52},{Año:2023,Mes:1,Sede:"MAIPU",count:7},{Año:2023,Mes:1,Sede:"No Informado",count:10},{Año:2023,Mes:1,Sede:"PADRE ALONSO DE OVALLE",count:22},{Año:2023,Mes:1,Sede:"PLAZA NORTE",count:4},{Año:2023,Mes:1,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:1,Sede:"PLAZA VESPUCIO",count:47},{Año:2023,Mes:1,Sede:"SAN BERNARDO",count:4},{Año:2023,Mes:1,Sede:"SAN CARLOS DE APOQUINDO",count:3},{Año:2023,Mes:1,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:1,Sede:"VALPARAISO",count:21},{Año:2023,Mes:1,Sede:"VINA DEL MAR",count:36},{Año:2023,Mes:2,Sede:"ALAMEDA",count:4},{Año:2023,Mes:2,Sede:"ANTONIO VARAS",count:80},{Año:2023,Mes:2,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:2,Sede:"CONCEPCION",count:10},{Año:2023,Mes:2,Sede:"MAIPU",count:5},{Año:2023,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:13},{Año:2023,Mes:2,Sede:"PLAZA VESPUCIO",count:9},{Año:2023,Mes:2,Sede:"SAN BERNARDO",count:2},{Año:2023,Mes:2,Sede:"SAN CARLOS DE APOQUINDO",count:2},{Año:2023,Mes:2,Sede:"SAN JOAQUIN",count:3},{Año:2023,Mes:2,Sede:"VALPARAISO",count:5},{Año:2023,Mes:2,Sede:"VINA DEL MAR",count:5},{Año:2023,Mes:3,Sede:"ALAMEDA",count:131},{Año:2023,Mes:3,Sede:"ANTONIO VARAS",count:568},{Año:2023,Mes:3,Sede:"CONCEPCION",count:127},{Año:2023,Mes:3,Sede:"MAIPU",count:6},{Año:2023,Mes:3,Sede:"No Informado",count:8},{Año:2023,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:311},{Año:2023,Mes:3,Sede:"PLAZA NORTE",count:27},{Año:2023,Mes:3,Sede:"PLAZA OESTE",count:3},{Año:2023,Mes:3,Sede:"PLAZA VESPUCIO",count:132},{Año:2023,Mes:3,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:3,Sede:"PUERTO MONTT",count:23},{Año:2023,Mes:3,Sede:"SAN BERNARDO",count:20},{Año:2023,Mes:3,Sede:"SAN CARLOS DE APOQUINDO",count:22},{Año:2023,Mes:3,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:3,Sede:"VALPARAISO",count:39},{Año:2023,Mes:3,Sede:"VINA DEL MAR",count:370},{Año:2023,Mes:4,Sede:"ALAMEDA",count:22},{Año:2023,Mes:4,Sede:"ANTONIO VARAS",count:507},{Año:2023,Mes:4,Sede:"CAMPUS ARAUCO",count:4},{Año:2023,Mes:4,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:4,Sede:"CONCEPCION",count:74},{Año:2023,Mes:4,Sede:"MAIPU",count:10},{Año:2023,Mes:4,Sede:"No Informado",count:12},{Año:2023,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:85},{Año:2023,Mes:4,Sede:"PLAZA NORTE",count:179},{Año:2023,Mes:4,Sede:"PLAZA OESTE",count:3},{Año:2023,Mes:4,Sede:"PLAZA VESPUCIO",count:106},{Año:2023,Mes:4,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:4,Sede:"PUERTO MONTT",count:28},{Año:2023,Mes:4,Sede:"SAN BERNARDO",count:22},{Año:2023,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:68},{Año:2023,Mes:4,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:4,Sede:"VALPARAISO",count:30},{Año:2023,Mes:4,Sede:"VINA DEL MAR",count:241},{Año:2023,Mes:5,Sede:"ALAMEDA",count:13},{Año:2023,Mes:5,Sede:"ANTONIO VARAS",count:545},{Año:2023,Mes:5,Sede:"CAMPUS NACIMIENTO",count:2},{Año:2023,Mes:5,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:5,Sede:"CONCEPCION",count:72},{Año:2023,Mes:5,Sede:"MAIPU",count:9},{Año:2023,Mes:5,Sede:"MELIPILLA",count:1},{Año:2023,Mes:5,Sede:"No Informado",count:18},{Año:2023,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:64},{Año:2023,Mes:5,Sede:"PLAZA NORTE",count:88},{Año:2023,Mes:5,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:5,Sede:"PLAZA VESPUCIO",count:105},{Año:2023,Mes:5,Sede:"PUERTO MONTT",count:2},{Año:2023,Mes:5,Sede:"SAN BERNARDO",count:6},{Año:2023,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:34},{Año:2023,Mes:5,Sede:"VALPARAISO",count:73},{Año:2023,Mes:5,Sede:"VINA DEL MAR",count:222},{Año:2023,Mes:6,Sede:"ALAMEDA",count:6},{Año:2023,Mes:6,Sede:"ANTONIO VARAS",count:436},{Año:2023,Mes:6,Sede:"CONCEPCION",count:150},{Año:2023,Mes:6,Sede:"MAIPU",count:7},{Año:2023,Mes:6,Sede:"MELIPILLA",count:1},{Año:2023,Mes:6,Sede:"No Informado",count:11},{Año:2023,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:78},{Año:2023,Mes:6,Sede:"PLAZA NORTE",count:35},{Año:2023,Mes:6,Sede:"PLAZA OESTE",count:2},{Año:2023,Mes:6,Sede:"PLAZA VESPUCIO",count:87},{Año:2023,Mes:6,Sede:"PUENTE ALTO",count:3},{Año:2023,Mes:6,Sede:"PUERTO MONTT",count:6},{Año:2023,Mes:6,Sede:"SAN BERNARDO",count:3},{Año:2023,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:4},{Año:2023,Mes:6,Sede:"SAN JOAQUIN",count:7},{Año:2023,Mes:6,Sede:"VALPARAISO",count:24},{Año:2023,Mes:6,Sede:"VINA DEL MAR",count:136},{Año:2023,Mes:7,Sede:"ALAMEDA",count:7},{Año:2023,Mes:7,Sede:"ANTONIO VARAS",count:133},{Año:2023,Mes:7,Sede:"CASA CENTRAL",count:3},{Año:2023,Mes:7,Sede:"CONCEPCION",count:94},{Año:2023,Mes:7,Sede:"Educacion Continua",count:10},{Año:2023,Mes:7,Sede:"MAIPU",count:6},{Año:2023,Mes:7,Sede:"No Informado",count:4},{Año:2023,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:20},{Año:2023,Mes:7,Sede:"PLAZA NORTE",count:5},{Año:2023,Mes:7,Sede:"PLAZA OESTE",count:1},{Año:2023,Mes:7,Sede:"PLAZA VESPUCIO",count:67},{Año:2023,Mes:7,Sede:"PUERTO MONTT",count:4},{Año:2023,Mes:7,Sede:"SAN BERNARDO",count:4},{Año:2023,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2023,Mes:7,Sede:"SAN JOAQUIN",count:4},{Año:2023,Mes:7,Sede:"VALPARAISO",count:17},{Año:2023,Mes:7,Sede:"VINA DEL MAR",count:79},{Año:2023,Mes:8,Sede:"ALAMEDA",count:14},{Año:2023,Mes:8,Sede:"ANTONIO VARAS",count:952},{Año:2023,Mes:8,Sede:"CAMPUS ARAUCO",count:7},{Año:2023,Mes:8,Sede:"CASA CENTRAL",count:1},{Año:2023,Mes:8,Sede:"CONCEPCION",count:572},{Año:2023,Mes:8,Sede:"MAIPU",count:6},{Año:2023,Mes:8,Sede:"No Informado",count:11},{Año:2023,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:889},{Año:2023,Mes:8,Sede:"PLAZA NORTE",count:622},{Año:2023,Mes:8,Sede:"PLAZA VESPUCIO",count:1102},{Año:2023,Mes:8,Sede:"PUENTE ALTO",count:2},{Año:2023,Mes:8,Sede:"PUERTO MONTT",count:10},{Año:2023,Mes:8,Sede:"SAN BERNARDO",count:5},{Año:2023,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:76},{Año:2023,Mes:8,Sede:"SAN JOAQUIN",count:8},{Año:2023,Mes:8,Sede:"VALPARAISO",count:211},{Año:2023,Mes:8,Sede:"VINA DEL MAR",count:555},{Año:2023,Mes:9,Sede:"ALAMEDA",count:12},{Año:2023,Mes:9,Sede:"ANTONIO VARAS",count:1570},{Año:2023,Mes:9,Sede:"CASA CENTRAL",count:2},{Año:2023,Mes:9,Sede:"CONCEPCION",count:688},{Año:2023,Mes:9,Sede:"MAIPU",count:10},{Año:2023,Mes:9,Sede:"No Informado",count:6},{Año:2023,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:422},{Año:2023,Mes:9,Sede:"PLAZA NORTE",count:421},{Año:2023,Mes:9,Sede:"PLAZA VESPUCIO",count:932},{Año:2023,Mes:9,Sede:"PUERTO MONTT",count:22},{Año:2023,Mes:9,Sede:"SAN BERNARDO",count:2},{Año:2023,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:92},{Año:2023,Mes:9,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:9,Sede:"VALPARAISO",count:255},{Año:2023,Mes:9,Sede:"VINA DEL MAR",count:744},{Año:2023,Mes:10,Sede:"ALAMEDA",count:12},{Año:2023,Mes:10,Sede:"ANTONIO VARAS",count:477},{Año:2023,Mes:10,Sede:"CASA CENTRAL",count:6},{Año:2023,Mes:10,Sede:"CONCEPCION",count:327},{Año:2023,Mes:10,Sede:"MAIPU",count:4},{Año:2023,Mes:10,Sede:"MELIPILLA",count:1},{Año:2023,Mes:10,Sede:"No Informado",count:19},{Año:2023,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:124},{Año:2023,Mes:10,Sede:"PLAZA NORTE",count:88},{Año:2023,Mes:10,Sede:"PLAZA VESPUCIO",count:421},{Año:2023,Mes:10,Sede:"PUERTO MONTT",count:15},{Año:2023,Mes:10,Sede:"SAN BERNARDO",count:7},{Año:2023,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2023,Mes:10,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:10,Sede:"VALPARAISO",count:170},{Año:2023,Mes:10,Sede:"VINA DEL MAR",count:340},{Año:2023,Mes:11,Sede:"ALAMEDA",count:3},{Año:2023,Mes:11,Sede:"ANTONIO VARAS",count:422},{Año:2023,Mes:11,Sede:"CASA CENTRAL",count:7},{Año:2023,Mes:11,Sede:"CONCEPCION",count:221},{Año:2023,Mes:11,Sede:"MAIPU",count:64},{Año:2023,Mes:11,Sede:"No Informado",count:19},{Año:2023,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:183},{Año:2023,Mes:11,Sede:"PLAZA NORTE",count:53},{Año:2023,Mes:11,Sede:"PLAZA VESPUCIO",count:674},{Año:2023,Mes:11,Sede:"PUENTE ALTO",count:55},{Año:2023,Mes:11,Sede:"PUERTO MONTT",count:56},{Año:2023,Mes:11,Sede:"SAN BERNARDO",count:20},{Año:2023,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:17},{Año:2023,Mes:11,Sede:"SAN JOAQUIN",count:2},{Año:2023,Mes:11,Sede:"VALPARAISO",count:173},{Año:2023,Mes:11,Sede:"VINA DEL MAR",count:411},{Año:2023,Mes:12,Sede:"ALAMEDA",count:6},{Año:2023,Mes:12,Sede:"ANTONIO VARAS",count:569},{Año:2023,Mes:12,Sede:"CONCEPCION",count:232},{Año:2023,Mes:12,Sede:"MAIPU",count:2},{Año:2023,Mes:12,Sede:"No Informado",count:9},{Año:2023,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:519},{Año:2023,Mes:12,Sede:"PLAZA NORTE",count:104},{Año:2023,Mes:12,Sede:"PLAZA VESPUCIO",count:616},{Año:2023,Mes:12,Sede:"PUENTE ALTO",count:30},{Año:2023,Mes:12,Sede:"PUERTO MONTT",count:15},{Año:2023,Mes:12,Sede:"SAN CARLOS DE APOQUINDO",count:30},{Año:2023,Mes:12,Sede:"SAN JOAQUIN",count:1},{Año:2023,Mes:12,Sede:"VALPARAISO",count:94},{Año:2023,Mes:12,Sede:"VINA DEL MAR",count:285},{Año:2024,Mes:2,Sede:"ANTONIO VARAS",count:64},{Año:2024,Mes:2,Sede:"CONCEPCION",count:10},{Año:2024,Mes:2,Sede:"No Informado",count:4},{Año:2024,Mes:2,Sede:"PADRE ALONSO DE OVALLE",count:22},{Año:2024,Mes:2,Sede:"PLAZA NORTE",count:2},{Año:2024,Mes:2,Sede:"PLAZA VESPUCIO",count:31},{Año:2024,Mes:2,Sede:"PUENTE ALTO",count:6},{Año:2024,Mes:2,Sede:"PUERTO MONTT",count:5},{Año:2024,Mes:2,Sede:"VALPARAISO",count:5},{Año:2024,Mes:2,Sede:"VINA DEL MAR",count:106},{Año:2024,Mes:3,Sede:"ANTONIO VARAS",count:437},{Año:2024,Mes:3,Sede:"CASA CENTRAL",count:23},{Año:2024,Mes:3,Sede:"CONCEPCION",count:41},{Año:2024,Mes:3,Sede:"MAIPU",count:4},{Año:2024,Mes:3,Sede:"No Informado",count:19},{Año:2024,Mes:3,Sede:"PADRE ALONSO DE OVALLE",count:100},{Año:2024,Mes:3,Sede:"PLAZA NORTE",count:18},{Año:2024,Mes:3,Sede:"PLAZA VESPUCIO",count:176},{Año:2024,Mes:3,Sede:"PUENTE ALTO",count:3},{Año:2024,Mes:3,Sede:"PUERTO MONTT",count:25},{Año:2024,Mes:3,Sede:"SAN BERNARDO",count:9},{Año:2024,Mes:3,Sede:"VALPARAISO",count:1},{Año:2024,Mes:3,Sede:"VINA DEL MAR",count:204},{Año:2024,Mes:4,Sede:"ANTONIO VARAS",count:577},{Año:2024,Mes:4,Sede:"CONCEPCION",count:296},{Año:2024,Mes:4,Sede:"MAIPU",count:31},{Año:2024,Mes:4,Sede:"No Informado",count:16},{Año:2024,Mes:4,Sede:"PADRE ALONSO DE OVALLE",count:292},{Año:2024,Mes:4,Sede:"PLAZA NORTE",count:92},{Año:2024,Mes:4,Sede:"PLAZA VESPUCIO",count:279},{Año:2024,Mes:4,Sede:"PUENTE ALTO",count:2},{Año:2024,Mes:4,Sede:"PUERTO MONTT",count:50},{Año:2024,Mes:4,Sede:"SAN BERNARDO",count:35},{Año:2024,Mes:4,Sede:"SAN CARLOS DE APOQUINDO",count:96},{Año:2024,Mes:4,Sede:"VALPARAISO",count:42},{Año:2024,Mes:4,Sede:"VINA DEL MAR",count:320},{Año:2024,Mes:5,Sede:"ALAMEDA",count:3},{Año:2024,Mes:5,Sede:"ANTONIO VARAS",count:335},{Año:2024,Mes:5,Sede:"CONCEPCION",count:127},{Año:2024,Mes:5,Sede:"MAIPU",count:37},{Año:2024,Mes:5,Sede:"No Informado",count:9},{Año:2024,Mes:5,Sede:"PADRE ALONSO DE OVALLE",count:111},{Año:2024,Mes:5,Sede:"PLAZA NORTE",count:27},{Año:2024,Mes:5,Sede:"PLAZA VESPUCIO",count:244},{Año:2024,Mes:5,Sede:"PUENTE ALTO",count:5},{Año:2024,Mes:5,Sede:"PUERTO MONTT",count:24},{Año:2024,Mes:5,Sede:"SAN CARLOS DE APOQUINDO",count:57},{Año:2024,Mes:5,Sede:"VALPARAISO",count:86},{Año:2024,Mes:5,Sede:"VINA DEL MAR",count:184},{Año:2024,Mes:6,Sede:"ALAMEDA",count:17},{Año:2024,Mes:6,Sede:"ANTONIO VARAS",count:386},{Año:2024,Mes:6,Sede:"CASA CENTRAL",count:6},{Año:2024,Mes:6,Sede:"CONCEPCION",count:62},{Año:2024,Mes:6,Sede:"MAIPU",count:91},{Año:2024,Mes:6,Sede:"No Informado",count:10},{Año:2024,Mes:6,Sede:"PADRE ALONSO DE OVALLE",count:165},{Año:2024,Mes:6,Sede:"PLAZA NORTE",count:134},{Año:2024,Mes:6,Sede:"PLAZA OESTE",count:9},{Año:2024,Mes:6,Sede:"PLAZA VESPUCIO",count:313},{Año:2024,Mes:6,Sede:"PUENTE ALTO",count:1},{Año:2024,Mes:6,Sede:"PUERTO MONTT",count:45},{Año:2024,Mes:6,Sede:"SAN CARLOS DE APOQUINDO",count:9},{Año:2024,Mes:6,Sede:"VALPARAISO",count:230},{Año:2024,Mes:6,Sede:"VINA DEL MAR",count:159},{Año:2024,Mes:7,Sede:"ALAMEDA",count:4},{Año:2024,Mes:7,Sede:"ANTONIO VARAS",count:174},{Año:2024,Mes:7,Sede:"CASA CENTRAL",count:3},{Año:2024,Mes:7,Sede:"CONCEPCION",count:84},{Año:2024,Mes:7,Sede:"MAIPU",count:83},{Año:2024,Mes:7,Sede:"No Informado",count:17},{Año:2024,Mes:7,Sede:"PADRE ALONSO DE OVALLE",count:81},{Año:2024,Mes:7,Sede:"PLAZA NORTE",count:37},{Año:2024,Mes:7,Sede:"PLAZA OESTE",count:8},{Año:2024,Mes:7,Sede:"PLAZA VESPUCIO",count:103},{Año:2024,Mes:7,Sede:"PUENTE ALTO",count:2},{Año:2024,Mes:7,Sede:"PUERTO MONTT",count:7},{Año:2024,Mes:7,Sede:"SAN CARLOS DE APOQUINDO",count:5},{Año:2024,Mes:7,Sede:"VALPARAISO",count:93},{Año:2024,Mes:7,Sede:"VINA DEL MAR",count:101},{Año:2024,Mes:8,Sede:"ALAMEDA",count:128},{Año:2024,Mes:8,Sede:"ANTONIO VARAS",count:363},{Año:2024,Mes:8,Sede:"CAMPUS ARAUCO",count:20},{Año:2024,Mes:8,Sede:"CONCEPCION",count:92},{Año:2024,Mes:8,Sede:"MAIPU",count:16},{Año:2024,Mes:8,Sede:"No Informado",count:11},{Año:2024,Mes:8,Sede:"PADRE ALONSO DE OVALLE",count:152},{Año:2024,Mes:8,Sede:"PLAZA NORTE",count:115},{Año:2024,Mes:8,Sede:"PLAZA OESTE",count:7},{Año:2024,Mes:8,Sede:"PLAZA VESPUCIO",count:189},{Año:2024,Mes:8,Sede:"PUENTE ALTO",count:5},{Año:2024,Mes:8,Sede:"PUERTO MONTT",count:18},{Año:2024,Mes:8,Sede:"SAN CARLOS DE APOQUINDO",count:14},{Año:2024,Mes:8,Sede:"VALPARAISO",count:45},{Año:2024,Mes:8,Sede:"VINA DEL MAR",count:228},{Año:2024,Mes:9,Sede:"ALAMEDA",count:117},{Año:2024,Mes:9,Sede:"ANTONIO VARAS",count:679},{Año:2024,Mes:9,Sede:"CONCEPCION",count:101},{Año:2024,Mes:9,Sede:"MAIPU",count:77},{Año:2024,Mes:9,Sede:"No Informado",count:16},{Año:2024,Mes:9,Sede:"PADRE ALONSO DE OVALLE",count:149},{Año:2024,Mes:9,Sede:"PLAZA NORTE",count:109},{Año:2024,Mes:9,Sede:"PLAZA OESTE",count:9},{Año:2024,Mes:9,Sede:"PLAZA VESPUCIO",count:455},{Año:2024,Mes:9,Sede:"PUENTE ALTO",count:11},{Año:2024,Mes:9,Sede:"PUERTO MONTT",count:18},{Año:2024,Mes:9,Sede:"SAN CARLOS DE APOQUINDO",count:12},{Año:2024,Mes:9,Sede:"VALPARAISO",count:40},{Año:2024,Mes:9,Sede:"VINA DEL MAR",count:196},{Año:2024,Mes:10,Sede:"ALAMEDA",count:51},{Año:2024,Mes:10,Sede:"ANTONIO VARAS",count:300},{Año:2024,Mes:10,Sede:"CONCEPCION",count:240},{Año:2024,Mes:10,Sede:"MAIPU",count:19},{Año:2024,Mes:10,Sede:"No Informado",count:13},{Año:2024,Mes:10,Sede:"PADRE ALONSO DE OVALLE",count:164},{Año:2024,Mes:10,Sede:"PLAZA NORTE",count:36},{Año:2024,Mes:10,Sede:"PLAZA VESPUCIO",count:340},{Año:2024,Mes:10,Sede:"PUENTE ALTO",count:4},{Año:2024,Mes:10,Sede:"PUERTO MONTT",count:37},{Año:2024,Mes:10,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2024,Mes:10,Sede:"VALPARAISO",count:50},{Año:2024,Mes:10,Sede:"VINA DEL MAR",count:185},{Año:2024,Mes:11,Sede:"ALAMEDA",count:19},{Año:2024,Mes:11,Sede:"ANTONIO VARAS",count:338},{Año:2024,Mes:11,Sede:"CONCEPCION",count:51},{Año:2024,Mes:11,Sede:"MAIPU",count:14},{Año:2024,Mes:11,Sede:"No Informado",count:11},{Año:2024,Mes:11,Sede:"PADRE ALONSO DE OVALLE",count:69},{Año:2024,Mes:11,Sede:"PLAZA NORTE",count:29},{Año:2024,Mes:11,Sede:"PLAZA OESTE",count:5},{Año:2024,Mes:11,Sede:"PLAZA VESPUCIO",count:173},{Año:2024,Mes:11,Sede:"PUENTE ALTO",count:3},{Año:2024,Mes:11,Sede:"PUERTO MONTT",count:19},{Año:2024,Mes:11,Sede:"SAN CARLOS DE APOQUINDO",count:6},{Año:2024,Mes:11,Sede:"VALPARAISO",count:139},{Año:2024,Mes:11,Sede:"VINA DEL MAR",count:192},{Año:2024,Mes:12,Sede:"ALAMEDA",count:39},{Año:2024,Mes:12,Sede:"ANTONIO VARAS",count:261},{Año:2024,Mes:12,Sede:"CONCEPCION",count:30},{Año:2024,Mes:12,Sede:"MAIPU",count:7},{Año:2024,Mes:12,Sede:"No Informado",count:5},{Año:2024,Mes:12,Sede:"PADRE ALONSO DE OVALLE",count:31},{Año:2024,Mes:12,Sede:"PLAZA NORTE",count:12},{Año:2024,Mes:12,Sede:"PLAZA VESPUCIO",count:113},{Año:2024,Mes:12,Sede:"PUERTO MONTT",count:15},{Año:2024,Mes:12,Sede:"VALPARAISO",count:90},{Año:2024,Mes:12,Sede:"VINA DEL MAR",count:55}],
-  carrera_sede_año:[{Año:2021,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:5102},{Año:2021,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:2047},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:1024},{Año:2021,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:888},{Año:2021,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:840},{Año:2021,Sede:"VALPARAISO",Carrera:"COMERCIO EXTERIOR",count:364},{Año:2021,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:405},{Año:2021,Sede:"SAN CARLOS DE APOQUINDO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:453},{Año:2021,Sede:"ANTONIO VARAS",Carrera:"No Aplica",count:210},{Año:2021,Sede:"PLAZA VESPUCIO",Carrera:"AUDITORIA",count:135},{Año:2021,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:231},{Año:2021,Sede:"VINA DEL MAR",Carrera:"COMERCIO EXTERIOR",count:209},{Año:2021,Sede:"VINA DEL MAR",Carrera:"No Aplica",count:186},{Año:2021,Sede:"ANTONIO VARAS",Carrera:"AUDITORIA",count:101},{Año:2022,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:5547},{Año:2022,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:3121},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:1127},{Año:2022,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:1026},{Año:2022,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1702},{Año:2022,Sede:"VALPARAISO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:810},{Año:2022,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:717},{Año:2022,Sede:"VINA DEL MAR",Carrera:"COMERCIO EXTERIOR",count:589},{Año:2022,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:429},{Año:2022,Sede:"SAN CARLOS DE APOQUINDO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:475},{Año:2022,Sede:"ANTONIO VARAS",Carrera:"AUDITORIA",count:143},{Año:2023,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:5934},{Año:2023,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:3654},{Año:2023,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:2382},{Año:2023,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:2231},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1519},{Año:2023,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:1023},{Año:2023,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1440},{Año:2023,Sede:"VALPARAISO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:968},{Año:2023,Sede:"VINA DEL MAR",Carrera:"AUDITORIA",count:262},{Año:2024,Sede:"ANTONIO VARAS",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:3632},{Año:2024,Sede:"PLAZA VESPUCIO",Carrera:"COMERCIO EXTERIOR",count:1822},{Año:2024,Sede:"CONCEPCION",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1024},{Año:2024,Sede:"VINA DEL MAR",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:1213},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",Carrera:"COMERCIO EXTERIOR",count:399},{Año:2024,Sede:"PADRE ALONSO DE OVALLE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:576},{Año:2024,Sede:"PLAZA NORTE",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:484},{Año:2024,Sede:"VALPARAISO",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:687},{Año:2024,Sede:"VINA DEL MAR",Carrera:"AUDITORIA",count:253},{Año:2024,Sede:"PLAZA VESPUCIO",Carrera:"AUDITORIA",count:220},{Año:2024,Sede:"ALAMEDA",Carrera:"INGENIERIA EN COMERCIO EXTERIOR",count:371}],
-  sedes:["ALAMEDA","ANTONIO VARAS","CAMPUS ARAUCO","CAMPUS NACIMIENTO","CAMPUS VILLARRICA","CASA CENTRAL","CONCEPCION","Educacion Continua","LICEO RENCA","MAIPU","MELIPILLA","NACIMIENTO","No Informado","ONLINE","PADRE ALONSO DE OVALLE","PLAZA NORTE","PLAZA OESTE","PLAZA VESPUCIO","PUENTE ALTO","PUERTO MONTT","SAN BERNARDO","SAN CARLOS DE APOQUINDO","SAN JOAQUIN","VALPARAISO","VINA DEL MAR"],
-  años:[2021,2022,2023,2024]
-};
 
-const ML = ["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-const YCFG = {
-  2021:{c:"#6366f1",bg:"rgba(99,102,241,.12)"},
-  2022:{c:"#0ea5e9",bg:"rgba(14,165,233,.12)"},
-  2023:{c:"#FCB32E",bg:"rgba(252,179,46,.12)"},
-  2024:{c:"#ef4444",bg:"rgba(239,68,68,.12)"}
-};
-const PAL = ["#FCB32E","#6366f1","#0ea5e9","#10b981","#f43f5e","#8b5cf6","#06b6d4","#f97316","#84cc16","#ec4899","#14b8a6","#a78bfa"];
+<!-- KPI BAR -->
+<div class="kpi-bar">
+  <div class="kpi-item">
+    <div class="kpi-value" style="color:var(--yellow)">70.863</div>
+    <div class="kpi-label">Registros totales</div>
+    <div class="kpi-sub">Log completo 2021–2024</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-value" style="color:var(--cyan)">$8.590.884</div>
+    <div class="kpi-label">Suscripción anual CLP</div>
+    <div class="kpi-sub">Período Abril–Marzo</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-value" style="color:var(--violet)">21</div>
+    <div class="kpi-label">Sedes activas</div>
+    <div class="kpi-sub">Con registros de uso</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-value" style="color:var(--green)">$380</div>
+    <div class="kpi-label">Menor valor x uso</div>
+    <div class="kpi-sub">SUS 2023–2024 · 22.583 usos</div>
+  </div>
+</div>
 
-let selYears = [2021,2022,2023,2024];
-let selSedes = new Set();  // start empty so user selects
-let activeTab = 0;
-const CH = {};
+<!-- ═══════════════ RESUMEN ═══════════════ -->
+<div id="sec-resumen" class="section-wrap active">
+  <div class="section-header">
+    <div class="sec-inner">
+      <div><div class="sec-tag"><span class="sec-badge">RES</span><span style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;">Resumen por Mes y Año</span></div>
+      <div class="sec-title">Análisis de usos · ciclos académicos</div></div>
+      <div class="sec-period">Datos completos · 2021–2024</div>
+    </div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="content">
 
-const fmt = n => n ? n.toLocaleString('es-CL') : '0';
-const pct = (a,b) => b ? ((a-b)/b*100).toFixed(1) : null;
-function sdColor(s){ return PAL[DATA.sedes.indexOf(s) % PAL.length]; }
-function destroy(id){ if(CH[id]){ CH[id].destroy(); delete CH[id]; } }
-
-// ── INIT ──
-function init(){
-  // year buttons
-  const yg = document.getElementById('yr-grid');
-  DATA.años.forEach(y=>{
-    const tot = DATA.total_sede_año.filter(r=>r.Año===y).reduce((s,r)=>s+r.count,0);
-    const b = document.createElement('button');
-    b.className = `yr-btn on-${y-2000}`;
-    b.dataset.y = y;
-    b.innerHTML = `${y}<br><small style="font-weight:400;opacity:.7">${fmt(tot)}</small>`;
-    b.addEventListener('click',()=>toggleYear(y,b));
-    yg.appendChild(b);
-  });
-
-  // sede list — sorted by total desc
-  const sedeTotals = DATA.sedes.map(s=>({
-    s, tot: DATA.total_sede_año.filter(r=>r.Sede===s).reduce((a,r)=>a+r.count,0)
-  })).sort((a,b)=>b.tot-a.tot);
-
-  const sl = document.getElementById('sede-list');
-  sedeTotals.forEach(({s,tot})=>{
-    const item = document.createElement('label');
-    item.className = 'sede-item';
-    item.innerHTML = `<input type="checkbox"><span class="sdot" style="background:${sdColor(s)}"></span><span class="sname" title="${s}">${s}</span><span class="scount">${fmt(tot)}</span>`;
-    item.querySelector('input').addEventListener('change',e=>{
-      if(e.target.checked){ selSedes.add(s); item.classList.add('on'); }
-      else { selSedes.delete(s); item.classList.remove('on'); }
-      refresh();
-    });
-    sl.appendChild(item);
-  });
-
-  refresh();
-}
-
-function toggleYear(y,b){
-  if(selYears.includes(y)){
-    if(selYears.length===1) return;
-    selYears = selYears.filter(x=>x!==y);
-    b.classList.remove(`on-${y-2000}`);
-  } else {
-    selYears.push(y); selYears.sort();
-    b.classList.add(`on-${y-2000}`);
-  }
-  refresh();
-}
-
-function allSedes(){
-  document.querySelectorAll('.sede-item').forEach(item=>{
-    const cb = item.querySelector('input');
-    const sn = item.querySelector('.sname').textContent;
-    cb.checked = true; item.classList.add('on'); selSedes.add(sn);
-  });
-  refresh();
-}
-function noneSedes(){
-  document.querySelectorAll('.sede-item').forEach(item=>{
-    item.querySelector('input').checked = false;
-    item.classList.remove('on');
-  });
-  selSedes.clear(); refresh();
-}
-
-function switchTab(i){
-  activeTab = i;
-  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));
-  document.querySelectorAll('.nav-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
-  renderTab();
-}
-
-// ── REFRESH ──
-function refresh(){
-  const grand = DATA.total_sede_año
-    .filter(r=>selYears.includes(r.Año) && selSedes.has(r.Sede))
-    .reduce((s,r)=>s+r.count,0);
-  document.getElementById('total-num').textContent = fmt(grand);
-  renderKPI();
-  renderTab();
-}
-
-function renderKPI(){
-  const strip = document.getElementById('kpi-strip');
-  strip.innerHTML = '';
-  DATA.años.forEach((y,i)=>{
-    const tot = DATA.total_sede_año
-      .filter(r=>r.Año===y && selSedes.has(r.Sede))
-      .reduce((s,r)=>s+r.count,0);
-    const prevY = DATA.años[i-1];
-    const prev = prevY ? DATA.total_sede_año.filter(r=>r.Año===prevY && selSedes.has(r.Sede)).reduce((s,r)=>s+r.count,0) : null;
-    const d = prev!==null ? pct(tot,prev) : null;
-    const on = selYears.includes(y);
-    const card = document.createElement('div');
-    card.className = 'kpi-card';
-    card.style.opacity = on ? 1 : 0.35;
-    card.style.borderBottomColor = on ? YCFG[y].c : 'transparent';
-    card.innerHTML = `<div class="kpi-yr">${y}</div>
-      <div class="kpi-val" style="color:${YCFG[y].c}">${fmt(tot)}</div>
-      ${d!==null
-        ? `<div class="kpi-sub ${parseFloat(d)>=0?'up':'dn'}">${parseFloat(d)>=0?'▲':'▼'} ${Math.abs(d)}% vs ${y-1}</div>`
-        : '<div class="kpi-sub na">Año base</div>'}`;
-    strip.appendChild(card);
-  });
-}
-
-function renderTab(){
-  if(activeTab===0) tab0();
-  else if(activeTab===1) tab1();
-  else if(activeTab===2) tab2();
-  else tab3();
-}
-
-// ── TAB 0: SEDE ──
-function tab0(){
-  const map = {};
-  DATA.total_sede_año.forEach(r=>{
-    if(!selYears.includes(r.Año)) return;
-    if(!selSedes.has(r.Sede)) return;
-    map[r.Sede] = (map[r.Sede]||0)+r.count;
-  });
-  // sorted alphabetically to avoid implying ranking
-  const sorted = Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
-  const total = sorted.reduce((s,x)=>s+x[1],0);
-  const n = sorted.length;
-
-  document.getElementById('p0-sub').textContent =
-    n===0 ? 'Selecciona al menos una sede en el panel izquierdo'
-    : `${n} sede${n>1?'s':''} seleccionada${n>1?'s':''} · ${fmt(total)} préstamos`;
-
-  const barWrap = document.getElementById('bar-wrap');
-  const donutWrap = document.getElementById('donut-wrap');
-
-  // Dynamic height: enough space per sede regardless of year count
-  const barH = Math.max(200, n * 44);
-  barWrap.style.height = barH + 'px';
-
-  if(n===0){
-    barWrap.innerHTML = '<div class="empty-state"><span class="big">🏫</span><p>Selecciona sedes para ver el gráfico</p></div>';
-    donutWrap.innerHTML = '<div class="empty-state"><span class="big">🍩</span><p>Selecciona sedes para ver distribución</p></div>';
-    destroy('bar'); destroy('donut');
-    document.getElementById('prog-list').innerHTML = '';
-    document.getElementById('tbl-sede').innerHTML = '';
-    return;
-  }
-
-  // Ensure canvas exists
-  if(!barWrap.querySelector('canvas')){
-    barWrap.innerHTML = '<canvas id="c-bar" style="position:absolute;inset:0"></canvas>';
-  }
-  if(!donutWrap.querySelector('canvas')){
-    donutWrap.innerHTML = '<canvas id="c-donut" style="position:absolute;inset:0"></canvas>';
-  }
-
-  // Bar chart — update if exists, create if not
-  const labels = sorted.map(x=>x[0]);
-  const dataVals = sorted.map(x=>x[1]);
-  const bgColors = sorted.map(x=>sdColor(x[0])+'22');
-  const bdColors = sorted.map(x=>sdColor(x[0]));
-
-  if(CH['bar']){
-    CH['bar'].data.labels = labels;
-    CH['bar'].data.datasets[0].data = dataVals;
-    CH['bar'].data.datasets[0].backgroundColor = bgColors;
-    CH['bar'].data.datasets[0].borderColor = bdColors;
-    CH['bar'].update();
-  } else {
-    CH['bar'] = new Chart(document.getElementById('c-bar'),{
-      type:'bar',
-      data:{
-        labels,
-        datasets:[{
-          label:'Total préstamos',
-          data:dataVals,
-          backgroundColor:bgColors,
-          borderColor:bdColors,
-          borderWidth:1.5,
-          borderRadius:4,
-          barThickness:16
-        }]
-      },
-      options:{
-        indexAxis:'y', responsive:true, maintainAspectRatio:false,
-        plugins:{
-          legend:{display:false},
-          tooltip:{callbacks:{
-            label: c => ` ${fmt(c.raw)} préstamos (${(c.raw/total*100).toFixed(1)}%)`,
-            afterLabel: c => {
-              const sede = sorted[c.dataIndex][0];
-              return selYears.map(y=>{
-                const r = DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===sede);
-                return r ? `  ${y}: ${fmt(r.count)}` : `  ${y}: —`;
-              }).join('\n');
-            }
-          }}
-        },
-        scales:{
-          x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
-          y:{grid:{display:false},ticks:{color:'#0f1724',font:{size:10,weight:'600'},autoSkip:false},afterFit(s){s.width=Math.max(s.width,195);}}
-        }
-      }
-    });
-  }
-
-  // Donut — update if exists, create if not
-  if(CH['donut']){
-    CH['donut'].data.labels = sorted.map(x=>x[0]);
-    CH['donut'].data.datasets[0].data = sorted.map(x=>x[1]);
-    CH['donut'].data.datasets[0].backgroundColor = sorted.map(x=>sdColor(x[0])+'cc');
-    CH['donut'].update();
-  } else {
-    CH['donut'] = new Chart(document.getElementById('c-donut'),{
-      type:'doughnut',
-      data:{
-        labels: sorted.map(x=>x[0]),
-        datasets:[{ data:sorted.map(x=>x[1]), backgroundColor:sorted.map(x=>sdColor(x[0])+'cc'), borderColor:'#ffffff', borderWidth:2.5, hoverOffset:8 }]
-      },
-      options:{
-        responsive:true, maintainAspectRatio:false, cutout:'62%',
-        plugins:{
-          legend:{position:'right',labels:{color:'#5a6478',font:{size:10},padding:8,boxWidth:11}},
-          tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(c.raw)} (${(c.raw/total*100).toFixed(1)}%)`}}
-        }
-      }
-    });
-  }
-
-  // Progress bars — use common reference (average) not max sede
-  const avg = total / n;
-  document.getElementById('prog-list').innerHTML = '<div class="prog-list">' + sorted.map(x=>`
-    <div class="prog-row">
-      <span class="prog-dot" style="background:${sdColor(x[0])}"></span>
-      <span class="prog-sede">${x[0]}</span>
-      <div class="prog-bar-wrap">
-        <div class="prog-bar-fill" style="width:${Math.min(100,(x[1]/avg*50)).toFixed(1)}%;background:${sdColor(x[0])}"></div>
+    <!-- VXU -->
+    <div class="vxu-row">
+      <div class="vxu-card hl">
+        <span class="vxu-badge bc">Ciclo actual</span>
+        <div class="vxu-cycle">SUS 2024–2025</div>
+        <div class="vxu-main" style="color:var(--yellow)">$690</div>
+        <div class="vxu-desc">valor por uso</div>
+        <div class="vxu-usos"><strong>12.456</strong> usos registrados</div>
       </div>
-      <span class="prog-val">${fmt(x[1])}</span>
-      <span class="prog-pct">${(x[1]/total*100).toFixed(1)}%</span>
-    </div>`).join('') + '</div>';
+      <div class="vxu-card">
+        <span class="vxu-badge bp">Anterior</span>
+        <div class="vxu-cycle">SUS 2023–2024</div>
+        <div class="vxu-main" style="color:var(--green)">$380</div>
+        <div class="vxu-desc">valor por uso</div>
+        <div class="vxu-usos"><strong>22.583</strong> usos registrados</div>
+      </div>
+      <div class="vxu-card">
+        <span class="vxu-badge bp">Anterior</span>
+        <div class="vxu-cycle">SUS 2022–2023</div>
+        <div class="vxu-main" style="color:var(--orange)">$474</div>
+        <div class="vxu-desc">valor por uso</div>
+        <div class="vxu-usos"><strong>18.138</strong> usos registrados</div>
+      </div>
+      <div class="vxu-card">
+        <span class="vxu-badge bp">Anterior</span>
+        <div class="vxu-cycle">SUS 2021–2022</div>
+        <div class="vxu-main" style="color:var(--cyan)">$544</div>
+        <div class="vxu-desc">valor por uso</div>
+        <div class="vxu-usos"><strong>15.791</strong> usos registrados</div>
+      </div>
+    </div>
 
-  // Table — no rank column to avoid positioning competition
-  document.getElementById('tbl-sede').innerHTML = `
-    <thead><tr>
-      <th>Sede</th>
-      ${selYears.map(y=>`<th class="r">${y}</th>`).join('')}
-      <th class="r">Total</th><th class="r">%</th>
-    </tr></thead>
-    <tbody>${sorted.map((x)=>{
-      const yv = selYears.map(y=>{
-        const r=DATA.total_sede_año.find(r=>r.Año===y&&r.Sede===x[0]);
-        return r?r.count:0;
-      });
-      return `<tr>
-        <td><span class="badge" style="background:${sdColor(x[0])}18;color:${sdColor(x[0])};border:1px solid ${sdColor(x[0])}33">${x[0]}</span></td>
-        ${yv.map(v=>`<td class="r" style="color:${v?'#0f1724':'#c8d0dc'}">${v?fmt(v):'—'}</td>`).join('')}
-        <td class="r b">${fmt(x[1])}</td>
-        <td class="r" style="color:var(--txt3)">${(x[1]/total*100).toFixed(1)}%</td>
-      </tr>`;
-    }).join('')}</tbody>
-    <tfoot><tr>
-      <td>TOTAL</td>
-      ${selYears.map(y=>{
-        const s=DATA.total_sede_año.filter(r=>r.Año===y&&selSedes.has(r.Sede)).reduce((s,r)=>s+r.count,0);
-        return `<td class="r" style="color:${YCFG[y].c}">${fmt(s)}</td>`;
-      }).join('')}
-      <td class="r" style="color:var(--gold-d)">${fmt(total)}</td>
-      <td class="r">100%</td>
-    </tr></tfoot>`;
+    <div class="cg2">
+      <div class="chart-box">
+        <div class="cbt">Usos mensuales por año</div>
+        <div class="cbs">Comparativo 2021–2024 · todos los meses</div>
+        <canvas id="ch-monthly" height="230"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="cbt">Valor por uso · por ciclo</div>
+        <div class="cbs">CLP por acceso registrado al recurso</div>
+        <canvas id="ch-vxu" height="230"></canvas>
+      </div>
+    </div>
+
+    <div class="cg1">
+      <div class="chart-box">
+        <div class="cbt">Total de usos por año calendario</div>
+        <div class="cbs">Suma anual de accesos registrados</div>
+        <canvas id="ch-annual" height="110"></canvas>
+      </div>
+    </div>
+
+    <div class="dtw">
+      <div class="dth"><div class="dtt">Detalle mensual · usos por año</div></div>
+      <div class="ox">
+        <table>
+          <thead><tr>
+            <th>Mes</th>
+            <th class="r" style="color:var(--yellow)">2024</th>
+            <th class="r" style="color:var(--green)">2023</th>
+            <th class="r" style="color:var(--orange)">2022</th>
+            <th class="r" style="color:var(--cyan)">2021</th>
+            <th class="r">Total</th>
+          </tr></thead>
+          <tbody id="monthly-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ CARRERA ═══════════════ -->
+<div id="sec-carrera" class="section-wrap">
+  <div class="section-header">
+    <div class="sec-inner">
+      <div><div class="sec-tag"><span class="sec-badge">CAR</span><span style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;">Carrera por Sede</span></div>
+      <div class="sec-title">Distribución de usos · todas las sedes</div></div>
+      <div class="sec-period">Datos completos · 2021–2024</div>
+    </div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="content">
+
+    <div class="filter-row">
+      <span class="filter-label">Sede:</span>
+      <select class="sel" id="sede-filter" onchange="applyFilters()">
+        <option value="">Todas las sedes</option>
+      </select>
+      <span class="filter-label">Carrera:</span>
+      <select class="sel" id="carrera-filter" onchange="applyFilters()">
+        <option value="">Todas las carreras</option>
+      </select>
+      <span class="filter-label">Año:</span>
+      <div class="filter-btn-group">
+        <button class="filter-btn active" onclick="setYr(this,'all')">Todos</button>
+        <button class="filter-btn" onclick="setYr(this,'2021')">2021</button>
+        <button class="filter-btn" onclick="setYr(this,'2022')">2022</button>
+        <button class="filter-btn" onclick="setYr(this,'2023')">2023</button>
+        <button class="filter-btn" onclick="setYr(this,'2024')">2024</button>
+      </div>
+    </div>
+
+    <div class="mk-row">
+      <div class="mk-card" style="--mk-c:var(--yellow)">
+        <div class="mk-label">Total usos (filtro activo)</div>
+        <div class="mk-val" id="mk-tot">—</div>
+        <div class="mk-sub" id="mk-per">Período seleccionado</div>
+      </div>
+      <div class="mk-card" style="--mk-c:var(--cyan)">
+        <div class="mk-label">Sede con más usos</div>
+        <div class="mk-val" id="mk-sede" style="font-size:20px;line-height:1.1">—</div>
+        <div class="mk-sub">En período seleccionado</div>
+      </div>
+      <div class="mk-card" style="--mk-c:var(--violet)">
+        <div class="mk-label">Combinaciones visibles</div>
+        <div class="mk-val" id="mk-comb">—</div>
+        <div class="mk-sub">Sede / carrera activas</div>
+      </div>
+    </div>
+
+    <div class="cg2">
+      <div class="chart-box">
+        <div class="cbt">Top sedes · usos acumulados</div>
+        <div class="cbs" id="ch-sed-sub">Por año seleccionado · top 10</div>
+        <canvas id="ch-sedes" height="260"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="cbt">Top carreras</div>
+        <div class="cbs">Distribución por carrera · filtro activo</div>
+        <canvas id="ch-carr" height="260"></canvas>
+      </div>
+    </div>
+
+    <div class="dtw">
+      <div class="dth">
+        <div class="dtt">Detalle Sede / Carrera</div>
+        <div id="td-desc" style="font-size:11px;color:var(--muted)"></div>
+      </div>
+      <div class="ox">
+        <table>
+          <thead><tr>
+            <th>Sede / Carrera</th>
+            <th class="r" style="color:var(--cyan)">2021</th>
+            <th class="r" style="color:var(--orange)">2022</th>
+            <th class="r" style="color:var(--green)">2023</th>
+            <th class="r" style="color:var(--yellow)">2024</th>
+            <th>Distribución</th>
+          </tr></thead>
+          <tbody id="car-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pag">
+        <div class="pg-info" id="pg-info"></div>
+        <div class="pg-btns" id="pg-btns"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const MD = {
+  m:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sept','Oct','Nov','Dic'],
+  2024:[null,260,1065,2132,1256,1641,805,1412,1998,1462,1082,668],
+  2023:[384,139,1791,1396,1258,996,464,5043,5179,2030,2380,2512],
+  2022:[null,87,2262,1150,1371,1198,285,4058,3405,1342,1577,1438],
+  2021:[278,176,1441,2416,1378,1076,513,1599,3534,1113,1159,654]
+};
+
+const FD = [
+  {s:'ALAMEDA',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:214,d:204,e:373},
+  {s:'ALAMEDA',c:'AUDITORIA',a:0,b:1,d:2,e:0},
+  {s:'ALAMEDA',c:'INGENIERIA EN ADMINISTRACION',a:0,b:3,d:0,e:0},
+  {s:'ALAMEDA',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:2,d:4,e:1},
+  {s:'ALAMEDA',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:1,d:1,e:0},
+  {s:'ALAMEDA',c:'INGENIERIA EN COMERCIO EXTERIOR',a:0,b:207,d:150,e:371},
+  {s:'ALAMEDA',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:47,e:0},
+  {s:'ALAMEDA',c:'INGENIERIA EN MARKETING DIGITAL',a:0,b:0,d:0,e:1},
+  {s:'ALAMEDA',c:'CONSTRUCCION',a:9,b:9,d:1,e:1},
+  {s:'ALAMEDA',c:'INGENIERIA EN CONSTRUCCION',a:0,b:0,d:1,e:0},
+  {s:'ALAMEDA',c:'RESTAURACION DE BIENES PATRIMONIALES',a:5,b:8,d:0,e:1},
+  {s:'ALAMEDA',c:'TECNICO EN INSTALACIONES ELECTRICAS',a:0,b:1,d:0,e:0},
+  {s:'ALAMEDA',c:'TECNICO EN PREVENCION DE RIESGOS',a:4,b:0,d:0,e:0},
+  {s:'ALAMEDA',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:4,d:0,e:1},
+  {s:'ALAMEDA',c:'INGENIERIA EN INFORMATICA',a:0,b:4,d:0,e:1},
+  {s:'ANTONIO VARAS',c:'ADMINISTRACION Y NEGOCIOS',a:5303,b:5772,d:6151,e:3792},
+  {s:'ANTONIO VARAS',c:'ADMINISTRACION DE RECURSOS HUMANOS',a:3,b:0,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'AUDITORIA',a:101,b:143,d:77,e:57},
+  {s:'ANTONIO VARAS',c:'COMERCIO EXTERIOR',a:6,b:5,d:28,e:0},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION',a:13,b:9,d:1,e:0},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:13,b:9,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:7,b:20,d:29,e:12},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:37,b:25,d:25,e:29},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:7,d:2,e:2},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN COMERCIO EXTERIOR',a:5102,b:5547,d:5934,e:3632},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN GESTION LOGISTICA',a:12,b:5,d:39,e:54},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN MARKETING',a:1,b:0,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN MARKETING DIGITAL',a:0,b:1,d:0,e:3},
+  {s:'ANTONIO VARAS',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:0,e:2},
+  {s:'ANTONIO VARAS',c:'TECNICO EN GESTION LOGISTICA',a:1,b:1,d:2,e:1},
+  {s:'ANTONIO VARAS',c:'TECNICO EN MARKETING',a:6,b:0,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'GASTRONOMIA',a:0,b:0,d:1,e:1},
+  {s:'ANTONIO VARAS',c:'GASTRONOMIA INTERNACIONAL',a:0,b:0,d:1,e:1},
+  {s:'ANTONIO VARAS',c:'INFORMATICA Y TELECOMUNICACIONES',a:63,b:6,d:5,e:1},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:5,b:2,d:1,e:0},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN INFORMATICA',a:58,b:4,d:3,e:1},
+  {s:'ANTONIO VARAS',c:'INGENIERIA EN INFRAESTRUCTURA Y PLATAFORMAS TECNOLOGICAS',a:0,b:0,d:1,e:0},
+  {s:'ANTONIO VARAS',c:'SALUD',a:1,b:0,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'INFORMATICA BIOMEDICA',a:1,b:0,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'TURISMO',a:3,b:7,d:1,e:0},
+  {s:'ANTONIO VARAS',c:'ECOTURISMO',a:2,b:4,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'TOURISM AND HOSPITALITY',a:1,b:2,d:0,e:0},
+  {s:'ANTONIO VARAS',c:'TURISMO Y HOTELERIA',a:0,b:1,d:1,e:0},
+  {s:'CAMPUS ARAUCO',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:0,d:3,e:15},
+  {s:'CAMPUS ARAUCO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:0,e:7},
+  {s:'CAMPUS ARAUCO',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:3,e:5},
+  {s:'CAMPUS ARAUCO',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:0,e:3},
+  {s:'CAMPUS ARAUCO',c:'TECNICO EN PREVENCION DE RIESGOS',a:0,b:0,d:1,e:0},
+  {s:'CAMPUS ARAUCO',c:'INGENIERIA',a:0,b:0,d:0,e:1},
+  {s:'CAMPUS ARAUCO',c:'TECNICO EN MANTENIMIENTO ELECTROMECANICO',a:0,b:0,d:0,e:1},
+  {s:'CAMPUS VILLARRICA',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:1,d:1,e:0},
+  {s:'CAMPUS VILLARRICA',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:1,d:0,e:0},
+  {s:'CAMPUS VILLARRICA',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:1,e:0},
+  {s:'CONCEPCION',c:'ADMINISTRACION Y NEGOCIOS',a:913,b:1713,d:2313,e:1051},
+  {s:'CONCEPCION',c:'COMERCIO EXTERIOR',a:0,b:0,d:36,e:0},
+  {s:'CONCEPCION',c:'INGENIERIA EN ADMINISTRACION',a:66,b:6,d:0,e:0},
+  {s:'CONCEPCION',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:7,b:2,d:8,e:17},
+  {s:'CONCEPCION',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:7,e:0},
+  {s:'CONCEPCION',c:'INGENIERIA EN COMERCIO EXTERIOR',a:840,b:1702,d:2231,e:1024},
+  {s:'CONCEPCION',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:31,e:10},
+  {s:'CONCEPCION',c:'TECNICO EN ADMINISTRACION',a:0,b:3,d:0,e:0},
+  {s:'CONCEPCION',c:'COMUNICACION',a:0,b:0,d:2,e:1},
+  {s:'CONCEPCION',c:'PUBLICIDAD',a:0,b:0,d:2,e:0},
+  {s:'CONCEPCION',c:'RELACIONES PUBLICAS MENCION MARKETING',a:0,b:0,d:0,e:1},
+  {s:'CONCEPCION',c:'CONSTRUCCION',a:0,b:4,d:0,e:1},
+  {s:'CONCEPCION',c:'INGENIERIA EN CONSTRUCCION',a:0,b:4,d:0,e:1},
+  {s:'CONCEPCION',c:'DISENO',a:0,b:0,d:2,e:0},
+  {s:'CONCEPCION',c:'DISENO GRAFICO',a:0,b:0,d:2,e:0},
+  {s:'CONCEPCION',c:'INFORMATICA Y TELECOMUNICACIONES',a:5,b:1,d:3,e:0},
+  {s:'CONCEPCION',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:5,b:0,d:3,e:0},
+  {s:'CONCEPCION',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:0,e:0},
+  {s:'CONCEPCION',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:0,e:0},
+  {s:'CONCEPCION',c:'SALUD',a:0,b:0,d:2,e:0},
+  {s:'CONCEPCION',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:1,e:0},
+  {s:'CONCEPCION',c:'TECNICO EN ODONTOLOGIA',a:0,b:0,d:1,e:0},
+  {s:'MAIPU',c:'ADMINISTRACION Y NEGOCIOS',a:82,b:64,d:107,e:306},
+  {s:'MAIPU',c:'AUDITORIA',a:1,b:44,d:28,e:24},
+  {s:'MAIPU',c:'COMERCIO EXTERIOR',a:77,b:9,d:8,e:5},
+  {s:'MAIPU',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:1,b:0,d:2,e:7},
+  {s:'MAIPU',c:'INGENIERIA EN ADMINISTRACION',a:2,b:0,d:0,e:0},
+  {s:'MAIPU',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:1,d:0,e:1},
+  {s:'MAIPU',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:51,e:1},
+  {s:'MAIPU',c:'INGENIERIA EN COMERCIO EXTERIOR',a:0,b:0,d:3,e:134},
+  {s:'MAIPU',c:'INGENIERIA EN GESTION LOGISTICA',a:1,b:0,d:3,e:134},
+  {s:'MAIPU',c:'INGENIERIA EN MARKETING',a:0,b:9,d:3,e:0},
+  {s:'MAIPU',c:'TECNICO EN GESTION DE PERSONAS',a:0,b:0,d:9,e:0},
+  {s:'MAIPU',c:'TECNICO EN GESTION LOGISTICA',a:0,b:1,d:0,e:0},
+  {s:'MAIPU',c:'COMUNICACION',a:0,b:0,d:0,e:9},
+  {s:'MAIPU',c:'ANIMACION DIGITAL',a:0,b:0,d:0,e:9},
+  {s:'MAIPU',c:'CONSTRUCCION',a:2,b:1,d:2,e:0},
+  {s:'MAIPU',c:'DIBUJO Y MODELAMIENTO ARQUITECTONICO Y ESTRUCTURAL',a:0,b:1,d:0,e:0},
+  {s:'MAIPU',c:'INGENIERIA EN CONSTRUCCION',a:2,b:0,d:0,e:0},
+  {s:'MAIPU',c:'TECNICO EN PREVENCION DE RIESGOS',a:0,b:0,d:2,e:0},
+  {s:'MAIPU',c:'INFORMATICA Y TELECOMUNICACIONES',a:1,b:3,d:2,e:2},
+  {s:'MAIPU',c:'ADMINISTRACION DE REDES Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
+  {s:'MAIPU',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:0,d:2,e:0},
+  {s:'MAIPU',c:'INGENIERIA EN INFORMATICA',a:1,b:2,d:0,e:2},
+  {s:'MAIPU',c:'INGENIERIA',a:2,b:0,d:6,e:5},
+  {s:'MAIPU',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:2,b:0,d:0,e:0},
+  {s:'MAIPU',c:'TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:6,e:0},
+  {s:'MAIPU',c:'TECNICO EN MANTENIMIENTO ELECTROMECANICO',a:0,b:0,d:0,e:4},
+  {s:'MAIPU',c:'TECNICO EN MAQUINARIA Y VEHICULOS PESADOS',a:0,b:0,d:0,e:1},
+  {s:'MAIPU',c:'INGENIERIA MEDIO AMBIENTE Y RECURSOS NATURALES',a:0,b:0,d:0,e:1},
+  {s:'MAIPU',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:1},
+  {s:'MELIPILLA',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:0,d:3,e:3},
+  {s:'MELIPILLA',c:'AUDITORIA',a:0,b:0,d:3,e:2},
+  {s:'MELIPILLA',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:0,e:1},
+  {s:'MELIPILLA',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
+  {s:'MELIPILLA',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:1,d:0,e:0},
+  {s:'MELIPILLA',c:'SALUD',a:0,b:1,d:0,e:0},
+  {s:'MELIPILLA',c:'TECNICO DE ENFERMERIA',a:0,b:1,d:0,e:0},
+  {s:'ONLINE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:1,d:0,e:1},
+  {s:'ONLINE',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:1,d:0,e:1},
+  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION Y NEGOCIOS',a:1299,b:1854,d:2567,e:1100},
+  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION DE RECURSOS HUMANOS',a:9,b:0,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'AUDITORIA',a:16,b:3,d:1,e:11},
+  {s:'PADRE ALONSO DE OVALLE',c:'COMERCIO EXTERIOR',a:1024,b:1127,d:1023,e:399},
+  {s:'PADRE ALONSO DE OVALLE',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:3,b:1,d:3,e:85},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION',a:1,b:0,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:0,b:4,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:1,b:0,d:12,e:1},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:2,b:0,d:0,e:9},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:0,d:1,e:4},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN COMERCIO EXTERIOR',a:231,b:717,d:1519,e:576},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:0,e:1},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN MARKETING DIGITAL',a:0,b:0,d:2,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN ADMINISTRACION',a:4,b:0,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN FINANZAS',a:0,b:0,d:2,e:3},
+  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN GESTION DE PERSONAS',a:0,b:0,d:1,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:3,e:11},
+  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO JURIDICO',a:0,b:2,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION DE EMPRESAS MENCION MARKETING',a:8,b:0,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'DISENO',a:0,b:0,d:3,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'DESARROLLO Y DISENO WEB',a:0,b:0,d:3,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'GASTRONOMIA',a:0,b:1,d:1,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:2,d:2,e:3},
+  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION DE REDES Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
+  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:2,e:2},
+  {s:'PADRE ALONSO DE OVALLE',c:'ANALISTA PROGRAMADOR',a:0,b:0,d:0,e:1},
+  {s:'PADRE ALONSO DE OVALLE',c:'TURISMO',a:3,b:0,d:1,e:1},
+  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION HOTELERA',a:1,b:0,d:1,e:1},
+  {s:'PADRE ALONSO DE OVALLE',c:'TURISMO DE AVENTURA',a:2,b:0,d:0,e:0},
+  {s:'PLAZA NORTE',c:'ADMINISTRACION Y NEGOCIOS',a:551,b:536,d:1543,e:528},
+  {s:'PLAZA NORTE',c:'AUDITORIA',a:2,b:0,d:5,e:8},
+  {s:'PLAZA NORTE',c:'COMERCIO EXTERIOR',a:117,b:16,d:5,e:0},
+  {s:'PLAZA NORTE',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:5,b:1,d:7,e:1},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:3,b:1,d:0,e:0},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:6,e:0},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:7,e:1},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:8,b:1,d:13,e:4},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN COMERCIO EXTERIOR',a:405,b:429,d:1440,e:484},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN GESTION LOGISTICA',a:1,b:88,d:43,e:26},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN MARKETING',a:8,b:0,d:0,e:0},
+  {s:'PLAZA NORTE',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:15,e:4},
+  {s:'PLAZA NORTE',c:'TECNICO EN MARKETING',a:0,b:0,d:2,e:0},
+  {s:'PLAZA NORTE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:3,d:2,e:1},
+  {s:'PLAZA NORTE',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:2,d:2,e:0},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:0,e:1},
+  {s:'PLAZA NORTE',c:'INGENIERIA',a:0,b:1,d:5,e:1},
+  {s:'PLAZA NORTE',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:5,e:0},
+  {s:'PLAZA NORTE',c:'TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:1},
+  {s:'PLAZA OESTE',c:'ADMINISTRACION Y NEGOCIOS',a:36,b:47,d:11,e:15},
+  {s:'PLAZA OESTE',c:'AUDITORIA',a:8,b:20,d:0,e:2},
+  {s:'PLAZA OESTE',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:1,b:22,d:6,e:8},
+  {s:'PLAZA OESTE',c:'INGENIERIA EN ADMINISTRACION',a:0,b:1,d:0,e:0},
+  {s:'PLAZA OESTE',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:0,e:2},
+  {s:'PLAZA OESTE',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:4,d:5,e:3},
+  {s:'PLAZA OESTE',c:'ADMINISTRACION FINANCIERA',a:27,b:0,d:0,e:0},
+  {s:'PLAZA OESTE',c:'DISENO',a:0,b:1,d:0,e:0},
+  {s:'PLAZA OESTE',c:'DISENO DE AMBIENTES',a:0,b:1,d:0,e:0},
+  {s:'PLAZA OESTE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:2,d:0,e:2},
+  {s:'PLAZA OESTE',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:1,d:0,e:2},
+  {s:'PLAZA OESTE',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:1,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'ADMINISTRACION Y NEGOCIOS',a:1281,b:1286,d:3969,e:2246},
+  {s:'PLAZA VESPUCIO',c:'AUDITORIA',a:135,b:83,d:86,e:220},
+  {s:'PLAZA VESPUCIO',c:'COMERCIO EXTERIOR',a:888,b:1026,d:3654,e:1822},
+  {s:'PLAZA VESPUCIO',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:58,b:9,d:45,e:27},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION',a:1,b:2,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:8,b:0,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:3,b:0,d:0,e:3},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:2,d:3,e:1},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:176,b:150,d:150,e:143},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN GESTION LOGISTICA',a:5,b:1,d:9,e:15},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN MARKETING',a:2,b:9,d:22,e:3},
+  {s:'PLAZA VESPUCIO',c:'TECNICO EN FINANZAS',a:1,b:0,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'TECNICO EN GESTION LOGISTICA',a:1,b:4,d:0,e:3},
+  {s:'PLAZA VESPUCIO',c:'TECNICO EN MARKETING',a:3,b:0,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'TEMPORADA ACADEMICA DE VERANO',a:0,b:0,d:0,e:9},
+  {s:'PLAZA VESPUCIO',c:'COMUNICACION',a:0,b:2,d:0,e:1},
+  {s:'PLAZA VESPUCIO',c:'PUBLICIDAD',a:0,b:2,d:0,e:1},
+  {s:'PLAZA VESPUCIO',c:'DISENO',a:1,b:3,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'DISENO GRAFICO',a:1,b:1,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'DISENO GRAFICO (INTERFACES E INTERACCIONES)',a:0,b:2,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'INFORMATICA Y TELECOMUNICACIONES',a:1,b:1,d:1,e:4},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:1,d:0,e:0},
+  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN INFORMATICA',a:1,b:0,d:1,e:4},
+  {s:'PUENTE ALTO',c:'ADMINISTRACION Y NEGOCIOS',a:18,b:31,d:85,e:15},
+  {s:'PUENTE ALTO',c:'ADMINISTRACION DE RECURSOS HUMANOS',a:1,b:3,d:0,e:0},
+  {s:'PUENTE ALTO',c:'AUDITORIA',a:17,b:26,d:2,e:8},
+  {s:'PUENTE ALTO',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:0,b:0,d:0,e:1},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:1,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:1,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:0,b:0,d:78,e:5},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:1,d:1,e:0},
+  {s:'PUENTE ALTO',c:'TECNICO EN MARKETING',a:0,b:1,d:2,e:1},
+  {s:'PUENTE ALTO',c:'CONSTRUCCION',a:2,b:0,d:0,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN CONSTRUCCION',a:2,b:0,d:0,e:0},
+  {s:'PUENTE ALTO',c:'INFORMATICA Y TELECOMUNICACIONES',a:1,b:2,d:0,e:0},
+  {s:'PUENTE ALTO',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:2,d:0,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN INFORMATICA',a:1,b:0,d:0,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA',a:3,b:1,d:2,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:2,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:0,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN ELECTRICIDAD Y ELECTRONICA',a:3,b:0,d:0,e:0},
+  {s:'PUENTE ALTO',c:'RECURSOS NATURALES',a:0,b:6,d:1,e:1},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN MEDIO AMBIENTE',a:0,b:6,d:0,e:0},
+  {s:'PUENTE ALTO',c:'TECNICO AGRICOLA',a:0,b:0,d:0,e:1},
+  {s:'PUENTE ALTO',c:'TECNICO VETERINARIO Y PECUARIO',a:0,b:0,d:1,e:0},
+  {s:'PUENTE ALTO',c:'SALUD',a:0,b:5,d:0,e:1},
+  {s:'PUENTE ALTO',c:'PREPARADOR FISICO',a:0,b:2,d:0,e:0},
+  {s:'PUENTE ALTO',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:0,e:1},
+  {s:'PUENTE ALTO',c:'TECNICO DE LABORATORIO CLINICO Y BANCO DE SANGRE',a:0,b:2,d:0,e:0},
+  {s:'PUENTE ALTO',c:'TECNICO EN ODONTOLOGIA',a:0,b:1,d:0,e:0},
+  {s:'PUENTE ALTO',c:'INGENIERIA MEDIO AMBIENTE Y RECURSOS NATURALES',a:0,b:0,d:0,e:2},
+  {s:'PUENTE ALTO',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:0,e:2},
+  {s:'PUERTO MONTT',c:'ADMINISTRACION Y NEGOCIOS',a:4,b:89,d:166,e:187},
+  {s:'PUERTO MONTT',c:'AUDITORIA',a:3,b:89,d:161,e:187},
+  {s:'PUERTO MONTT',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:1,b:0,d:0,e:0},
+  {s:'PUERTO MONTT',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:5,e:0},
+  {s:'PUERTO MONTT',c:'CONSTRUCCION',a:0,b:0,d:0,e:10},
+  {s:'PUERTO MONTT',c:'TECNICO EN CONSTRUCCION',a:0,b:0,d:0,e:10},
+  {s:'PUERTO MONTT',c:'INGENIERIA',a:0,b:0,d:4,e:0},
+  {s:'PUERTO MONTT',c:'INGENIERIA EN MAQUINARIA Y VEHICULOS PESADOS',a:0,b:0,d:1,e:0},
+  {s:'PUERTO MONTT',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:2,e:0},
+  {s:'PUERTO MONTT',c:'TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:1,e:0},
+  {s:'SAN BERNARDO',c:'ADMINISTRACION Y NEGOCIOS',a:33,b:29,d:25,e:27},
+  {s:'SAN BERNARDO',c:'AUDITORIA',a:5,b:8,d:12,e:6},
+  {s:'SAN BERNARDO',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:7,b:9,d:1,e:0},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION',a:2,b:1,d:0,e:0},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:4,b:2,d:0,e:0},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:2,b:0,d:1,e:3},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:4,d:8,e:14},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN GESTION LOGISTICA',a:6,b:2,d:0,e:1},
+  {s:'SAN BERNARDO',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:0,e:3},
+  {s:'SAN BERNARDO',c:'TECNICO EN FINANZAS',a:5,b:1,d:0,e:0},
+  {s:'SAN BERNARDO',c:'TECNICO EN GESTION LOGISTICA',a:1,b:2,d:3,e:0},
+  {s:'SAN BERNARDO',c:'ADMINISTRACION FINANCIERA',a:1,b:0,d:0,e:0},
+  {s:'SAN BERNARDO',c:'CONSTRUCCION',a:2,b:0,d:4,e:4},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN CONSTRUCCION',a:1,b:0,d:4,e:0},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN PREVENCION DE RIESGOS',a:1,b:0,d:0,e:4},
+  {s:'SAN BERNARDO',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:2,d:1,e:3},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:2,d:0,e:0},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN INFORMATICA',a:0,b:0,d:1,e:3},
+  {s:'SAN BERNARDO',c:'INGENIERIA',a:1,b:4,d:4,e:7},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN MAQUINARIA Y VEHICULOS PESADOS',a:0,b:0,d:1,e:0},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:4,d:2,e:2},
+  {s:'SAN BERNARDO',c:'TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:0,e:5},
+  {s:'SAN BERNARDO',c:'TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:1,b:0,d:1,e:0},
+  {s:'SAN BERNARDO',c:'RECURSOS NATURALES',a:49,b:3,d:2,e:0},
+  {s:'SAN BERNARDO',c:'TECNICO AGRICOLA',a:47,b:2,d:1,e:0},
+  {s:'SAN BERNARDO',c:'TECNICO VETERINARIO Y PECUARIO',a:2,b:1,d:1,e:0},
+  {s:'SAN BERNARDO',c:'SALUD',a:0,b:0,d:3,e:4},
+  {s:'SAN BERNARDO',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:3,e:0},
+  {s:'SAN BERNARDO',c:'TECNICO DE LABORATORIO CLINICO Y BANCO DE SANGRE',a:0,b:0,d:0,e:3},
+  {s:'SAN BERNARDO',c:'TECNICO EN ODONTOLOGIA',a:0,b:0,d:0,e:1},
+  {s:'SAN BERNARDO',c:'TURISMO',a:5,b:0,d:0,e:1},
+  {s:'SAN BERNARDO',c:'TURISMO DE AVENTURA',a:5,b:0,d:0,e:1},
+  {s:'SAN BERNARDO',c:'INGENIERIA MEDIO AMBIENTE Y RECURSOS NATURALES',a:0,b:0,d:0,e:5},
+  {s:'SAN BERNARDO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:5},
+  {s:'SAN CARLOS DE APOQUINDO',c:'ADMINISTRACION Y NEGOCIOS',a:455,b:475,d:346,e:197},
+  {s:'SAN CARLOS DE APOQUINDO',c:'AUDITORIA',a:2,b:0,d:1,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:2,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:0,d:0,e:1},
+  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:453,b:475,d:343,e:196},
+  {s:'SAN CARLOS DE APOQUINDO',c:'COMUNICACION',a:0,b:1,d:1,e:1},
+  {s:'SAN CARLOS DE APOQUINDO',c:'ACTUACION',a:0,b:0,d:1,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN SONIDO',a:0,b:0,d:0,e:1},
+  {s:'SAN CARLOS DE APOQUINDO',c:'TECNICO AUDIOVISUAL',a:0,b:1,d:0,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO',a:0,b:10,d:5,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO DE AMBIENTES',a:0,b:9,d:2,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO GRAFICO',a:0,b:0,d:1,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO INDUSTRIAL',a:0,b:1,d:2,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:0,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'SALUD',a:1,b:0,d:0,e:0},
+  {s:'SAN CARLOS DE APOQUINDO',c:'TECNICO DE ENFERMERIA',a:1,b:0,d:0,e:0},
+  {s:'SAN JOAQUIN',c:'CONSTRUCCION',a:2,b:0,d:0,e:0},
+  {s:'SAN JOAQUIN',c:'TECNICO EN PREVENCION DE RIESGOS',a:2,b:0,d:0,e:0},
+  {s:'SAN JOAQUIN',c:'INFORMATICA Y TELECOMUNICACIONES',a:2,b:49,d:24,e:2},
+  {s:'SAN JOAQUIN',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:1,b:0,d:0,e:0},
+  {s:'SAN JOAQUIN',c:'INGENIERIA EN INFORMATICA',a:1,b:49,d:24,e:2},
+  {s:'SAN JOAQUIN',c:'INGENIERIA',a:0,b:2,d:1,e:1},
+  {s:'SAN JOAQUIN',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:1,d:1,e:0},
+  {s:'SAN JOAQUIN',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:1},
+  {s:'SAN JOAQUIN',c:'TECNICO EN ENERGIAS RENOVABLES',a:0,b:1,d:0,e:0},
+  {s:'SAN JOAQUIN',c:'SALUD',a:0,b:1,d:0,e:1},
+  {s:'SAN JOAQUIN',c:'TECNICO DE ENFERMERIA',a:0,b:1,d:0,e:1},
+  {s:'VALPARAISO',c:'ADMINISTRACION Y NEGOCIOS',a:559,b:851,d:981,e:690},
+  {s:'VALPARAISO',c:'AUDITORIA',a:0,b:2,d:4,e:0},
+  {s:'VALPARAISO',c:'COMERCIO EXTERIOR',a:364,b:38,d:7,e:0},
+  {s:'VALPARAISO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:194,b:810,d:968,e:687},
+  {s:'VALPARAISO',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:1,d:1,e:3},
+  {s:'VALPARAISO',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'ADMINISTRACION FINANCIERA',a:1,b:0,d:0,e:0},
+  {s:'VALPARAISO',c:'CONSTRUCCION',a:3,b:4,d:3,e:0},
+  {s:'VALPARAISO',c:'INGENIERIA EN CONSTRUCCION',a:1,b:0,d:2,e:0},
+  {s:'VALPARAISO',c:'INGENIERIA EN PREVENCION DE RIESGOS',a:1,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'RESTAURACION DE BIENES PATRIMONIALES',a:0,b:1,d:0,e:0},
+  {s:'VALPARAISO',c:'TECNICO EN CONSTRUCCION',a:1,b:1,d:0,e:0},
+  {s:'VALPARAISO',c:'TECNICO EN PREVENCION DE RIESGOS',a:0,b:2,d:0,e:0},
+  {s:'VALPARAISO',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'INGENIERIA EN INFORMATICA',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'INGENIERIA',a:0,b:1,d:1,e:0},
+  {s:'VALPARAISO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:1,e:0},
+  {s:'VALPARAISO',c:'RECURSOS NATURALES',a:3,b:7,d:1,e:1},
+  {s:'VALPARAISO',c:'INGENIERIA EN MEDIO AMBIENTE',a:0,b:2,d:1,e:1},
+  {s:'VALPARAISO',c:'TECNICO VETERINARIO',a:3,b:5,d:0,e:0},
+  {s:'VALPARAISO',c:'SALUD',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'TECNICO EN RADIODIAGNOSTICO Y RADIOTERAPIA',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'TURISMO',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'ECOTURISMO',a:0,b:0,d:1,e:0},
+  {s:'VALPARAISO',c:'TURISMO Y HOSPITALIDAD',a:0,b:0,d:0,e:1},
+  {s:'VALPARAISO',c:'GASTRONOMIA INTERNACIONAL',a:0,b:0,d:0,e:1},
+  {s:'VALPARAISO',c:'SALUD Y BIENESTAR',a:0,b:0,d:0,e:4},
+  {s:'VALPARAISO',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:0,e:4},
+  {s:'VINA DEL MAR',c:'ADMINISTRACION Y NEGOCIOS',a:2336,b:3764,d:3185,e:1734},
+  {s:'VINA DEL MAR',c:'AUDITORIA',a:32,b:15,d:262,e:253},
+  {s:'VINA DEL MAR',c:'COMERCIO EXTERIOR',a:209,b:589,d:349,e:142},
+  {s:'VINA DEL MAR',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:6,b:13,d:133,e:52},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION',a:4,b:1,d:0,e:0},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:4,b:2,d:0,e:0},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:1,b:0,d:36,e:8},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:3,e:12},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:0,d:1,e:2},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN COMERCIO EXTERIOR',a:2047,b:3121,d:2382,e:1213},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN GESTION LOGISTICA',a:25,b:22,d:10,e:31},
+  {s:'VINA DEL MAR',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:6,e:15},
+  {s:'VINA DEL MAR',c:'TECNICO EN FINANZAS',a:0,b:1,d:1,e:1},
+  {s:'VINA DEL MAR',c:'TECNICO EN GESTION DE PERSONAS',a:0,b:0,d:2,e:0},
+  {s:'VINA DEL MAR',c:'TECNICO EN GESTION LOGISTICA',a:1,b:0,d:0,e:0},
+  {s:'VINA DEL MAR',c:'TECNICO EN MARKETING',a:0,b:0,d:0,e:1},
+  {s:'VINA DEL MAR',c:'ADMINISTRACION DE EMPRESAS MENCION MARKETING',a:7,b:0,d:0,e:4},
+  {s:'VINA DEL MAR',c:'COMUNICACION',a:4,b:0,d:2,e:0},
+  {s:'VINA DEL MAR',c:'COMUNICACION AUDIOVISUAL',a:0,b:0,d:1,e:0},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN SONIDO',a:0,b:0,d:1,e:0},
+  {s:'VINA DEL MAR',c:'RELACIONES PUBLICAS MENCION MARKETING',a:4,b:0,d:0,e:0},
+  {s:'VINA DEL MAR',c:'DISENO',a:2,b:0,d:1,e:2},
+  {s:'VINA DEL MAR',c:'DESARROLLO Y DISENO WEB',a:0,b:0,d:0,e:2},
+  {s:'VINA DEL MAR',c:'DISENO GRAFICO',a:1,b:0,d:0,e:0},
+  {s:'VINA DEL MAR',c:'ILUSTRACION',a:0,b:0,d:1,e:0},
+  {s:'VINA DEL MAR',c:'DISENO DE VESTUARIO',a:1,b:0,d:0,e:0},
+  {s:'VINA DEL MAR',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:9,d:3,e:12},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:0,d:1,e:0},
+  {s:'VINA DEL MAR',c:'INGENIERIA EN INFORMATICA',a:0,b:9,d:2,e:12},
+  {s:'VINA DEL MAR',c:'SALUD',a:5,b:0,d:0,e:0},
+  {s:'VINA DEL MAR',c:'PREPARADOR FISICO',a:5,b:0,d:0,e:0},
+  {s:'CASA CENTRAL',c:'NO APLICA',a:199,b:69,d:25,e:45},
+];
+
+// helpers
+const gv = (r,yr) => yr==='2021'?r.a:yr==='2022'?r.b:yr==='2023'?r.d:yr==='2024'?r.e:r.a+r.b+r.d+r.e;
+const fmt = x=>x>0?x.toLocaleString('es-CL'):'<span style="color:#333">—</span>';
+
+// ─── TABS ───
+const built={r:false,c:false};
+function showSec(id,btn){
+  document.querySelectorAll('.section-wrap').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='resumen'&&!built.r) buildResumen();
+  if(id==='carrera'&&!built.c) buildCarrera();
 }
 
-// ── TAB 1: MES/AÑO ──
-function tab1(){
-  const byYM = {};
-  DATA.años.forEach(y=>{ byYM[y]={}; });
-  DATA.mes_sede_año.forEach(r=>{
-    if(!selYears.includes(r.Año)) return;
-    if(!selSedes.has(r.Sede)) return;
-    byYM[r.Año][r.Mes] = (byYM[r.Año][r.Mes]||0)+r.count;
-  });
-
-  // Value highlights
-  let maxMesVal=0,maxMesName='',maxYrVal=0,maxYrName='';
-  selYears.forEach(y=>{
-    const ytot = Object.values(byYM[y]).reduce((s,v)=>s+v,0);
-    if(ytot>maxYrVal){ maxYrVal=ytot; maxYrName=String(y); }
-    for(let m=1;m<=12;m++){
-      const v=byYM[y][m]||0;
-      if(v>maxMesVal){ maxMesVal=v; maxMesName=ML[m]; }
-    }
-  });
-  document.getElementById('mes-max-display').innerHTML = maxMesVal>0
-    ? `<div class="val-display"><span class="val-big">${maxMesName}</span><span class="val-label">${fmt(maxMesVal)} préstamos</span></div><p style="font-size:11px;color:var(--txt3);margin-top:4px">Mes con mayor volumen en selección</p>`
-    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
-  document.getElementById('yr-max-display').innerHTML = maxYrVal>0
-    ? `<div class="val-display"><span class="val-big">${maxYrName}</span><span class="val-label">${fmt(maxYrVal)} totales</span></div><p style="font-size:11px;color:var(--txt3);margin-top:4px">Año con mayor actividad en sedes</p>`
-    : '<div class="empty-state" style="padding:20px"><p>Sin datos</p></div>';
-
-  // Legend
-  document.getElementById('leg-yr').innerHTML = selYears.map(y=>`
-    <div class="leg-item"><div class="leg-dot" style="background:${YCFG[y].c}"></div>${y} — ${fmt(Object.values(byYM[y]).reduce((s,v)=>s+v,0))}</div>`).join('');
-
-  // Line
-  destroy('line');
-  const ctx = document.getElementById('c-line').getContext('2d');
-  CH['line'] = new Chart(ctx,{
+// ─── RESUMEN ───
+function buildResumen(){
+  built.r=true;
+  const C={2024:'#F5C300',2023:'#22D19E',2022:'#FF6B35',2021:'#00C8D7'};
+  new Chart(document.getElementById('ch-monthly').getContext('2d'),{
     type:'line',
-    data:{
-      labels:ML.slice(1),
-      datasets:selYears.map(y=>({
-        label:String(y),
-        data:Array.from({length:12},(_,i)=>byYM[y][i+1]||0),
-        borderColor:YCFG[y].c, backgroundColor:YCFG[y].bg,
-        fill:true, tension:.4, pointRadius:4, pointHoverRadius:6,
-        borderWidth:2, pointBackgroundColor:YCFG[y].c
-      }))
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      plugins:{legend:{labels:{color:'#5a6478',font:{size:11,weight:'600'}}},
-        tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
-      scales:{
-        x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:11}}},
-        y:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
-      }
-    }
+    data:{labels:MD.m,datasets:[
+      {label:'2024',data:MD[2024],borderColor:C[2024],backgroundColor:'rgba(245,195,0,0.07)',tension:.4,pointRadius:3,borderWidth:2,spanGaps:true},
+      {label:'2023',data:MD[2023],borderColor:C[2023],backgroundColor:'rgba(34,209,158,0.04)',tension:.4,pointRadius:3,borderWidth:2},
+      {label:'2022',data:MD[2022],borderColor:C[2022],backgroundColor:'rgba(255,107,53,0.04)',tension:.4,pointRadius:3,borderWidth:2,spanGaps:true},
+      {label:'2021',data:MD[2021],borderColor:C[2021],backgroundColor:'rgba(0,200,215,0.04)',tension:.4,pointRadius:3,borderWidth:2},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#666',font:{family:'Barlow',size:12}}}},scales:{x:{grid:{color:'rgba(46,46,46,0.8)'},ticks:{color:'#555',font:{family:'Barlow'}}},y:{grid:{color:'rgba(46,46,46,0.8)'},ticks:{color:'#555',font:{family:'Barlow'}}}}}
   });
-
-  // Bar grouped
-  destroy('barm');
-  CH['barm'] = new Chart(document.getElementById('c-barm').getContext('2d'),{
+  new Chart(document.getElementById('ch-vxu').getContext('2d'),{
     type:'bar',
-    data:{
-      labels:ML.slice(1),
-      datasets:selYears.map(y=>({
-        label:String(y),
-        data:Array.from({length:12},(_,i)=>byYM[y][i+1]||0),
-        backgroundColor:YCFG[y].bg, borderColor:YCFG[y].c,
-        borderWidth:1.5, borderRadius:3
-      }))
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#5a6478',font:{size:11,weight:'600'}}},
-        tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#5a6478',font:{size:10}}},
-        y:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
-      }
+    data:{labels:['2021–2022','2022–2023','2023–2024','2024–2025'],datasets:[{label:'CLP/uso',data:[544.04,473.64,380.41,689.70],backgroundColor:['rgba(0,200,215,0.85)','rgba(255,107,53,0.85)','rgba(34,209,158,0.85)','rgba(245,195,0,0.95)'],borderRadius:3,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.y.toFixed(0)+' CLP/uso'}}},scales:{x:{grid:{color:'rgba(46,46,46,0.8)'},ticks:{color:'#555',font:{family:'Barlow',size:11}}},y:{grid:{color:'rgba(46,46,46,0.8)'},ticks:{color:'#555',callback:v=>'$'+v}}}}
+  });
+  const tots=[2021,2022,2023,2024].map(y=>MD[y].reduce((a,b)=>(a||0)+(b||0),0));
+  new Chart(document.getElementById('ch-annual').getContext('2d'),{
+    type:'bar',
+    data:{labels:['2021','2022','2023','2024'],datasets:[{data:tots,backgroundColor:['rgba(0,200,215,0.85)','rgba(255,107,53,0.85)','rgba(34,209,158,0.85)','rgba(245,195,0,0.95)'],borderRadius:4,borderSkipped:false}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.parsed.x.toLocaleString('es-CL')+' usos'}}},scales:{x:{grid:{color:'rgba(46,46,46,0.6)'},ticks:{color:'#555',callback:v=>v.toLocaleString('es-CL')}},y:{grid:{display:false},ticks:{color:'#888',font:{family:'Barlow Condensed',size:14,weight:'700'}}}}}
+  });
+  const tbody=document.getElementById('monthly-tbody');
+  let tr=[0,0,0,0];
+  tbody.innerHTML=MD.m.map((m,i)=>{
+    const v=[MD[2024][i]||0,MD[2023][i]||0,MD[2022][i]||0,MD[2021][i]||0];
+    v.forEach((x,j)=>tr[j]+=x);
+    const tot=v.reduce((a,b)=>a+b,0);
+    return `<tr><td style="font-weight:600">${m}</td><td class="num" style="color:var(--yellow)">${fmt(v[0])}</td><td class="num" style="color:var(--green)">${fmt(v[1])}</td><td class="num" style="color:var(--orange)">${fmt(v[2])}</td><td class="num" style="color:var(--cyan)">${fmt(v[3])}</td><td class="num" style="color:var(--muted)">${tot.toLocaleString('es-CL')}</td></tr>`;
+  }).join('');
+  const gt=tr.reduce((a,b)=>a+b,0);
+  tbody.innerHTML+=`<tr class="tot-row"><td><strong>TOTAL</strong></td>${tr.map(v=>`<td class="num"><strong>${v.toLocaleString('es-CL')}</strong></td>`).join('')}<td class="num"><strong>${gt.toLocaleString('es-CL')}</strong></td></tr>`;
+}
+
+// ─── CARRERA ───
+let selYr='all', filtered=[...FD], carPg=1;
+const PPG=40;
+let chSedes=null,chCarr=null;
+
+function buildCarrera(){
+  built.c=true;
+  // Sedes
+  const sedeEl=document.getElementById('sede-filter');
+  [...new Set(FD.map(r=>r.s))].sort().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sedeEl.appendChild(o);});
+  // Carreras
+  const carEl=document.getElementById('carrera-filter');
+  [...new Set(FD.map(r=>r.c))].sort().forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;carEl.appendChild(o);});
+
+  // Charts
+  chSedes=new Chart(document.getElementById('ch-sedes').getContext('2d'),{
+    type:'bar',data:{labels:[],datasets:[]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#666',font:{family:'Barlow',size:11}}}},scales:{x:{grid:{color:'rgba(46,46,46,0.7)'},ticks:{color:'#555',font:{size:10}}},y:{grid:{color:'rgba(46,46,46,0.7)'},ticks:{color:'#555',callback:v=>v.toLocaleString('es-CL')}}}}
+  });
+  chCarr=new Chart(document.getElementById('ch-carr').getContext('2d'),{
+    type:'doughnut',data:{labels:[],datasets:[{data:[],backgroundColor:[],borderColor:'#161616',borderWidth:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#666',font:{family:'Barlow',size:11},boxWidth:12,padding:10}},tooltip:{callbacks:{label:c=>' '+c.parsed.toLocaleString('es-CL')+' usos'}}}}
+  });
+  applyFilters();
+}
+
+function setYr(btn,yr){
+  document.querySelectorAll('.filter-btn-group .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selYr=yr;
+  applyFilters();
+}
+
+function applyFilters(){
+  const sede=document.getElementById('sede-filter').value;
+  const carrera=document.getElementById('carrera-filter').value;
+
+  // Rebuild carrera dropdown based on sede
+  const carEl=document.getElementById('carrera-filter');
+  const cur=carEl.value;
+  carEl.innerHTML='<option value="">Todas las carreras</option>';
+  const carsInSede=[...new Set(FD.filter(r=>!sede||r.s===sede).map(r=>r.c))].sort();
+  carsInSede.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;if(c===cur)o.selected=true;carEl.appendChild(o);});
+
+  filtered=FD.filter(r=>{
+    if(sede&&r.s!==sede) return false;
+    if(carEl.value&&r.c!==carEl.value) return false;
+    return true;
+  });
+
+  // Mini KPIs
+  const tot=filtered.reduce((a,r)=>a+gv(r,selYr),0);
+  document.getElementById('mk-tot').textContent=tot.toLocaleString('es-CL');
+  const bySede={};
+  filtered.forEach(r=>{bySede[r.s]=(bySede[r.s]||0)+gv(r,selYr);});
+  const top=Object.entries(bySede).sort((a,b)=>b[1]-a[1])[0];
+  const topName=top?top[0].replace('PADRE ALONSO DE OVALLE','P.A. OVALLE').replace('SAN CARLOS DE APOQUINDO','S.C. APOQUINDO'):'—';
+  document.getElementById('mk-sede').textContent=topName;
+  document.getElementById('mk-comb').textContent=filtered.length;
+  document.getElementById('mk-per').textContent=selYr==='all'?'Todos los años':'Año '+selYr;
+
+  // Update charts
+  if(chSedes){
+    const DC=['rgba(0,200,215,0.85)','rgba(255,107,53,0.85)','rgba(34,209,158,0.85)','rgba(245,195,0,0.92)'];
+    const short=s=>s.replace('PADRE ALONSO DE OVALLE','P.A. OVALLE').replace('SAN CARLOS DE APOQUINDO','S.C. APOQUINDO');
+    if(selYr==='all'){
+      const byS={};
+      filtered.forEach(r=>{if(!byS[r.s])byS[r.s]={a:0,b:0,d:0,e:0};['a','b','d','e'].forEach(k=>byS[r.s][k]+=r[k]);});
+      const top8=Object.entries(byS).sort((a,b)=>(b[1].a+b[1].b+b[1].d+b[1].e)-(a[1].a+a[1].b+a[1].d+a[1].e)).slice(0,8);
+      chSedes.data.labels=top8.map(([s])=>short(s));
+      chSedes.data.datasets=[
+        {label:'2021',data:top8.map(([,v])=>v.a),backgroundColor:DC[0],borderRadius:3,borderSkipped:false},
+        {label:'2022',data:top8.map(([,v])=>v.b),backgroundColor:DC[1],borderRadius:3,borderSkipped:false},
+        {label:'2023',data:top8.map(([,v])=>v.d),backgroundColor:DC[2],borderRadius:3,borderSkipped:false},
+        {label:'2024',data:top8.map(([,v])=>v.e),backgroundColor:DC[3],borderRadius:3,borderSkipped:false},
+      ];
+    } else {
+      const byS={};
+      filtered.forEach(r=>{byS[r.s]=(byS[r.s]||0)+gv(r,selYr);});
+      const top10=Object.entries(byS).sort((a,b)=>b[1]-a[1]).slice(0,10);
+      chSedes.data.labels=top10.map(([s])=>short(s));
+      chSedes.data.datasets=[{label:selYr,data:top10.map(([,v])=>v),backgroundColor:'rgba(245,195,0,0.88)',borderRadius:3,borderSkipped:false}];
     }
-  });
+    chSedes.update();
 
-  // Table
-  const totRow = selYears.map(y=>Object.values(byYM[y]).reduce((s,v)=>s+v,0));
-  document.getElementById('tbl-mes').innerHTML = `
-    <thead><tr><th>Mes</th>${selYears.map(y=>`<th class="r" style="color:${YCFG[y].c}">${y}</th>`).join('')}<th class="r">Total</th></tr></thead>
-    <tbody>${Array.from({length:12},(_,mi)=>{
-      const vs=selYears.map(y=>byYM[y][mi+1]||0);
-      const rt=vs.reduce((s,v)=>s+v,0);
-      return `<tr><td class="b">${ML[mi+1]}</td>${vs.map((v,i)=>`<td class="r" style="color:${v?YCFG[selYears[i]].c+'cc':'#c8d0dc'}">${v?fmt(v):'—'}</td>`).join('')}<td class="r b">${fmt(rt)}</td></tr>`;
-    }).join('')}</tbody>
-    <tfoot><tr><td>TOTAL</td>${totRow.map((v,i)=>`<td class="r" style="color:${YCFG[selYears[i]].c}">${fmt(v)}</td>`).join('')}<td class="r" style="color:var(--gold-d)">${fmt(totRow.reduce((s,v)=>s+v,0))}</td></tr></tfoot>`;
-}
-
-// ── TAB 2: CARRERA/SEDE — filtros independientes ──
-
-// State para filtros propios de tab2
-let f2Years = new Set([2021,2022,2023,2024]);
-let f2Sedes = new Set();   // vacío = todas las sedes del dataset carrera
-let f2Cars  = new Set();   // vacío = todas las carreras
-let f2Init  = false;
-
-function initTab2Filters(){
-  if(f2Init) return;
-  f2Init = true;
-
-  // Años
-  const yc = document.getElementById('f2-yr');
-  DATA.años.forEach(y=>{
-    const b = document.createElement('button');
-    b.className = `yr-btn on-${y-2000}`;
-    b.dataset.y = y;
-    b.textContent = y;
-    b.style.padding = '4px 10px';
-    b.addEventListener('click',()=>{
-      if(f2Years.has(y)){ if(f2Years.size===1) return; f2Years.delete(y); b.className='yr-btn'; }
-      else { f2Years.add(y); b.className=`yr-btn on-${y-2000}`; }
-      refreshTab2();
-    });
-    yc.appendChild(b);
-  });
-
-  // Sedes únicas en carrera_sede_año
-  const sedesSet = new Set(DATA.carrera_sede_año.map(r=>r.Sede));
-  const sedesArr = [...sedesSet].sort();
-  sedesArr.forEach(s=>f2Sedes.add(s)); // start all selected
-
-  const sc = document.getElementById('f2-sede');
-  sedesArr.forEach(s=>{
-    const item = document.createElement('label');
-    item.className = 'sede-item on';
-    item.dataset.s = s;
-    item.innerHTML = `<input type="checkbox" checked><span class="sdot" style="background:${sdColor(s)}"></span><span class="sname" title="${s}">${s}</span>`;
-    item.querySelector('input').addEventListener('change',e=>{
-      if(e.target.checked){ f2Sedes.add(s); item.classList.add('on'); }
-      else { f2Sedes.delete(s); item.classList.remove('on'); }
-      refreshTab2();
-    });
-    sc.appendChild(item);
-  });
-
-  // Carreras únicas
-  const carsSet = new Set(DATA.carrera_sede_año.map(r=>r.Carrera));
-  const carsArr = [...carsSet].sort();
-  carsArr.forEach(c=>f2Cars.add(c));
-
-  const cc = document.getElementById('f2-car');
-  carsArr.forEach(c=>{
-    const item = document.createElement('label');
-    item.className = 'sede-item on';
-    item.dataset.c = c;
-    item.innerHTML = `<input type="checkbox" checked><span class="sname" title="${c}" style="max-width:none">${c}</span>`;
-    item.querySelector('input').addEventListener('change',e=>{
-      if(e.target.checked){ f2Cars.add(c); item.classList.add('on'); }
-      else { f2Cars.delete(c); item.classList.remove('on'); }
-      refreshTab2();
-    });
-    cc.appendChild(item);
-  });
-}
-
-function f2SedeAll(){
-  document.querySelectorAll('#f2-sede .sede-item').forEach(item=>{
-    item.querySelector('input').checked=true; item.classList.add('on');
-    f2Sedes.add(item.dataset.s);
-  }); refreshTab2();
-}
-function f2SedeNone(){
-  document.querySelectorAll('#f2-sede .sede-item').forEach(item=>{
-    item.querySelector('input').checked=false; item.classList.remove('on');
-    f2Sedes.delete(item.dataset.s);
-  }); refreshTab2();
-}
-function f2CarAll(){
-  document.querySelectorAll('#f2-car .sede-item').forEach(item=>{
-    item.querySelector('input').checked=true; item.classList.add('on');
-    f2Cars.add(item.dataset.c);
-  }); refreshTab2();
-}
-function f2CarNone(){
-  document.querySelectorAll('#f2-car .sede-item').forEach(item=>{
-    item.querySelector('input').checked=false; item.classList.remove('on');
-    f2Cars.delete(item.dataset.c);
-  }); refreshTab2();
-}
-
-function refreshTab2(){ if(activeTab===2) tab2(); }
-
-function tab2(){
-  initTab2Filters();
-
-  const map = {};
-  DATA.carrera_sede_año.forEach(r=>{
-    if(!f2Years.has(r.Año)) return;
-    if(!f2Sedes.has(r.Sede)) return;
-    if(!f2Cars.has(r.Carrera)) return;
-    const k=`${r.Sede}||${r.Carrera}`;
-    if(!map[k]) map[k]={sede:r.Sede,carrera:r.Carrera,tot:0};
-    map[k].tot += r.count;
-  });
-  const sorted = Object.values(map).sort((a,b)=>b.tot-a.tot);
-  const n = sorted.length;
-
-  // Top carrera
-  const carMap={};
-  sorted.forEach(x=>{ carMap[x.carrera]=(carMap[x.carrera]||0)+x.tot; });
-  const topCar = Object.entries(carMap).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById('top-carrera-display').innerHTML = topCar
-    ? `<div class="val-display"><span class="val-big" style="font-size:20px;line-height:1.3">${topCar[0]}</span></div><p style="font-size:11px;color:var(--txt3);margin-top:6px">${fmt(topCar[1])} préstamos · ${n} combinación${n!==1?'es':''} encontrada${n!==1?'s':''}</p>`
-    : '<div class="empty-state" style="padding:20px"><p>Sin datos con los filtros actuales</p></div>';
-
-  // Chart — dynamic height
-  const carWrap = document.getElementById('car-wrap');
-  const carH = Math.max(200, n * 38);
-  carWrap.style.height = carH + 'px';
-
-  if(!carWrap.querySelector('canvas')){
-    carWrap.innerHTML = '<canvas id="c-car" style="position:absolute;inset:0"></canvas>';
+    const byC={};
+    filtered.forEach(r=>{byC[r.c]=(byC[r.c]||0)+gv(r,selYr);});
+    const topC=Object.entries(byC).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const DCOL=['#F5C300','#22D19E','#FF6B35','#00C8D7','#9B6DFF','#f43f5e','#06b6d4','#a78bfa'];
+    chCarr.data.labels=topC.map(([c])=>c.length>28?c.slice(0,26)+'…':c);
+    chCarr.data.datasets[0].data=topC.map(([,v])=>v);
+    chCarr.data.datasets[0].backgroundColor=DCOL.slice(0,topC.length);
+    chCarr.update();
   }
 
-  destroy('car');
-  if(n===0){
-    carWrap.innerHTML = '<div class="empty-state"><span class="big">🎓</span><p>Sin combinaciones con los filtros seleccionados</p></div>';
-  } else {
-    carWrap.innerHTML = '<canvas id="c-car" style="position:absolute;inset:0"></canvas>';
-    CH['car'] = new Chart(document.getElementById('c-car'),{
-      type:'bar',
-      data:{
-        labels: sorted.map(x=>`${x.sede} · ${x.carrera}`),
-        datasets:[{
-          label:'Préstamos',
-          data:sorted.map(x=>x.tot),
-          backgroundColor:sorted.map(x=>sdColor(x.sede)+'22'),
-          borderColor:sorted.map(x=>sdColor(x.sede)),
-          borderWidth:1.5, borderRadius:4, barThickness:18
-        }]
-      },
-      options:{
-        indexAxis:'y', responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{callbacks:{
-          title:it=>`${sorted[it[0].dataIndex].sede}`,
-          label:it=>[` Carrera: ${sorted[it.dataIndex].carrera}`,` Total: ${fmt(sorted[it.dataIndex].tot)}`]
-        }}},
-        scales:{
-          x:{grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},
-          y:{grid:{display:false},ticks:{color:'#0f1724',font:{size:9.5,weight:'500'},autoSkip:false},afterFit(s){s.width=Math.max(s.width,240);}}
-        }
-      }
-    });
-  }
-
-  document.getElementById('tbl-car').innerHTML = n===0 ? '' : `
-    <thead><tr><th>#</th><th>Sede</th><th>Carrera</th><th class="r">Total</th></tr></thead>
-    <tbody>${sorted.map((d,i)=>`<tr>
-      <td class="rn">${i+1}</td>
-      <td><span class="badge" style="background:${sdColor(d.sede)}18;color:${sdColor(d.sede)};border:1px solid ${sdColor(d.sede)}30">${d.sede}</span></td>
-      <td style="color:var(--txt2)">${d.carrera}</td>
-      <td class="r b" style="color:var(--gold-d)">${fmt(d.tot)}</td>
-    </tr>`).join('')}</tbody>`;
+  carPg=1;
+  renderTable();
 }
 
-// ── TAB 3: ACUMULADO ──
-function tab3(){
-  const map={};
-  DATA.total_sede_año.forEach(r=>{
-    if(!selYears.includes(r.Año)||!selSedes.has(r.Sede)) return;
-    if(!map[r.Sede]) map[r.Sede]={sede:r.Sede};
-    map[r.Sede][r.Año]=(map[r.Sede][r.Año]||0)+r.count;
-  });
-  const rows=Object.values(map).map(r=>{
-    r.tot=selYears.reduce((s,y)=>s+(r[y]||0),0); return r;
-  }).sort((a,b)=>b.tot-a.tot);
-
-  const grandTot = rows.reduce((s,r)=>s+r.tot,0);
-
-  // Global variation first->last year across all selected sedes
-  const firstY=selYears[0], lastY=selYears[selYears.length-1];
-  const totFirst = rows.reduce((s,r)=>s+(r[firstY]||0),0);
-  const totLast  = rows.reduce((s,r)=>s+(r[lastY]||0),0);
-  const globalPct = totFirst>0 ? ((totLast-totFirst)/totFirst*100).toFixed(1) : null;
-
-  document.getElementById('total-periodo-display').innerHTML = `
-    <div class="val-display"><span class="val-big">${fmt(grandTot)}</span></div>
-    <p style="font-size:11px;color:var(--txt3);margin-top:6px">${rows.length} sede${rows.length!==1?'s':''} · ${selYears.length} año${selYears.length!==1?'s':''}</p>`;
-
-  document.getElementById('variacion-global-display').innerHTML = globalPct!==null && selYears.length>1
-    ? `<div class="val-display"><span class="val-big" style="color:${parseFloat(globalPct)>=0?'#16a34a':'#dc2626'}">${parseFloat(globalPct)>=0?'+':''}${globalPct}%</span></div>
-       <p style="font-size:11px;color:var(--txt3);margin-top:6px">Variación total entre ${firstY} y ${lastY}</p>`
-    : '<div class="empty-state" style="padding:20px"><p>Selecciona más de un año para comparar</p></div>';
-
-  // Chart
-  destroy('stk');
-  CH['stk'] = new Chart(document.getElementById('c-stk').getContext('2d'),{
-    type:'bar',
-    data:{
-      labels:rows.map(r=>r.sede.length>14?r.sede.slice(0,13)+'…':r.sede),
-      datasets:selYears.map(y=>({
-        label:String(y),
-        data:rows.map(r=>r[y]||0),
-        backgroundColor:YCFG[y].bg,
-        borderColor:YCFG[y].c,
-        borderWidth:1.5, borderRadius:2
-      }))
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#5a6478',font:{size:11,weight:'600'}}},
-        tooltip:{mode:'index',intersect:false,callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.raw)}`}}},
-      scales:{
-        x:{stacked:true,grid:{display:false},ticks:{color:'#5a6478',font:{size:9.5},maxRotation:38}},
-        y:{stacked:true,grid:{color:'#e5e8ef'},ticks:{color:'#5a6478',font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}
-      }
+function renderTable(){
+  const sorted=[...filtered].sort((a,b)=>a.s!==b.s?a.s.localeCompare(b.s):gv(b,selYr)-gv(a,selYr));
+  const maxV=Math.max(...sorted.map(r=>gv(r,selYr)),1);
+  const start=(carPg-1)*PPG;
+  const page=sorted.slice(start,start+PPG);
+  const tbody=document.getElementById('car-tbody');
+  let lastS=null;
+  tbody.innerHTML=page.map(r=>{
+    const v=gv(r,selYr), pct=(v/maxV*100).toFixed(1);
+    const bc=v>2000?'#F5C300':v>500?'#22D19E':v>100?'#FF6B35':'#444';
+    let sedeHdr='';
+    if(r.s!==lastS){
+      lastS=r.s;
+      const sT=sorted.filter(x=>x.s===r.s).reduce((a,x)=>a+gv(x,selYr),0);
+      sedeHdr=`<tr class="sede-row"><td colspan="5" class="sede-name">▸ ${r.s} <span style="font-size:12px;color:var(--muted);font-family:Barlow;font-weight:400;text-transform:none;margin-left:10px">Total: ${sT.toLocaleString('es-CL')}</span></td><td></td></tr>`;
     }
-  });
+    return sedeHdr+`<tr>
+      <td class="car-name">${r.c}</td>
+      <td class="num" style="color:var(--cyan)">${fmt(r.a)}</td>
+      <td class="num" style="color:var(--orange)">${fmt(r.b)}</td>
+      <td class="num" style="color:var(--green)">${fmt(r.d)}</td>
+      <td class="num" style="color:var(--yellow)">${fmt(r.e)}</td>
+      <td style="min-width:130px"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${bc}"></div></div><span class="bar-pct">${pct}%</span></div></td>
+    </tr>`;
+  }).join('');
 
-  const colTots = selYears.map(y=>rows.reduce((s,r)=>s+(r[y]||0),0));
-  document.getElementById('tbl-acum').innerHTML=`
-    <thead><tr><th>Sede</th>${selYears.map(y=>`<th class="r" style="color:${YCFG[y].c}">${y}</th>`).join('')}<th class="r">Total</th></tr></thead>
-    <tbody>${rows.map(r=>`<tr>
-      <td><span class="badge" style="background:${sdColor(r.sede)}18;color:${sdColor(r.sede)};border:1px solid ${sdColor(r.sede)}30">${r.sede}</span></td>
-      ${selYears.map(y=>`<td class="r" style="color:${r[y]?YCFG[y].c+'cc':'#c8d0dc'}">${r[y]?fmt(r[y]):'—'}</td>`).join('')}
-      <td class="r b">${fmt(r.tot)}</td>
-    </tr>`).join('')}</tbody>
-    <tfoot><tr><td>TOTAL</td>${colTots.map((v,i)=>`<td class="r" style="color:${YCFG[selYears[i]].c}">${fmt(v)}</td>`).join('')}<td class="r" style="color:var(--gold-d)">${fmt(grandTot)}</td></tr></tfoot>`;
+  const tot=sorted.length, pages=Math.ceil(tot/PPG);
+  document.getElementById('pg-info').textContent=`Mostrando ${start+1}–${Math.min(start+PPG,tot)} de ${tot} registros`;
+  document.getElementById('td-desc').textContent=`${tot} combinaciones · ${selYr==='all'?'Todos los años':'Año '+selYr}`;
+  const pgEl=document.getElementById('pg-btns');
+  pgEl.innerHTML='';
+  const mkB=(l,p,dis,act)=>{const b=document.createElement('button');b.className='pg-btn'+(act?' active':'');b.textContent=l;b.disabled=dis;b.onclick=()=>{carPg=p;renderTable();};return b;};
+  pgEl.appendChild(mkB('←',carPg-1,carPg===1));
+  for(let i=Math.max(1,carPg-2);i<=Math.min(pages,carPg+2);i++) pgEl.appendChild(mkB(i,i,false,i===carPg));
+  pgEl.appendChild(mkB('→',carPg+1,carPg===pages));
 }
 
-init();
+buildResumen();
 </script>
 </body>
 </html>
