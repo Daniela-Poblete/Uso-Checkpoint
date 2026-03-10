@@ -322,23 +322,6 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
       </div>
     </div>
 
-    <div class="mk-row">
-      <div class="mk-card" style="--mk-c:#B8900A">
-        <div class="mk-label">Total usos (filtro activo)</div>
-        <div class="mk-val" id="mk-tot">—</div>
-        <div class="mk-sub" id="mk-per">Período seleccionado</div>
-      </div>
-      <div class="mk-card" style="--mk-c:#007A87">
-        <div class="mk-label">Sede con más usos</div>
-        <div class="mk-val" id="mk-sede" style="font-size:20px;line-height:1.1">—</div>
-        <div class="mk-sub">En período seleccionado</div>
-      </div>
-      <div class="mk-card" style="--mk-c:#6B3FD4">
-        <div class="mk-label">Combinaciones visibles</div>
-        <div class="mk-val" id="mk-comb">—</div>
-        <div class="mk-sub">Sede / carrera activas</div>
-      </div>
-    </div>
 
     <div class="cg2">
       <div class="chart-box">
@@ -852,20 +835,9 @@ function applyFilters(){
     return true;
   });
 
-  // Mini KPIs
-  const tot=filtered.reduce((a,r)=>a+gv(r,selYr),0);
-  document.getElementById('mk-tot').textContent=tot.toLocaleString('es-CL');
-  const bySede={};
-  filtered.forEach(r=>{bySede[r.s]=(bySede[r.s]||0)+gv(r,selYr);});
-  const top=Object.entries(bySede).sort((a,b)=>b[1]-a[1])[0];
-  const topName=top?top[0].replace('PADRE ALONSO DE OVALLE','P.A. OVALLE').replace('SAN CARLOS DE APOQUINDO','S.C. APOQUINDO'):'—';
-  document.getElementById('mk-sede').textContent=topName;
-  document.getElementById('mk-comb').textContent=filtered.length;
-  document.getElementById('mk-per').textContent=selYr==='all'?'Todos los años':'Año '+selYr;
-
   // Update charts
   if(chSedes){
-    const DC=['rgba(0,153,168,0.82)','rgba(217,90,26,0.82)','rgba(15,175,126,0.82)','rgba(184,144,10,0.92)'];
+    const DC=['rgba(0,153,168,0.85)','rgba(217,90,26,0.85)','rgba(15,175,126,0.85)','rgba(184,144,10,0.92)'];
     const short=s=>s.replace('PADRE ALONSO DE OVALLE','P.A. OVALLE').replace('SAN CARLOS DE APOQUINDO','S.C. APOQUINDO');
     if(selYr==='all'){
       const byS={};
@@ -873,17 +845,21 @@ function applyFilters(){
       const top8=Object.entries(byS).sort((a,b)=>(b[1].a+b[1].b+b[1].d+b[1].e)-(a[1].a+a[1].b+a[1].d+a[1].e)).slice(0,8);
       chSedes.data.labels=top8.map(([s])=>short(s));
       chSedes.data.datasets=[
-        {label:'2021',data:top8.map(([,v])=>v.a),backgroundColor:DC[0],borderRadius:3,borderSkipped:false},
-        {label:'2022',data:top8.map(([,v])=>v.b),backgroundColor:DC[1],borderRadius:3,borderSkipped:false},
-        {label:'2023',data:top8.map(([,v])=>v.d),backgroundColor:DC[2],borderRadius:3,borderSkipped:false},
-        {label:'2024',data:top8.map(([,v])=>v.e),backgroundColor:DC[3],borderRadius:3,borderSkipped:false},
+        {label:'2021',data:top8.map(([,v])=>v.a),backgroundColor:DC[0],stack:'s',borderRadius:0,borderSkipped:false},
+        {label:'2022',data:top8.map(([,v])=>v.b),backgroundColor:DC[1],stack:'s',borderRadius:0,borderSkipped:false},
+        {label:'2023',data:top8.map(([,v])=>v.d),backgroundColor:DC[2],stack:'s',borderRadius:0,borderSkipped:false},
+        {label:'2024',data:top8.map(([,v])=>v.e),backgroundColor:DC[3],stack:'s',borderRadius:3,borderSkipped:false},
       ];
+      chSedes.options.scales.x.stacked=true;
+      chSedes.options.scales.y.stacked=true;
     } else {
       const byS={};
       filtered.forEach(r=>{byS[r.s]=(byS[r.s]||0)+gv(r,selYr);});
       const top10=Object.entries(byS).sort((a,b)=>b[1]-a[1]).slice(0,10);
       chSedes.data.labels=top10.map(([s])=>short(s));
-      chSedes.data.datasets=[{label:selYr,data:top10.map(([,v])=>v),backgroundColor:'rgba(184,144,10,0.88)',borderRadius:3,borderSkipped:false}];
+      chSedes.data.datasets=[{label:selYr,data:top10.map(([,v])=>v),backgroundColor:'rgba(184,144,10,0.88)',borderRadius:3,borderSkipped:false,stack:'s'}];
+      chSedes.options.scales.x.stacked=false;
+      chSedes.options.scales.y.stacked=false;
     }
     chSedes.update();
 
