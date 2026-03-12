@@ -79,6 +79,28 @@ html,body{font-family:'Lato',sans-serif;font-size:14px;line-height:1.5;backgroun
 .filter-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:6px 14px;font-family:'Lato',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border-radius:2px;transition:all .15s;}
 .filter-btn:hover{color:var(--text);border-color:#bbb;}
 .filter-btn.active{background:var(--yellow);color:var(--black);border-color:var(--yellow);}
+
+/* Chart toggle pills */
+.chart-filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.cpill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;
+  font-family:'Lato',sans-serif;font-size:11px;font-weight:700;cursor:pointer;
+  border:1.5px solid transparent;transition:all .15s;user-select:none;}
+.cpill .cdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.cpill.off{background:#f0f0ee;border-color:#ddd;color:#aaa;}
+.cpill.off .cdot{opacity:.3;}
+
+/* Year toggle row on line chart */
+.yr-toggle-row{display:flex;align-items:center;gap:10px;margin:4px 0 16px;}
+.yr-toggle-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.yr-toggle-group{display:flex;gap:0;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
+.yrtog{padding:7px 20px;border:none;border-right:1.5px solid var(--border);background:#fafaf8;
+  font-family:'Lato',sans-serif;font-size:12px;font-weight:700;color:#bbb;
+  cursor:pointer;transition:all .15s;}
+.yrtog:last-child{border-right:none;}
+.yrtog:hover:not(.on){background:#f0f0ee;color:#777;}
+.yrtog[data-yr="2025"].on{background:#FFF8E0;color:#7a5e00;box-shadow:inset 0 -3px 0 #B8900A;}
+.yrtog[data-yr="2024"].on{background:#E8FBF5;color:#0A8C64;box-shadow:inset 0 -3px 0 #0A8C64;}
+.yrtog[data-yr="2023"].on{background:#FDF0E8;color:#B84A10;box-shadow:inset 0 -3px 0 #B84A10;}
 select.sel{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 30px 6px 12px;font-family:'Lato',sans-serif;font-size:13px;cursor:pointer;border-radius:2px;outline:none;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:180px;}
 select.sel:hover,select.sel:focus{border-color:var(--yellow);}
 
@@ -187,14 +209,16 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
   <div class="kpi-item">
     <div class="kpi-value" style="color:#C49B00">52.047</div>
     <div class="kpi-label">Registros totales</div>
+    <div class="kpi-sub">Log completo 2023–2025</div>
   </div>
   <div class="kpi-item">
     <div class="kpi-value" style="color:#007A87">$8.558.872</div>
     <div class="kpi-label">Suscripción anual CLP</div>
+    <div class="kpi-sub">Período Abril–Marzo · SUS 2025–2026</div>
   </div>
   <div class="kpi-item">
     <div class="kpi-value" style="color:#B8900A">$790</div>
-    <div class="kpi-label">Valor por uso · ciclo actual</div>
+    <div class="kpi-label">Valor x uso · ciclo actual</div>
     <div class="kpi-sub">SUS 2025–2026 · 10.838 usos red</div>
   </div>
   <div class="kpi-item">
@@ -251,7 +275,14 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
     <div class="cg2">
       <div class="chart-box">
         <div class="cbt">Usos mensuales por año</div>
-        <div class="cbs">Comparativo 2023–2025 · todos los meses</div>
+        <div class="yr-toggle-row">
+          <span class="yr-toggle-lbl">Mostrar año:</span>
+          <div class="yr-toggle-group">
+            <button class="yrtog on" data-yr="2025" onclick="toggleLine(this)">2025</button>
+            <button class="yrtog" data-yr="2024" onclick="toggleLine(this)">2024</button>
+            <button class="yrtog" data-yr="2023" onclick="toggleLine(this)">2023</button>
+          </div>
+        </div>
         <div class="chart-wrap"><canvas id="ch-monthly"></canvas></div>
       </div>
       <div class="chart-box">
@@ -604,23 +635,76 @@ function showSec(id,btn){
 }
 
 // ─── RESUMEN ───
+// Chart references for toggling
+let chMonthly=null, chVxu=null;
+
+// Full data for VXU (all 4 cycles)
+const VXU_ALL = {
+  '2022-2023':{label:'2022–2023',val:474,bg:'rgba(0,153,168,0.85)'},
+  '2023-2024':{label:'2023–2024',val:380,bg:'rgba(217,90,26,0.85)'},
+  '2024-2025':{label:'2024–2025',val:527,bg:'rgba(15,175,126,0.85)'},
+  '2025-2026':{label:'2025–2026',val:790,bg:'rgba(245,195,0,0.95)'}
+};
+let activeVxu = new Set(['2022-2023','2023-2024','2024-2025','2025-2026']);
+let activeLine = new Set(['2025']);
+
+function toggleLine(btn){
+  const yr = btn.dataset.yr;
+  if(activeLine.has(yr)){
+    if(activeLine.size===1) return;
+    activeLine.delete(yr);
+    btn.classList.remove('on');
+  } else {
+    activeLine.add(yr);
+    btn.classList.add('on');
+  }
+  if(!chMonthly) return;
+  chMonthly.data.datasets.forEach(ds=>{
+    ds.hidden = !activeLine.has(ds.label);
+  });
+  chMonthly.update();
+}
+
+function toggleBar(btn){
+  const sus = btn.dataset.sus;
+  if(activeVxu.has(sus)){
+    if(activeVxu.size===1) return;
+    activeVxu.delete(sus);
+    btn.classList.remove('on');
+  } else {
+    activeVxu.add(sus);
+    btn.classList.add('on');
+  }
+  rebuildVxu();
+}
+
+function rebuildVxu(){
+  if(!chVxu) return;
+  const keys = ['2022-2023','2023-2024','2024-2025','2025-2026'].filter(k=>activeVxu.has(k));
+  chVxu.data.labels = keys.map(k=>VXU_ALL[k].label);
+  chVxu.data.datasets[0].data = keys.map(k=>VXU_ALL[k].val);
+  chVxu.data.datasets[0].backgroundColor = keys.map(k=>VXU_ALL[k].bg);
+  chVxu.options.scales.y.max = Math.ceil(Math.max(...keys.map(k=>VXU_ALL[k].val))*1.18/100)*100;
+  chVxu.update();
+}
+
 function buildResumen(){
   built.r=true;
-  const C={2025:'#B8900A',2024:'#0A8C64',2023:'#B84A10'};
-  new Chart(document.getElementById('ch-monthly').getContext('2d'),{
+  chMonthly = new Chart(document.getElementById('ch-monthly').getContext('2d'),{
     type:'line',
     data:{labels:MD.m,datasets:[
       {label:'2025',data:MD[2025],borderColor:'#B8900A',backgroundColor:'rgba(245,195,0,0.07)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,spanGaps:true,datalabels:{display:false}},
-      {label:'2024',data:MD[2024],borderColor:'#0A8C64',backgroundColor:'rgba(34,209,158,0.04)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,spanGaps:true,datalabels:{display:false}},
-      {label:'2023',data:MD[2023],borderColor:'#B84A10',backgroundColor:'rgba(255,107,53,0.04)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,datalabels:{display:false}},
+      {label:'2024',data:MD[2024],borderColor:'#0A8C64',backgroundColor:'rgba(34,209,158,0.04)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,spanGaps:true,datalabels:{display:false},hidden:true},
+      {label:'2023',data:MD[2023],borderColor:'#B84A10',backgroundColor:'rgba(255,107,53,0.04)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,datalabels:{display:false},hidden:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{legend:{labels:{color:'#555',font:{family:'Lato',size:12}}},
+      plugins:{legend:{display:false},
         tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.parsed.y.toLocaleString('es-CL')+' usos'}}},
-      scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'}}},y:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
+      scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'}}},
+        y:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
   });
-  new Chart(document.getElementById('ch-vxu').getContext('2d'),{
+  chVxu = new Chart(document.getElementById('ch-vxu').getContext('2d'),{
     type:'bar',
     data:{labels:['2022–2023','2023–2024','2024–2025','2025–2026'],datasets:[{
       label:'CLP/uso',
