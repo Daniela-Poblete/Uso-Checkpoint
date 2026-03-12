@@ -6,6 +6,7 @@
 <title>Check Point · Sistema de Bibliotecas DUOC UC</title>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root {
   --yellow: #F5C300;
@@ -170,39 +171,38 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
   <div class="nav-sep">Sistema de Bibliotecas</div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSec('resumen',this)">Resumen Mes · Año</button>
-    <button class="nav-tab" onclick="showSec('carrera',this)">Carrera por Sede</button>
   </div>
-  <div class="nav-year">2021–2024</div>
+  <div class="nav-year">2023–2025</div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-tag">Informe · Check Point · Thomson Reuters</div>
-  <h1>Check Point &amp; <em>Uso</em><br>DUOC UC 2021–2024</h1>
+  <h1>Check Point &amp; <em>Uso</em><br>DUOC UC 2023–2025</h1>
   <p class="hero-desc">Análisis de acceso al recurso Check Point — usos mensuales por ciclo académico, valor por uso destacado y distribución completa por carrera y sede para todo el período disponible.</p>
 </div>
 
 <!-- KPI BAR -->
 <div class="kpi-bar">
   <div class="kpi-item">
-    <div class="kpi-value" style="color:#C49B00">70.863</div>
+    <div class="kpi-value" style="color:#C49B00">52.047</div>
     <div class="kpi-label">Registros totales</div>
-    <div class="kpi-sub">Log completo 2021–2024</div>
+    <div class="kpi-sub">Log completo 2023–2025</div>
   </div>
   <div class="kpi-item">
-    <div class="kpi-value" style="color:#007A87">$8.590.884</div>
+    <div class="kpi-value" style="color:#007A87">$8.558.872</div>
     <div class="kpi-label">Suscripción anual CLP</div>
-    <div class="kpi-sub">Período Abril–Marzo</div>
+    <div class="kpi-sub">Período Abril–Marzo · SUS 2025–2026</div>
   </div>
   <div class="kpi-item">
-    <div class="kpi-value" style="color:#0A8C64">$380</div>
-    <div class="kpi-label">Menor valor x uso</div>
-    <div class="kpi-sub">SUS 2023–2024 · 22.583 usos</div>
+    <div class="kpi-value" style="color:#B8900A">$790</div>
+    <div class="kpi-label">Valor x uso · ciclo actual</div>
+    <div class="kpi-sub">SUS 2025–2026 · 10.838 usos red</div>
   </div>
   <div class="kpi-item">
-    <div class="kpi-value" style="color:#B84A10">$690</div>
-    <div class="kpi-label">Mayor valor x uso</div>
-    <div class="kpi-sub">SUS 2024–2025 · 12.456 usos</div>
+    <div class="kpi-value" style="color:#0A8C64">14.694</div>
+    <div class="kpi-label">Usos registrados 2025</div>
+    <div class="kpi-sub">Ene–Dic 2025 · datos actuales</div>
   </div>
 </div>
 
@@ -212,7 +212,7 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
     <div class="sec-inner">
       <div><div class="sec-tag"><span class="sec-badge">RES</span><span style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;">Resumen por Mes y Año</span></div>
       <div class="sec-title">Análisis de usos · ciclos académicos</div></div>
-      <div class="sec-period">Datos completos · 2021–2024</div>
+      <div class="sec-period">Datos completos · 2023–2025</div>
     </div>
     <div class="sec-line"></div>
   </div>
@@ -222,38 +222,38 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
     <div class="vxu-row">
       <div class="vxu-card hl">
         <span class="vxu-badge bc">Ciclo actual</span>
-        <div class="vxu-cycle">SUS 2024–2025</div>
-        <div class="vxu-main" style="color:#B8900A">$690</div>
+        <div class="vxu-cycle">SUS 2025–2026</div>
+        <div class="vxu-main" style="color:#B8900A">$790</div>
         <div class="vxu-desc">valor por uso</div>
-        <div class="vxu-usos"><strong>12.456</strong> usos registrados</div>
+        <div class="vxu-usos"><strong>10.838</strong> usos registrados</div>
+      </div>
+      <div class="vxu-card">
+        <span class="vxu-badge bp">Anterior</span>
+        <div class="vxu-cycle">SUS 2024–2025</div>
+        <div class="vxu-main" style="color:#0A8C64">$527</div>
+        <div class="vxu-desc">valor por uso</div>
+        <div class="vxu-usos"><strong>16.312</strong> usos registrados</div>
       </div>
       <div class="vxu-card">
         <span class="vxu-badge bp">Anterior</span>
         <div class="vxu-cycle">SUS 2023–2024</div>
-        <div class="vxu-main" style="color:#0A8C64">$380</div>
+        <div class="vxu-main" style="color:#B84A10">$380</div>
         <div class="vxu-desc">valor por uso</div>
         <div class="vxu-usos"><strong>22.583</strong> usos registrados</div>
       </div>
       <div class="vxu-card">
         <span class="vxu-badge bp">Anterior</span>
         <div class="vxu-cycle">SUS 2022–2023</div>
-        <div class="vxu-main" style="color:#B84A10">$474</div>
+        <div class="vxu-main" style="color:#007A87">$474</div>
         <div class="vxu-desc">valor por uso</div>
         <div class="vxu-usos"><strong>18.138</strong> usos registrados</div>
-      </div>
-      <div class="vxu-card">
-        <span class="vxu-badge bp">Anterior</span>
-        <div class="vxu-cycle">SUS 2021–2022</div>
-        <div class="vxu-main" style="color:#007A87">$544</div>
-        <div class="vxu-desc">valor por uso</div>
-        <div class="vxu-usos"><strong>15.791</strong> usos registrados</div>
       </div>
     </div>
 
     <div class="cg2">
       <div class="chart-box">
         <div class="cbt">Usos mensuales por año</div>
-        <div class="cbs">Comparativo 2021–2024 · todos los meses</div>
+        <div class="cbs">Comparativo 2023–2025 · todos los meses</div>
         <div class="chart-wrap"><canvas id="ch-monthly"></canvas></div>
       </div>
       <div class="chart-box">
@@ -277,10 +277,9 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
         <table>
           <thead><tr>
             <th>Mes</th>
-            <th class="r" style="color:#B8900A">2024</th>
-            <th class="r" style="color:#0A8C64">2023</th>
-            <th class="r" style="color:#B84A10">2022</th>
-            <th class="r" style="color:#007A87">2021</th>
+            <th class="r" style="color:#B8900A">2025</th>
+            <th class="r" style="color:#0A8C64">2024</th>
+            <th class="r" style="color:#B84A10">2023</th>
             <th class="r">Total</th>
           </tr></thead>
           <tbody id="monthly-tbody"></tbody>
@@ -291,451 +290,309 @@ tr.tot-row td{color:var(--yellow-dark);font-weight:700;background:rgba(245,195,0
   </div>
 </div>
 
-<!-- ═══════════════ CARRERA ═══════════════ -->
-<div id="sec-carrera" class="section-wrap">
-  <div class="section-header">
-    <div class="sec-inner">
-      <div><div class="sec-tag"><span class="sec-badge">CAR</span><span style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;">Carrera por Sede</span></div>
-      <div class="sec-title">Distribución de usos · todas las sedes</div></div>
-      <div class="sec-period">Datos completos · 2021–2024</div>
-    </div>
-    <div class="sec-line"></div>
-  </div>
-  <div class="content">
-
-    <div class="filter-row">
-      <span class="filter-label">Sede:</span>
-      <select class="sel" id="sede-filter" onchange="applyFilters()">
-        <option value="">Todas las sedes</option>
-      </select>
-      <span class="filter-label">Carrera:</span>
-      <select class="sel" id="carrera-filter" onchange="applyFilters()">
-        <option value="">Todas las carreras</option>
-      </select>
-      <span class="filter-label">Año:</span>
-      <div class="filter-btn-group">
-        <button class="filter-btn active" onclick="setYr(this,'all')">Todos</button>
-        <button class="filter-btn" onclick="setYr(this,'2021')">2021</button>
-        <button class="filter-btn" onclick="setYr(this,'2022')">2022</button>
-        <button class="filter-btn" onclick="setYr(this,'2023')">2023</button>
-        <button class="filter-btn" onclick="setYr(this,'2024')">2024</button>
-      </div>
-    </div>
-
-
-    <div class="cg2">
-      <div class="chart-box">
-        <div class="cbt">Top sedes · usos acumulados</div>
-        <div class="cbs" id="ch-sed-sub">Por año seleccionado · top 10</div>
-        <div class="chart-wrap lg"><canvas id="ch-sedes"></canvas></div>
-      </div>
-      <div class="chart-box">
-        <div class="cbt">Top carreras</div>
-        <div class="cbs">Distribución por carrera · filtro activo</div>
-        <div class="chart-wrap lg"><canvas id="ch-carr"></canvas></div>
-      </div>
-    </div>
-
-    <div class="dtw">
-      <div class="dth">
-        <div class="dtt">Detalle Sede / Carrera</div>
-        <div id="td-desc" style="font-size:11px;color:var(--muted)"></div>
-      </div>
-      <div class="ox">
-        <table>
-          <thead><tr>
-            <th>Sede / Carrera</th>
-            <th class="r" style="color:#007A87">2021</th>
-            <th class="r" style="color:#B84A10">2022</th>
-            <th class="r" style="color:#0A8C64">2023</th>
-            <th class="r" style="color:#B8900A">2024</th>
-            <th>Distribución</th>
-          </tr></thead>
-          <tbody id="car-tbody"></tbody>
-        </table>
-      </div>
-      <div class="pag">
-        <div class="pg-info" id="pg-info"></div>
-        <div class="pg-btns" id="pg-btns"></div>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <script>
 // ─── DATA ───
 const MD = {
   m:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sept','Oct','Nov','Dic'],
+  2025:[506,159,3191,3142,1088,1064,413,712,2289,823,704,603],
   2024:[null,260,1065,2132,1256,1641,805,1412,1998,1462,1082,668],
-  2023:[384,139,1791,1396,1258,996,464,5043,5179,2030,2380,2512],
-  2022:[null,87,2262,1150,1371,1198,285,4058,3405,1342,1577,1438],
-  2021:[278,176,1441,2416,1378,1076,513,1599,3534,1113,1159,654]
+  2023:[384,139,1791,1396,1258,996,464,5043,5179,2030,2380,2512]
 };
 
 const FD = [
-  {s:'ALAMEDA',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:214,d:204,e:373},
-  {s:'ALAMEDA',c:'AUDITORIA',a:0,b:1,d:2,e:0},
-  {s:'ALAMEDA',c:'INGENIERIA EN ADMINISTRACION',a:0,b:3,d:0,e:0},
-  {s:'ALAMEDA',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:2,d:4,e:1},
-  {s:'ALAMEDA',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:1,d:1,e:0},
-  {s:'ALAMEDA',c:'INGENIERIA EN COMERCIO EXTERIOR',a:0,b:207,d:150,e:371},
-  {s:'ALAMEDA',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:47,e:0},
-  {s:'ALAMEDA',c:'INGENIERIA EN MARKETING DIGITAL',a:0,b:0,d:0,e:1},
-  {s:'ALAMEDA',c:'CONSTRUCCION',a:9,b:9,d:1,e:1},
-  {s:'ALAMEDA',c:'INGENIERIA EN CONSTRUCCION',a:0,b:0,d:1,e:0},
-  {s:'ALAMEDA',c:'RESTAURACION DE BIENES PATRIMONIALES',a:5,b:8,d:0,e:1},
-  {s:'ALAMEDA',c:'TECNICO EN INSTALACIONES ELECTRICAS',a:0,b:1,d:0,e:0},
-  {s:'ALAMEDA',c:'TECNICO EN PREVENCION DE RIESGOS',a:4,b:0,d:0,e:0},
-  {s:'ALAMEDA',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:4,d:0,e:1},
-  {s:'ALAMEDA',c:'INGENIERIA EN INFORMATICA',a:0,b:4,d:0,e:1},
-  {s:'ANTONIO VARAS',c:'ADMINISTRACION Y NEGOCIOS',a:5303,b:5772,d:6151,e:3792},
-  {s:'ANTONIO VARAS',c:'ADMINISTRACION DE RECURSOS HUMANOS',a:3,b:0,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'AUDITORIA',a:101,b:143,d:77,e:57},
-  {s:'ANTONIO VARAS',c:'COMERCIO EXTERIOR',a:6,b:5,d:28,e:0},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION',a:13,b:9,d:1,e:0},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:13,b:9,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:7,b:20,d:29,e:12},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:37,b:25,d:25,e:29},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:7,d:2,e:2},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN COMERCIO EXTERIOR',a:5102,b:5547,d:5934,e:3632},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN GESTION LOGISTICA',a:12,b:5,d:39,e:54},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN MARKETING',a:1,b:0,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN MARKETING DIGITAL',a:0,b:1,d:0,e:3},
-  {s:'ANTONIO VARAS',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:0,e:2},
-  {s:'ANTONIO VARAS',c:'TECNICO EN GESTION LOGISTICA',a:1,b:1,d:2,e:1},
-  {s:'ANTONIO VARAS',c:'TECNICO EN MARKETING',a:6,b:0,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'GASTRONOMIA',a:0,b:0,d:1,e:1},
-  {s:'ANTONIO VARAS',c:'GASTRONOMIA INTERNACIONAL',a:0,b:0,d:1,e:1},
-  {s:'ANTONIO VARAS',c:'INFORMATICA Y TELECOMUNICACIONES',a:63,b:6,d:5,e:1},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:5,b:2,d:1,e:0},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN INFORMATICA',a:58,b:4,d:3,e:1},
-  {s:'ANTONIO VARAS',c:'INGENIERIA EN INFRAESTRUCTURA Y PLATAFORMAS TECNOLOGICAS',a:0,b:0,d:1,e:0},
-  {s:'ANTONIO VARAS',c:'SALUD',a:1,b:0,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'INFORMATICA BIOMEDICA',a:1,b:0,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'TURISMO',a:3,b:7,d:1,e:0},
-  {s:'ANTONIO VARAS',c:'ECOTURISMO',a:2,b:4,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'TOURISM AND HOSPITALITY',a:1,b:2,d:0,e:0},
-  {s:'ANTONIO VARAS',c:'TURISMO Y HOTELERIA',a:0,b:1,d:1,e:0},
-  {s:'CAMPUS ARAUCO',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:0,d:3,e:15},
-  {s:'CAMPUS ARAUCO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:0,e:7},
-  {s:'CAMPUS ARAUCO',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:3,e:5},
-  {s:'CAMPUS ARAUCO',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:0,e:3},
-  {s:'CAMPUS ARAUCO',c:'TECNICO EN PREVENCION DE RIESGOS',a:0,b:0,d:1,e:0},
-  {s:'CAMPUS ARAUCO',c:'INGENIERIA',a:0,b:0,d:0,e:1},
-  {s:'CAMPUS ARAUCO',c:'TECNICO EN MANTENIMIENTO ELECTROMECANICO',a:0,b:0,d:0,e:1},
-  {s:'CAMPUS VILLARRICA',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:1,d:1,e:0},
-  {s:'CAMPUS VILLARRICA',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:1,d:0,e:0},
-  {s:'CAMPUS VILLARRICA',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:1,e:0},
-  {s:'CONCEPCION',c:'ADMINISTRACION Y NEGOCIOS',a:913,b:1713,d:2313,e:1051},
-  {s:'CONCEPCION',c:'COMERCIO EXTERIOR',a:0,b:0,d:36,e:0},
-  {s:'CONCEPCION',c:'INGENIERIA EN ADMINISTRACION',a:66,b:6,d:0,e:0},
-  {s:'CONCEPCION',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:7,b:2,d:8,e:17},
-  {s:'CONCEPCION',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:7,e:0},
-  {s:'CONCEPCION',c:'INGENIERIA EN COMERCIO EXTERIOR',a:840,b:1702,d:2231,e:1024},
-  {s:'CONCEPCION',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:31,e:10},
-  {s:'CONCEPCION',c:'TECNICO EN ADMINISTRACION',a:0,b:3,d:0,e:0},
-  {s:'CONCEPCION',c:'COMUNICACION',a:0,b:0,d:2,e:1},
-  {s:'CONCEPCION',c:'PUBLICIDAD',a:0,b:0,d:2,e:0},
-  {s:'CONCEPCION',c:'RELACIONES PUBLICAS MENCION MARKETING',a:0,b:0,d:0,e:1},
-  {s:'CONCEPCION',c:'CONSTRUCCION',a:0,b:4,d:0,e:1},
-  {s:'CONCEPCION',c:'INGENIERIA EN CONSTRUCCION',a:0,b:4,d:0,e:1},
-  {s:'CONCEPCION',c:'DISENO',a:0,b:0,d:2,e:0},
-  {s:'CONCEPCION',c:'DISENO GRAFICO',a:0,b:0,d:2,e:0},
-  {s:'CONCEPCION',c:'INFORMATICA Y TELECOMUNICACIONES',a:5,b:1,d:3,e:0},
-  {s:'CONCEPCION',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:5,b:0,d:3,e:0},
-  {s:'CONCEPCION',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:0,e:0},
-  {s:'CONCEPCION',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:0,e:0},
-  {s:'CONCEPCION',c:'SALUD',a:0,b:0,d:2,e:0},
-  {s:'CONCEPCION',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:1,e:0},
-  {s:'CONCEPCION',c:'TECNICO EN ODONTOLOGIA',a:0,b:0,d:1,e:0},
-  {s:'MAIPU',c:'ADMINISTRACION Y NEGOCIOS',a:82,b:64,d:107,e:306},
-  {s:'MAIPU',c:'AUDITORIA',a:1,b:44,d:28,e:24},
-  {s:'MAIPU',c:'COMERCIO EXTERIOR',a:77,b:9,d:8,e:5},
-  {s:'MAIPU',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:1,b:0,d:2,e:7},
-  {s:'MAIPU',c:'INGENIERIA EN ADMINISTRACION',a:2,b:0,d:0,e:0},
-  {s:'MAIPU',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:1,d:0,e:1},
-  {s:'MAIPU',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:51,e:1},
-  {s:'MAIPU',c:'INGENIERIA EN COMERCIO EXTERIOR',a:0,b:0,d:3,e:134},
-  {s:'MAIPU',c:'INGENIERIA EN GESTION LOGISTICA',a:1,b:0,d:3,e:134},
-  {s:'MAIPU',c:'INGENIERIA EN MARKETING',a:0,b:9,d:3,e:0},
-  {s:'MAIPU',c:'TECNICO EN GESTION DE PERSONAS',a:0,b:0,d:9,e:0},
-  {s:'MAIPU',c:'TECNICO EN GESTION LOGISTICA',a:0,b:1,d:0,e:0},
-  {s:'MAIPU',c:'COMUNICACION',a:0,b:0,d:0,e:9},
-  {s:'MAIPU',c:'ANIMACION DIGITAL',a:0,b:0,d:0,e:9},
-  {s:'MAIPU',c:'CONSTRUCCION',a:2,b:1,d:2,e:0},
-  {s:'MAIPU',c:'DIBUJO Y MODELAMIENTO ARQUITECTONICO Y ESTRUCTURAL',a:0,b:1,d:0,e:0},
-  {s:'MAIPU',c:'INGENIERIA EN CONSTRUCCION',a:2,b:0,d:0,e:0},
-  {s:'MAIPU',c:'TECNICO EN PREVENCION DE RIESGOS',a:0,b:0,d:2,e:0},
-  {s:'MAIPU',c:'INFORMATICA Y TELECOMUNICACIONES',a:1,b:3,d:2,e:2},
-  {s:'MAIPU',c:'ADMINISTRACION DE REDES Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
-  {s:'MAIPU',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:0,d:2,e:0},
-  {s:'MAIPU',c:'INGENIERIA EN INFORMATICA',a:1,b:2,d:0,e:2},
-  {s:'MAIPU',c:'INGENIERIA',a:2,b:0,d:6,e:5},
-  {s:'MAIPU',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:2,b:0,d:0,e:0},
-  {s:'MAIPU',c:'TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:6,e:0},
-  {s:'MAIPU',c:'TECNICO EN MANTENIMIENTO ELECTROMECANICO',a:0,b:0,d:0,e:4},
-  {s:'MAIPU',c:'TECNICO EN MAQUINARIA Y VEHICULOS PESADOS',a:0,b:0,d:0,e:1},
-  {s:'MAIPU',c:'INGENIERIA MEDIO AMBIENTE Y RECURSOS NATURALES',a:0,b:0,d:0,e:1},
-  {s:'MAIPU',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:1},
-  {s:'MELIPILLA',c:'ADMINISTRACION Y NEGOCIOS',a:0,b:0,d:3,e:3},
-  {s:'MELIPILLA',c:'AUDITORIA',a:0,b:0,d:3,e:2},
-  {s:'MELIPILLA',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:0,e:1},
-  {s:'MELIPILLA',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
-  {s:'MELIPILLA',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:1,d:0,e:0},
-  {s:'MELIPILLA',c:'SALUD',a:0,b:1,d:0,e:0},
-  {s:'MELIPILLA',c:'TECNICO DE ENFERMERIA',a:0,b:1,d:0,e:0},
-  {s:'ONLINE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:1,d:0,e:1},
-  {s:'ONLINE',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:1,d:0,e:1},
-  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION Y NEGOCIOS',a:1299,b:1854,d:2567,e:1100},
-  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION DE RECURSOS HUMANOS',a:9,b:0,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'AUDITORIA',a:16,b:3,d:1,e:11},
-  {s:'PADRE ALONSO DE OVALLE',c:'COMERCIO EXTERIOR',a:1024,b:1127,d:1023,e:399},
-  {s:'PADRE ALONSO DE OVALLE',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:3,b:1,d:3,e:85},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION',a:1,b:0,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:0,b:4,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:1,b:0,d:12,e:1},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:2,b:0,d:0,e:9},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:0,d:1,e:4},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN COMERCIO EXTERIOR',a:231,b:717,d:1519,e:576},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:0,d:0,e:1},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN MARKETING DIGITAL',a:0,b:0,d:2,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN ADMINISTRACION',a:4,b:0,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN FINANZAS',a:0,b:0,d:2,e:3},
-  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN GESTION DE PERSONAS',a:0,b:0,d:1,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:3,e:11},
-  {s:'PADRE ALONSO DE OVALLE',c:'TECNICO JURIDICO',a:0,b:2,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION DE EMPRESAS MENCION MARKETING',a:8,b:0,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'DISENO',a:0,b:0,d:3,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'DESARROLLO Y DISENO WEB',a:0,b:0,d:3,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'GASTRONOMIA',a:0,b:1,d:1,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:2,d:2,e:3},
-  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION DE REDES Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
-  {s:'PADRE ALONSO DE OVALLE',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:2,e:2},
-  {s:'PADRE ALONSO DE OVALLE',c:'ANALISTA PROGRAMADOR',a:0,b:0,d:0,e:1},
-  {s:'PADRE ALONSO DE OVALLE',c:'TURISMO',a:3,b:0,d:1,e:1},
-  {s:'PADRE ALONSO DE OVALLE',c:'ADMINISTRACION HOTELERA',a:1,b:0,d:1,e:1},
-  {s:'PADRE ALONSO DE OVALLE',c:'TURISMO DE AVENTURA',a:2,b:0,d:0,e:0},
-  {s:'PLAZA NORTE',c:'ADMINISTRACION Y NEGOCIOS',a:551,b:536,d:1543,e:528},
-  {s:'PLAZA NORTE',c:'AUDITORIA',a:2,b:0,d:5,e:8},
-  {s:'PLAZA NORTE',c:'COMERCIO EXTERIOR',a:117,b:16,d:5,e:0},
-  {s:'PLAZA NORTE',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:5,b:1,d:7,e:1},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:3,b:1,d:0,e:0},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:6,e:0},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:7,e:1},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:8,b:1,d:13,e:4},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN COMERCIO EXTERIOR',a:405,b:429,d:1440,e:484},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN GESTION LOGISTICA',a:1,b:88,d:43,e:26},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN MARKETING',a:8,b:0,d:0,e:0},
-  {s:'PLAZA NORTE',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:15,e:4},
-  {s:'PLAZA NORTE',c:'TECNICO EN MARKETING',a:0,b:0,d:2,e:0},
-  {s:'PLAZA NORTE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:3,d:2,e:1},
-  {s:'PLAZA NORTE',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:2,d:2,e:0},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:0,e:1},
-  {s:'PLAZA NORTE',c:'INGENIERIA',a:0,b:1,d:5,e:1},
-  {s:'PLAZA NORTE',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:5,e:0},
-  {s:'PLAZA NORTE',c:'TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:1},
-  {s:'PLAZA OESTE',c:'ADMINISTRACION Y NEGOCIOS',a:36,b:47,d:11,e:15},
-  {s:'PLAZA OESTE',c:'AUDITORIA',a:8,b:20,d:0,e:2},
-  {s:'PLAZA OESTE',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:1,b:22,d:6,e:8},
-  {s:'PLAZA OESTE',c:'INGENIERIA EN ADMINISTRACION',a:0,b:1,d:0,e:0},
-  {s:'PLAZA OESTE',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:0,e:2},
-  {s:'PLAZA OESTE',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:4,d:5,e:3},
-  {s:'PLAZA OESTE',c:'ADMINISTRACION FINANCIERA',a:27,b:0,d:0,e:0},
-  {s:'PLAZA OESTE',c:'DISENO',a:0,b:1,d:0,e:0},
-  {s:'PLAZA OESTE',c:'DISENO DE AMBIENTES',a:0,b:1,d:0,e:0},
-  {s:'PLAZA OESTE',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:2,d:0,e:2},
-  {s:'PLAZA OESTE',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:1,d:0,e:2},
-  {s:'PLAZA OESTE',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:1,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'ADMINISTRACION Y NEGOCIOS',a:1281,b:1286,d:3969,e:2246},
-  {s:'PLAZA VESPUCIO',c:'AUDITORIA',a:135,b:83,d:86,e:220},
-  {s:'PLAZA VESPUCIO',c:'COMERCIO EXTERIOR',a:888,b:1026,d:3654,e:1822},
-  {s:'PLAZA VESPUCIO',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:58,b:9,d:45,e:27},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION',a:1,b:2,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:8,b:0,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:3,b:0,d:0,e:3},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:2,d:3,e:1},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:176,b:150,d:150,e:143},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN GESTION LOGISTICA',a:5,b:1,d:9,e:15},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN MARKETING',a:2,b:9,d:22,e:3},
-  {s:'PLAZA VESPUCIO',c:'TECNICO EN FINANZAS',a:1,b:0,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'TECNICO EN GESTION LOGISTICA',a:1,b:4,d:0,e:3},
-  {s:'PLAZA VESPUCIO',c:'TECNICO EN MARKETING',a:3,b:0,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'TEMPORADA ACADEMICA DE VERANO',a:0,b:0,d:0,e:9},
-  {s:'PLAZA VESPUCIO',c:'COMUNICACION',a:0,b:2,d:0,e:1},
-  {s:'PLAZA VESPUCIO',c:'PUBLICIDAD',a:0,b:2,d:0,e:1},
-  {s:'PLAZA VESPUCIO',c:'DISENO',a:1,b:3,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'DISENO GRAFICO',a:1,b:1,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'DISENO GRAFICO (INTERFACES E INTERACCIONES)',a:0,b:2,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'INFORMATICA Y TELECOMUNICACIONES',a:1,b:1,d:1,e:4},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:1,d:0,e:0},
-  {s:'PLAZA VESPUCIO',c:'INGENIERIA EN INFORMATICA',a:1,b:0,d:1,e:4},
-  {s:'PUENTE ALTO',c:'ADMINISTRACION Y NEGOCIOS',a:18,b:31,d:85,e:15},
-  {s:'PUENTE ALTO',c:'ADMINISTRACION DE RECURSOS HUMANOS',a:1,b:3,d:0,e:0},
-  {s:'PUENTE ALTO',c:'AUDITORIA',a:17,b:26,d:2,e:8},
-  {s:'PUENTE ALTO',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:0,b:0,d:0,e:1},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:1,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:1,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:0,b:0,d:78,e:5},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:1,d:1,e:0},
-  {s:'PUENTE ALTO',c:'TECNICO EN MARKETING',a:0,b:1,d:2,e:1},
-  {s:'PUENTE ALTO',c:'CONSTRUCCION',a:2,b:0,d:0,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN CONSTRUCCION',a:2,b:0,d:0,e:0},
-  {s:'PUENTE ALTO',c:'INFORMATICA Y TELECOMUNICACIONES',a:1,b:2,d:0,e:0},
-  {s:'PUENTE ALTO',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:0,b:2,d:0,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN INFORMATICA',a:1,b:0,d:0,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA',a:3,b:1,d:2,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:2,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:0,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN ELECTRICIDAD Y ELECTRONICA',a:3,b:0,d:0,e:0},
-  {s:'PUENTE ALTO',c:'RECURSOS NATURALES',a:0,b:6,d:1,e:1},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN MEDIO AMBIENTE',a:0,b:6,d:0,e:0},
-  {s:'PUENTE ALTO',c:'TECNICO AGRICOLA',a:0,b:0,d:0,e:1},
-  {s:'PUENTE ALTO',c:'TECNICO VETERINARIO Y PECUARIO',a:0,b:0,d:1,e:0},
-  {s:'PUENTE ALTO',c:'SALUD',a:0,b:5,d:0,e:1},
-  {s:'PUENTE ALTO',c:'PREPARADOR FISICO',a:0,b:2,d:0,e:0},
-  {s:'PUENTE ALTO',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:0,e:1},
-  {s:'PUENTE ALTO',c:'TECNICO DE LABORATORIO CLINICO Y BANCO DE SANGRE',a:0,b:2,d:0,e:0},
-  {s:'PUENTE ALTO',c:'TECNICO EN ODONTOLOGIA',a:0,b:1,d:0,e:0},
-  {s:'PUENTE ALTO',c:'INGENIERIA MEDIO AMBIENTE Y RECURSOS NATURALES',a:0,b:0,d:0,e:2},
-  {s:'PUENTE ALTO',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:0,e:2},
-  {s:'PUERTO MONTT',c:'ADMINISTRACION Y NEGOCIOS',a:4,b:89,d:166,e:187},
-  {s:'PUERTO MONTT',c:'AUDITORIA',a:3,b:89,d:161,e:187},
-  {s:'PUERTO MONTT',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:1,b:0,d:0,e:0},
-  {s:'PUERTO MONTT',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:5,e:0},
-  {s:'PUERTO MONTT',c:'CONSTRUCCION',a:0,b:0,d:0,e:10},
-  {s:'PUERTO MONTT',c:'TECNICO EN CONSTRUCCION',a:0,b:0,d:0,e:10},
-  {s:'PUERTO MONTT',c:'INGENIERIA',a:0,b:0,d:4,e:0},
-  {s:'PUERTO MONTT',c:'INGENIERIA EN MAQUINARIA Y VEHICULOS PESADOS',a:0,b:0,d:1,e:0},
-  {s:'PUERTO MONTT',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:2,e:0},
-  {s:'PUERTO MONTT',c:'TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:1,e:0},
-  {s:'SAN BERNARDO',c:'ADMINISTRACION Y NEGOCIOS',a:33,b:29,d:25,e:27},
-  {s:'SAN BERNARDO',c:'AUDITORIA',a:5,b:8,d:12,e:6},
-  {s:'SAN BERNARDO',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:7,b:9,d:1,e:0},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION',a:2,b:1,d:0,e:0},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:4,b:2,d:0,e:0},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:2,b:0,d:1,e:3},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:4,d:8,e:14},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN GESTION LOGISTICA',a:6,b:2,d:0,e:1},
-  {s:'SAN BERNARDO',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:0,e:3},
-  {s:'SAN BERNARDO',c:'TECNICO EN FINANZAS',a:5,b:1,d:0,e:0},
-  {s:'SAN BERNARDO',c:'TECNICO EN GESTION LOGISTICA',a:1,b:2,d:3,e:0},
-  {s:'SAN BERNARDO',c:'ADMINISTRACION FINANCIERA',a:1,b:0,d:0,e:0},
-  {s:'SAN BERNARDO',c:'CONSTRUCCION',a:2,b:0,d:4,e:4},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN CONSTRUCCION',a:1,b:0,d:4,e:0},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN PREVENCION DE RIESGOS',a:1,b:0,d:0,e:4},
-  {s:'SAN BERNARDO',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:2,d:1,e:3},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:2,d:0,e:0},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN INFORMATICA',a:0,b:0,d:1,e:3},
-  {s:'SAN BERNARDO',c:'INGENIERIA',a:1,b:4,d:4,e:7},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN MAQUINARIA Y VEHICULOS PESADOS',a:0,b:0,d:1,e:0},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:4,d:2,e:2},
-  {s:'SAN BERNARDO',c:'TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:0,d:0,e:5},
-  {s:'SAN BERNARDO',c:'TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:1,b:0,d:1,e:0},
-  {s:'SAN BERNARDO',c:'RECURSOS NATURALES',a:49,b:3,d:2,e:0},
-  {s:'SAN BERNARDO',c:'TECNICO AGRICOLA',a:47,b:2,d:1,e:0},
-  {s:'SAN BERNARDO',c:'TECNICO VETERINARIO Y PECUARIO',a:2,b:1,d:1,e:0},
-  {s:'SAN BERNARDO',c:'SALUD',a:0,b:0,d:3,e:4},
-  {s:'SAN BERNARDO',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:3,e:0},
-  {s:'SAN BERNARDO',c:'TECNICO DE LABORATORIO CLINICO Y BANCO DE SANGRE',a:0,b:0,d:0,e:3},
-  {s:'SAN BERNARDO',c:'TECNICO EN ODONTOLOGIA',a:0,b:0,d:0,e:1},
-  {s:'SAN BERNARDO',c:'TURISMO',a:5,b:0,d:0,e:1},
-  {s:'SAN BERNARDO',c:'TURISMO DE AVENTURA',a:5,b:0,d:0,e:1},
-  {s:'SAN BERNARDO',c:'INGENIERIA MEDIO AMBIENTE Y RECURSOS NATURALES',a:0,b:0,d:0,e:5},
-  {s:'SAN BERNARDO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:5},
-  {s:'SAN CARLOS DE APOQUINDO',c:'ADMINISTRACION Y NEGOCIOS',a:455,b:475,d:346,e:197},
-  {s:'SAN CARLOS DE APOQUINDO',c:'AUDITORIA',a:2,b:0,d:1,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:0,b:0,d:2,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:0,d:0,e:1},
-  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:453,b:475,d:343,e:196},
-  {s:'SAN CARLOS DE APOQUINDO',c:'COMUNICACION',a:0,b:1,d:1,e:1},
-  {s:'SAN CARLOS DE APOQUINDO',c:'ACTUACION',a:0,b:0,d:1,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN SONIDO',a:0,b:0,d:0,e:1},
-  {s:'SAN CARLOS DE APOQUINDO',c:'TECNICO AUDIOVISUAL',a:0,b:1,d:0,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO',a:0,b:10,d:5,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO DE AMBIENTES',a:0,b:9,d:2,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO GRAFICO',a:0,b:0,d:1,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'DISENO INDUSTRIAL',a:0,b:1,d:2,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:1,d:0,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'INGENIERIA EN INFORMATICA',a:0,b:1,d:0,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'SALUD',a:1,b:0,d:0,e:0},
-  {s:'SAN CARLOS DE APOQUINDO',c:'TECNICO DE ENFERMERIA',a:1,b:0,d:0,e:0},
-  {s:'SAN JOAQUIN',c:'CONSTRUCCION',a:2,b:0,d:0,e:0},
-  {s:'SAN JOAQUIN',c:'TECNICO EN PREVENCION DE RIESGOS',a:2,b:0,d:0,e:0},
-  {s:'SAN JOAQUIN',c:'INFORMATICA Y TELECOMUNICACIONES',a:2,b:49,d:24,e:2},
-  {s:'SAN JOAQUIN',c:'ANALISTA PROGRAMADOR COMPUTACIONAL',a:1,b:0,d:0,e:0},
-  {s:'SAN JOAQUIN',c:'INGENIERIA EN INFORMATICA',a:1,b:49,d:24,e:2},
-  {s:'SAN JOAQUIN',c:'INGENIERIA',a:0,b:2,d:1,e:1},
-  {s:'SAN JOAQUIN',c:'INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL',a:0,b:1,d:1,e:0},
-  {s:'SAN JOAQUIN',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:0,d:0,e:1},
-  {s:'SAN JOAQUIN',c:'TECNICO EN ENERGIAS RENOVABLES',a:0,b:1,d:0,e:0},
-  {s:'SAN JOAQUIN',c:'SALUD',a:0,b:1,d:0,e:1},
-  {s:'SAN JOAQUIN',c:'TECNICO DE ENFERMERIA',a:0,b:1,d:0,e:1},
-  {s:'VALPARAISO',c:'ADMINISTRACION Y NEGOCIOS',a:559,b:851,d:981,e:690},
-  {s:'VALPARAISO',c:'AUDITORIA',a:0,b:2,d:4,e:0},
-  {s:'VALPARAISO',c:'COMERCIO EXTERIOR',a:364,b:38,d:7,e:0},
-  {s:'VALPARAISO',c:'INGENIERIA EN COMERCIO EXTERIOR',a:194,b:810,d:968,e:687},
-  {s:'VALPARAISO',c:'INGENIERIA EN GESTION LOGISTICA',a:0,b:1,d:1,e:3},
-  {s:'VALPARAISO',c:'TECNICO EN GESTION LOGISTICA',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'ADMINISTRACION FINANCIERA',a:1,b:0,d:0,e:0},
-  {s:'VALPARAISO',c:'CONSTRUCCION',a:3,b:4,d:3,e:0},
-  {s:'VALPARAISO',c:'INGENIERIA EN CONSTRUCCION',a:1,b:0,d:2,e:0},
-  {s:'VALPARAISO',c:'INGENIERIA EN PREVENCION DE RIESGOS',a:1,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'RESTAURACION DE BIENES PATRIMONIALES',a:0,b:1,d:0,e:0},
-  {s:'VALPARAISO',c:'TECNICO EN CONSTRUCCION',a:1,b:1,d:0,e:0},
-  {s:'VALPARAISO',c:'TECNICO EN PREVENCION DE RIESGOS',a:0,b:2,d:0,e:0},
-  {s:'VALPARAISO',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'INGENIERIA EN INFORMATICA',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'INGENIERIA',a:0,b:1,d:1,e:0},
-  {s:'VALPARAISO',c:'INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA',a:0,b:1,d:1,e:0},
-  {s:'VALPARAISO',c:'RECURSOS NATURALES',a:3,b:7,d:1,e:1},
-  {s:'VALPARAISO',c:'INGENIERIA EN MEDIO AMBIENTE',a:0,b:2,d:1,e:1},
-  {s:'VALPARAISO',c:'TECNICO VETERINARIO',a:3,b:5,d:0,e:0},
-  {s:'VALPARAISO',c:'SALUD',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'TECNICO EN RADIODIAGNOSTICO Y RADIOTERAPIA',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'TURISMO',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'ECOTURISMO',a:0,b:0,d:1,e:0},
-  {s:'VALPARAISO',c:'TURISMO Y HOSPITALIDAD',a:0,b:0,d:0,e:1},
-  {s:'VALPARAISO',c:'GASTRONOMIA INTERNACIONAL',a:0,b:0,d:0,e:1},
-  {s:'VALPARAISO',c:'SALUD Y BIENESTAR',a:0,b:0,d:0,e:4},
-  {s:'VALPARAISO',c:'TECNICO DE ENFERMERIA',a:0,b:0,d:0,e:4},
-  {s:'VINA DEL MAR',c:'ADMINISTRACION Y NEGOCIOS',a:2336,b:3764,d:3185,e:1734},
-  {s:'VINA DEL MAR',c:'AUDITORIA',a:32,b:15,d:262,e:253},
-  {s:'VINA DEL MAR',c:'COMERCIO EXTERIOR',a:209,b:589,d:349,e:142},
-  {s:'VINA DEL MAR',c:'CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA',a:6,b:13,d:133,e:52},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION',a:4,b:1,d:0,e:0},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION DE RECURSOS HUMANOS',a:4,b:2,d:0,e:0},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION MENCION FINANZAS',a:1,b:0,d:36,e:8},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS',a:0,b:0,d:3,e:12},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN ADMINISTRACION MENCION MARKETING',a:0,b:0,d:1,e:2},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN COMERCIO EXTERIOR',a:2047,b:3121,d:2382,e:1213},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN GESTION LOGISTICA',a:25,b:22,d:10,e:31},
-  {s:'VINA DEL MAR',c:'TECNICO EN ADMINISTRACION',a:0,b:0,d:6,e:15},
-  {s:'VINA DEL MAR',c:'TECNICO EN FINANZAS',a:0,b:1,d:1,e:1},
-  {s:'VINA DEL MAR',c:'TECNICO EN GESTION DE PERSONAS',a:0,b:0,d:2,e:0},
-  {s:'VINA DEL MAR',c:'TECNICO EN GESTION LOGISTICA',a:1,b:0,d:0,e:0},
-  {s:'VINA DEL MAR',c:'TECNICO EN MARKETING',a:0,b:0,d:0,e:1},
-  {s:'VINA DEL MAR',c:'ADMINISTRACION DE EMPRESAS MENCION MARKETING',a:7,b:0,d:0,e:4},
-  {s:'VINA DEL MAR',c:'COMUNICACION',a:4,b:0,d:2,e:0},
-  {s:'VINA DEL MAR',c:'COMUNICACION AUDIOVISUAL',a:0,b:0,d:1,e:0},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN SONIDO',a:0,b:0,d:1,e:0},
-  {s:'VINA DEL MAR',c:'RELACIONES PUBLICAS MENCION MARKETING',a:4,b:0,d:0,e:0},
-  {s:'VINA DEL MAR',c:'DISENO',a:2,b:0,d:1,e:2},
-  {s:'VINA DEL MAR',c:'DESARROLLO Y DISENO WEB',a:0,b:0,d:0,e:2},
-  {s:'VINA DEL MAR',c:'DISENO GRAFICO',a:1,b:0,d:0,e:0},
-  {s:'VINA DEL MAR',c:'ILUSTRACION',a:0,b:0,d:1,e:0},
-  {s:'VINA DEL MAR',c:'DISENO DE VESTUARIO',a:1,b:0,d:0,e:0},
-  {s:'VINA DEL MAR',c:'INFORMATICA Y TELECOMUNICACIONES',a:0,b:9,d:3,e:12},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN CONECTIVIDAD Y REDES',a:0,b:0,d:1,e:0},
-  {s:'VINA DEL MAR',c:'INGENIERIA EN INFORMATICA',a:0,b:9,d:2,e:12},
-  {s:'VINA DEL MAR',c:'SALUD',a:5,b:0,d:0,e:0},
-  {s:'VINA DEL MAR',c:'PREPARADOR FISICO',a:5,b:0,d:0,e:0},
-  {s:'CASA CENTRAL',c:'NO APLICA',a:199,b:69,d:25,e:45},
+  {s:"ALAMEDA",c:"AUDITORIA",d:2,e:0,f:1},
+  {s:"ALAMEDA",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:4,e:1,f:0},
+  {s:"ALAMEDA",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:1,e:0,f:0},
+  {s:"ALAMEDA",c:"INGENIERIA EN COMERCIO EXTERIOR",d:150,e:371,f:1140},
+  {s:"ALAMEDA",c:"INGENIERIA EN CONSTRUCCION",d:1,e:0,f:0},
+  {s:"ALAMEDA",c:"INGENIERIA EN GESTION LOGISTICA",d:47,e:0,f:2},
+  {s:"ALAMEDA",c:"INGENIERIA EN INFORMATICA",d:0,e:1,f:0},
+  {s:"ALAMEDA",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:1,f:0},
+  {s:"ALAMEDA",c:"No Aplica",d:27,e:5,f:40},
+  {s:"ALAMEDA",c:"RESTAURACION DE BIENES PATRIMONIALES",d:0,e:1,f:1},
+  {s:"ANTONIO VARAS",c:"ADMINISTRACION EN TURISMO Y HOSPITALIDAD MENCION",d:0,e:0,f:2},
+  {s:"ANTONIO VARAS",c:"AUDITORIA",d:77,e:57,f:14},
+  {s:"ANTONIO VARAS",c:"COMERCIO EXTERIOR",d:28,e:0,f:7},
+  {s:"ANTONIO VARAS",c:"ECOTURISMO",d:0,e:0,f:6},
+  {s:"ANTONIO VARAS",c:"GASTRONOMIA INTERNACIONAL",d:1,e:1,f:0},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN ADMINISTRACION",d:1,e:0,f:0},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:29,e:12,f:0},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:25,e:29,f:3},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN ADMINISTRACION MENCION MARKETING",d:2,e:2,f:0},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN COMERCIO EXTERIOR",d:5934,e:3632,f:4235},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN CONECTIVIDAD Y REDES",d:1,e:0,f:0},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN GESTION LOGISTICA",d:39,e:54,f:38},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN INFORMATICA",d:3,e:1,f:3},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN INFRAESTRUCTURA Y PLATAFORMAS TECNOLOGICAS",d:1,e:0,f:0},
+  {s:"ANTONIO VARAS",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:3,f:31},
+  {s:"ANTONIO VARAS",c:"No Aplica",d:273,e:120,f:135},
+  {s:"ANTONIO VARAS",c:"No Informado",d:0,e:0,f:6},
+  {s:"ANTONIO VARAS",c:"TECNICO EN ADMINISTRACION",d:0,e:2,f:0},
+  {s:"ANTONIO VARAS",c:"TECNICO EN GESTION LOGISTICA",d:2,e:1,f:0},
+  {s:"ANTONIO VARAS",c:"TEMPORADA ACADEMICA DE VERANO",d:7,e:0,f:0},
+  {s:"ANTONIO VARAS",c:"TURISMO Y HOTELERIA",d:1,e:0,f:1},
+  {s:"CAMPUS ARAUCO",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:0,e:7,f:59},
+  {s:"CAMPUS ARAUCO",c:"No Aplica",d:8,e:14,f:0},
+  {s:"CAMPUS ARAUCO",c:"TECNICO EN ADMINISTRACION",d:3,e:5,f:0},
+  {s:"CAMPUS ARAUCO",c:"TECNICO EN GESTION LOGISTICA",d:0,e:3,f:0},
+  {s:"CAMPUS ARAUCO",c:"TECNICO EN MANTENIMIENTO ELECTROMECANICO",d:0,e:1,f:0},
+  {s:"CAMPUS ARAUCO",c:"TECNICO EN PREVENCION DE RIESGOS",d:1,e:0,f:0},
+  {s:"CAMPUS NACIMIENTO",c:"No Aplica",d:2,e:0,f:0},
+  {s:"CAMPUS VILLARRICA",c:"TECNICO EN ADMINISTRACION",d:1,e:0,f:0},
+  {s:"CASA CENTRAL",c:"No Aplica",d:25,e:45,f:91},
+  {s:"CONCEPCION",c:"AUDITORIA",d:0,e:0,f:12},
+  {s:"CONCEPCION",c:"COMERCIO EXTERIOR",d:36,e:0,f:14},
+  {s:"CONCEPCION",c:"COMUNICACION AUDIOVISUAL",d:0,e:0,f:1},
+  {s:"CONCEPCION",c:"DISENO GRAFICO",d:2,e:0,f:1},
+  {s:"CONCEPCION",c:"GASTRONOMIA INTERNACIONAL",d:0,e:0,f:1},
+  {s:"CONCEPCION",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:8,e:17,f:4},
+  {s:"CONCEPCION",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:7,e:0,f:0},
+  {s:"CONCEPCION",c:"INGENIERIA EN COMERCIO EXTERIOR",d:2231,e:1024,f:479},
+  {s:"CONCEPCION",c:"INGENIERIA EN CONECTIVIDAD Y REDES",d:3,e:0,f:0},
+  {s:"CONCEPCION",c:"INGENIERIA EN CONSTRUCCION",d:0,e:1,f:0},
+  {s:"CONCEPCION",c:"INGENIERIA EN GESTION LOGISTICA",d:31,e:10,f:0},
+  {s:"CONCEPCION",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:0,f:1},
+  {s:"CONCEPCION",c:"No Aplica",d:297,e:81,f:114},
+  {s:"CONCEPCION",c:"PUBLICIDAD",d:2,e:0,f:0},
+  {s:"CONCEPCION",c:"RELACIONES PUBLICAS MENCION MARKETING",d:0,e:1,f:0},
+  {s:"CONCEPCION",c:"TECNICO DE ENFERMERIA",d:1,e:0,f:0},
+  {s:"CONCEPCION",c:"TECNICO EN ODONTOLOGIA",d:1,e:0,f:0},
+  {s:"Educacion Continua",c:"No Aplica",d:10,e:0,f:38},
+  {s:"MAIPU",c:"ANIMACION DIGITAL",d:0,e:9,f:0},
+  {s:"MAIPU",c:"AUDITORIA",d:28,e:24,f:11},
+  {s:"MAIPU",c:"COMERCIO EXTERIOR",d:8,e:5,f:9},
+  {s:"MAIPU",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:2,e:7,f:0},
+  {s:"MAIPU",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:0,e:1,f:119},
+  {s:"MAIPU",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:51,e:1,f:7},
+  {s:"MAIPU",c:"INGENIERIA EN COMERCIO EXTERIOR",d:3,e:134,f:5},
+  {s:"MAIPU",c:"INGENIERIA EN CONECTIVIDAD Y REDES",d:2,e:0,f:0},
+  {s:"MAIPU",c:"INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:0,e:0,f:6},
+  {s:"MAIPU",c:"INGENIERIA EN GESTION LOGISTICA",d:3,e:134,f:290},
+  {s:"MAIPU",c:"INGENIERIA EN INFORMATICA",d:0,e:2,f:1},
+  {s:"MAIPU",c:"INGENIERIA EN MARKETING",d:3,e:0,f:0},
+  {s:"MAIPU",c:"INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:0,e:1,f:0},
+  {s:"MAIPU",c:"No Aplica",d:19,e:56,f:28},
+  {s:"MAIPU",c:"No Informado",d:0,e:0,f:4},
+  {s:"MAIPU",c:"TECNICO DE ENFERMERIA",d:0,e:0,f:5},
+  {s:"MAIPU",c:"TECNICO EN ADMINISTRACION",d:0,e:0,f:35},
+  {s:"MAIPU",c:"TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:6,e:0,f:0},
+  {s:"MAIPU",c:"TECNICO EN GESTION DE PERSONAS",d:9,e:0,f:0},
+  {s:"MAIPU",c:"TECNICO EN MANTENIMIENTO ELECTROMECANICO",d:0,e:4,f:2},
+  {s:"MAIPU",c:"TECNICO EN MAQUINARIA Y VEHICULOS PESADOS",d:0,e:1,f:0},
+  {s:"MAIPU",c:"TECNICO EN PREVENCION DE RIESGOS",d:2,e:0,f:0},
+  {s:"MELIPILLA",c:"AUDITORIA",d:3,e:2,f:0},
+  {s:"MELIPILLA",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:0,e:0,f:2},
+  {s:"MELIPILLA",c:"INGENIERIA EN GESTION LOGISTICA",d:0,e:1,f:0},
+  {s:"MELIPILLA",c:"INGENIERIA EN INFORMATICA",d:0,e:0,f:1},
+  {s:"MELIPILLA",c:"No Aplica",d:0,e:1,f:2},
+  {s:"NACIMIENTO",c:"No Aplica",d:0,e:4,f:1},
+  {s:"No Informado",c:"No Informado",d:127,e:131,f:0},
+  {s:"ONLINE",c:"ANALISTA PROGRAMADOR COMPUTACIONAL",d:0,e:1,f:0},
+  {s:"ONLINE",c:"CONTABILIDAD TRIBUTARIA",d:0,e:0,f:9},
+  {s:"ONLINE",c:"INGENIERIA EN DESARROLLO DE SOFTWARE",d:0,e:0,f:1},
+  {s:"ONLINE",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:0,f:2},
+  {s:"ONLINE",c:"TEcnico en Operaciones LogIsticas",d:0,e:0,f:2},
+  {s:"PADRE ALONSO DE OVALLE",c:"ADMINISTRACION HOTELERA",d:1,e:1,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"ANALISTA PROGRAMADOR",d:0,e:1,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"AUDITORIA",d:1,e:11,f:10},
+  {s:"PADRE ALONSO DE OVALLE",c:"COMERCIO EXTERIOR",d:1023,e:399,f:578},
+  {s:"PADRE ALONSO DE OVALLE",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:3,e:85,f:55},
+  {s:"PADRE ALONSO DE OVALLE",c:"DESARROLLO Y DISENO WEB",d:3,e:0,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"DISENO DE AMBIENTES",d:0,e:0,f:1},
+  {s:"PADRE ALONSO DE OVALLE",c:"GASTRONOMIA",d:1,e:0,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:12,e:1,f:3},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:0,e:9,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN ADMINISTRACION MENCION MARKETING",d:1,e:4,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN COMERCIO EXTERIOR",d:1519,e:576,f:423},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN GESTION LOGISTICA",d:0,e:1,f:15},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN INFORMATICA",d:2,e:2,f:1},
+  {s:"PADRE ALONSO DE OVALLE",c:"INGENIERIA EN MARKETING DIGITAL",d:2,e:0,f:1},
+  {s:"PADRE ALONSO DE OVALLE",c:"No Aplica",d:156,e:232,f:124},
+  {s:"PADRE ALONSO DE OVALLE",c:"No Informado",d:0,e:0,f:2},
+  {s:"PADRE ALONSO DE OVALLE",c:"TECNICO EN ADMINISTRACION",d:0,e:0,f:6},
+  {s:"PADRE ALONSO DE OVALLE",c:"TECNICO EN FINANZAS",d:2,e:3,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"TECNICO EN GESTION DE PERSONAS",d:1,e:0,f:0},
+  {s:"PADRE ALONSO DE OVALLE",c:"TECNICO EN GESTION LOGISTICA",d:3,e:11,f:13},
+  {s:"PLAZA NORTE",c:"ANALISTA PROGRAMADOR",d:0,e:0,f:2},
+  {s:"PLAZA NORTE",c:"ANALISTA PROGRAMADOR COMPUTACIONAL",d:2,e:0,f:0},
+  {s:"PLAZA NORTE",c:"AUDITORIA",d:5,e:8,f:7},
+  {s:"PLAZA NORTE",c:"COMERCIO EXTERIOR",d:5,e:0,f:0},
+  {s:"PLAZA NORTE",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:7,e:1,f:0},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:6,e:0,f:0},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:7,e:1,f:1},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN ADMINISTRACION MENCION INNOVACION Y EMPRENDIMIENTO",d:0,e:0,f:4},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN ADMINISTRACION MENCION MARKETING",d:13,e:4,f:0},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN COMERCIO EXTERIOR",d:1440,e:484,f:923},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN GESTION LOGISTICA",d:43,e:26,f:12},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN INFORMATICA",d:0,e:1,f:0},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:0,f:3},
+  {s:"PLAZA NORTE",c:"INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:5,e:0,f:1},
+  {s:"PLAZA NORTE",c:"No Aplica",d:76,e:81,f:11},
+  {s:"PLAZA NORTE",c:"TECNICO EN GESTION LOGISTICA",d:15,e:4,f:26},
+  {s:"PLAZA NORTE",c:"TECNICO EN MARKETING",d:2,e:0,f:0},
+  {s:"PLAZA NORTE",c:"TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:0,e:1,f:2},
+  {s:"PLAZA OESTE",c:"ANALISTA PROGRAMADOR COMPUTACIONAL",d:0,e:2,f:0},
+  {s:"PLAZA OESTE",c:"AUDITORIA",d:0,e:2,f:62},
+  {s:"PLAZA OESTE",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:6,e:8,f:3},
+  {s:"PLAZA OESTE",c:"DISENO GRAFICO",d:0,e:0,f:1},
+  {s:"PLAZA OESTE",c:"DISENO INDUSTRIAL",d:0,e:0,f:1},
+  {s:"PLAZA OESTE",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:0,e:2,f:8},
+  {s:"PLAZA OESTE",c:"INGENIERIA EN COMERCIO EXTERIOR",d:0,e:0,f:1},
+  {s:"PLAZA OESTE",c:"INGENIERIA EN GESTION LOGISTICA",d:5,e:3,f:28},
+  {s:"PLAZA OESTE",c:"INGENIERIA EN INFORMATICA",d:0,e:0,f:3},
+  {s:"PLAZA OESTE",c:"No Aplica",d:0,e:29,f:73},
+  {s:"PLAZA OESTE",c:"No Informado",d:0,e:0,f:2},
+  {s:"PLAZA VESPUCIO",c:"AUDITORIA",d:86,e:220,f:248},
+  {s:"PLAZA VESPUCIO",c:"COMERCIO EXTERIOR",d:3654,e:1822,f:510},
+  {s:"PLAZA VESPUCIO",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:45,e:27,f:41},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:0,e:3,f:1},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:3,e:1,f:2},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN ADMINISTRACION MENCION INNOVACION Y EMPRENDIMIENTO",d:0,e:0,f:1},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN ADMINISTRACION MENCION MARKETING",d:0,e:0,f:1},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN COMERCIO EXTERIOR",d:150,e:143,f:752},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN GESTION LOGISTICA",d:9,e:15,f:0},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN INFORMATICA",d:1,e:4,f:2},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN MARKETING",d:22,e:3,f:0},
+  {s:"PLAZA VESPUCIO",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:0,f:18},
+  {s:"PLAZA VESPUCIO",c:"No Aplica",d:328,e:165,f:218},
+  {s:"PLAZA VESPUCIO",c:"No Informado",d:0,e:0,f:2},
+  {s:"PLAZA VESPUCIO",c:"PUBLICIDAD",d:0,e:1,f:0},
+  {s:"PLAZA VESPUCIO",c:"PUBLICIDAD PLAN COMUN",d:0,e:0,f:19},
+  {s:"PLAZA VESPUCIO",c:"TECNICO EN ADMINISTRACION",d:0,e:0,f:1},
+  {s:"PLAZA VESPUCIO",c:"TECNICO EN GESTION LOGISTICA",d:0,e:3,f:39},
+  {s:"PLAZA VESPUCIO",c:"TEMPORADA ACADEMICA DE VERANO",d:0,e:9,f:0},
+  {s:"PUENTE ALTO",c:"AUDITORIA",d:2,e:8,f:0},
+  {s:"PUENTE ALTO",c:"COMERCIO EXTERIOR",d:0,e:0,f:8},
+  {s:"PUENTE ALTO",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:0,e:1,f:0},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:1,e:0,f:0},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:1,e:0,f:0},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN COMERCIO EXTERIOR",d:78,e:5,f:34},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN CONECTIVIDAD Y REDES",d:0,e:0,f:1},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN CONSTRUCCION",d:0,e:0,f:1},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:2,e:2,f:0},
+  {s:"PUENTE ALTO",c:"INGENIERIA EN GESTION LOGISTICA",d:1,e:0,f:17},
+  {s:"PUENTE ALTO",c:"No Aplica",d:6,e:24,f:3},
+  {s:"PUENTE ALTO",c:"TECNICO AGRICOLA",d:0,e:1,f:0},
+  {s:"PUENTE ALTO",c:"TECNICO DE ENFERMERIA",d:0,e:1,f:0},
+  {s:"PUENTE ALTO",c:"TECNICO EN CONSTRUCCION",d:0,e:0,f:2},
+  {s:"PUENTE ALTO",c:"TECNICO EN MARKETING",d:2,e:1,f:0},
+  {s:"PUENTE ALTO",c:"TECNICO EN QUIMICA Y FARMACIA",d:0,e:0,f:1},
+  {s:"PUENTE ALTO",c:"TECNICO VETERINARIO Y PECUARIO",d:1,e:0,f:0},
+  {s:"PUERTO MONTT",c:"AUDITORIA",d:161,e:187,f:202},
+  {s:"PUERTO MONTT",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:0,e:0,f:36},
+  {s:"PUERTO MONTT",c:"INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:0,e:0,f:1},
+  {s:"PUERTO MONTT",c:"INGENIERIA EN GESTION LOGISTICA",d:0,e:0,f:1},
+  {s:"PUERTO MONTT",c:"INGENIERIA EN MAQUINARIA Y VEHICULOS PESADOS",d:1,e:0,f:0},
+  {s:"PUERTO MONTT",c:"INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:2,e:0,f:0},
+  {s:"PUERTO MONTT",c:"No Aplica",d:11,e:66,f:53},
+  {s:"PUERTO MONTT",c:"No Informado",d:0,e:0,f:1},
+  {s:"PUERTO MONTT",c:"TECNICO EN ADMINISTRACION",d:0,e:0,f:6},
+  {s:"PUERTO MONTT",c:"TECNICO EN CONSTRUCCION",d:0,e:10,f:8},
+  {s:"PUERTO MONTT",c:"TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:1,e:0,f:0},
+  {s:"PUERTO MONTT",c:"TECNICO EN GESTION LOGISTICA",d:5,e:0,f:0},
+  {s:"PUERTO MONTT",c:"TECNICO EN ODONTOLOGIA",d:0,e:0,f:1},
+  {s:"SAN BERNARDO",c:"AUDITORIA",d:12,e:6,f:0},
+  {s:"SAN BERNARDO",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:1,e:0,f:1},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:1,e:3,f:0},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:8,e:14,f:8},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN COMERCIO EXTERIOR",d:0,e:0,f:11},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN CONSTRUCCION",d:4,e:0,f:0},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN GESTION LOGISTICA",d:0,e:1,f:7},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN INFORMATICA",d:1,e:3,f:2},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN MAQUINARIA Y VEHICULOS PESADOS",d:1,e:0,f:0},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:2,e:7,f:0},
+  {s:"SAN BERNARDO",c:"INGENIERIA EN PREVENCION DE RIESGOS",d:0,e:4,f:0},
+  {s:"SAN BERNARDO",c:"No Aplica",d:56,e:25,f:18},
+  {s:"SAN BERNARDO",c:"TECNICO AGRICOLA",d:1,e:0,f:0},
+  {s:"SAN BERNARDO",c:"TECNICO DE ENFERMERIA",d:3,e:0,f:0},
+  {s:"SAN BERNARDO",c:"TECNICO DE LABORATORIO CLINICO Y BANCO DE SANGRE",d:0,e:3,f:0},
+  {s:"SAN BERNARDO",c:"TECNICO EN ADMINISTRACION",d:0,e:3,f:1},
+  {s:"SAN BERNARDO",c:"TECNICO EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:0,e:5,f:0},
+  {s:"SAN BERNARDO",c:"TECNICO EN GESTION LOGISTICA",d:3,e:0,f:0},
+  {s:"SAN BERNARDO",c:"TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:1,e:0,f:2},
+  {s:"SAN BERNARDO",c:"TECNICO EN ODONTOLOGIA",d:0,e:1,f:0},
+  {s:"SAN BERNARDO",c:"TECNICO EN QUIMICA Y FARMACIA",d:0,e:0,f:2},
+  {s:"SAN BERNARDO",c:"TECNICO VETERINARIO Y PECUARIO",d:1,e:0,f:0},
+  {s:"SAN BERNARDO",c:"TURISMO DE AVENTURA",d:0,e:1,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"ACTUACION",d:1,e:0,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"AUDITORIA",d:1,e:0,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"DISENO DE AMBIENTES",d:2,e:0,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"DISENO GRAFICO",d:1,e:0,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"DISENO INDUSTRIAL",d:2,e:0,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:2,e:0,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"INGENIERIA EN ADMINISTRACION MENCION MARKETING",d:0,e:1,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"INGENIERIA EN COMERCIO EXTERIOR",d:343,e:196,f:493},
+  {s:"SAN CARLOS DE APOQUINDO",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:0,f:2},
+  {s:"SAN CARLOS DE APOQUINDO",c:"INGENIERIA EN SONIDO",d:0,e:1,f:0},
+  {s:"SAN CARLOS DE APOQUINDO",c:"No Aplica",d:19,e:14,f:24},
+  {s:"SAN CARLOS DE APOQUINDO",c:"No Informado",d:0,e:0,f:51},
+  {s:"SAN JOAQUIN",c:"ANALISTA PROGRAMADOR",d:0,e:0,f:3},
+  {s:"SAN JOAQUIN",c:"AUDITORIA",d:0,e:0,f:1},
+  {s:"SAN JOAQUIN",c:"INGENIERIA EN ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL",d:1,e:0,f:2},
+  {s:"SAN JOAQUIN",c:"INGENIERIA EN INFORMATICA",d:24,e:2,f:3},
+  {s:"SAN JOAQUIN",c:"INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:0,e:1,f:5},
+  {s:"SAN JOAQUIN",c:"INGENIERIA EN REDES Y TELECOMUNICACIONES",d:0,e:0,f:2},
+  {s:"SAN JOAQUIN",c:"No Aplica",d:7,e:1,f:12},
+  {s:"SAN JOAQUIN",c:"No Informado",d:0,e:0,f:1},
+  {s:"SAN JOAQUIN",c:"TECNICO DE ENFERMERIA",d:0,e:1,f:1},
+  {s:"SAN JOAQUIN",c:"TECNICO DE LABORATORIO CLINICO Y BANCO DE SANGRE",d:0,e:0,f:1},
+  {s:"SAN JOAQUIN",c:"TECNICO EN ELECTRICIDAD Y ENERGIAS RENOVABLES",d:0,e:0,f:3},
+  {s:"SAN JOAQUIN",c:"TECNICO EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:0,e:0,f:1},
+  {s:"SAN JOAQUIN",c:"TECNICO EN QUIMICA Y FARMACIA",d:0,e:0,f:4},
+  {s:"VALPARAISO",c:"AUDITORIA",d:4,e:0,f:0},
+  {s:"VALPARAISO",c:"COMERCIO EXTERIOR",d:7,e:0,f:0},
+  {s:"VALPARAISO",c:"ECOTURISMO",d:1,e:0,f:0},
+  {s:"VALPARAISO",c:"GASTRONOMIA INTERNACIONAL",d:0,e:1,f:0},
+  {s:"VALPARAISO",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:0,e:0,f:1},
+  {s:"VALPARAISO",c:"INGENIERIA EN COMERCIO EXTERIOR",d:968,e:687,f:784},
+  {s:"VALPARAISO",c:"INGENIERIA EN CONSTRUCCION",d:2,e:0,f:2},
+  {s:"VALPARAISO",c:"INGENIERIA EN GESTION LOGISTICA",d:1,e:3,f:0},
+  {s:"VALPARAISO",c:"INGENIERIA EN INFORMATICA",d:1,e:0,f:0},
+  {s:"VALPARAISO",c:"INGENIERIA EN MECANICA AUTOMOTRIZ Y AUTOTRONICA",d:1,e:0,f:0},
+  {s:"VALPARAISO",c:"INGENIERIA EN MEDIO AMBIENTE",d:1,e:1,f:0},
+  {s:"VALPARAISO",c:"INGENIERIA EN PREVENCION DE RIESGOS",d:1,e:0,f:0},
+  {s:"VALPARAISO",c:"No Aplica",d:123,e:125,f:38},
+  {s:"VALPARAISO",c:"No Informado",d:0,e:0,f:3},
+  {s:"VALPARAISO",c:"TECNICO DE ENFERMERIA",d:0,e:4,f:0},
+  {s:"VALPARAISO",c:"TECNICO EN ADMINISTRACION",d:0,e:0,f:2},
+  {s:"VALPARAISO",c:"TECNICO EN GESTION LOGISTICA",d:1,e:0,f:0},
+  {s:"VALPARAISO",c:"TECNICO EN RADIODIAGNOSTICO Y RADIOTERAPIA",d:1,e:0,f:0},
+  {s:"VINA DEL MAR",c:"ADMINISTRACION DE EMPRESAS MENCION MARKETING",d:0,e:4,f:0},
+  {s:"VINA DEL MAR",c:"ANALISTA PROGRAMADOR",d:0,e:0,f:1},
+  {s:"VINA DEL MAR",c:"AUDITORIA",d:262,e:253,f:169},
+  {s:"VINA DEL MAR",c:"COMERCIO EXTERIOR",d:349,e:142,f:43},
+  {s:"VINA DEL MAR",c:"COMUNICACION AUDIOVISUAL",d:1,e:0,f:0},
+  {s:"VINA DEL MAR",c:"CONTABILIDAD GENERAL MENCION LEGISLACION TRIBUTARIA",d:133,e:52,f:29},
+  {s:"VINA DEL MAR",c:"DESARROLLO Y DISENO WEB",d:0,e:2,f:0},
+  {s:"VINA DEL MAR",c:"DISENO DE AMBIENTES",d:0,e:0,f:1},
+  {s:"VINA DEL MAR",c:"ILUSTRACION",d:1,e:0,f:0},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN ADMINISTRACION MENCION FINANZAS",d:36,e:8,f:3},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN ADMINISTRACION MENCION GESTION DE PERSONAS",d:3,e:12,f:8},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN ADMINISTRACION MENCION INNOVACION Y EMPRENDIMIENTO",d:0,e:0,f:1},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN ADMINISTRACION MENCION MARKETING",d:1,e:2,f:0},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN COMERCIO EXTERIOR",d:2382,e:1213,f:1086},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN CONECTIVIDAD Y REDES",d:1,e:0,f:0},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN GESTION LOGISTICA",d:10,e:31,f:38},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN INFORMATICA",d:2,e:12,f:2},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN MARKETING DIGITAL",d:0,e:0,f:2},
+  {s:"VINA DEL MAR",c:"INGENIERIA EN SONIDO",d:1,e:0,f:0},
+  {s:"VINA DEL MAR",c:"No Aplica",d:233,e:182,f:148},
+  {s:"VINA DEL MAR",c:"No Informado",d:0,e:0,f:5},
+  {s:"VINA DEL MAR",c:"PREPARADOR FISICO",d:0,e:0,f:1},
+  {s:"VINA DEL MAR",c:"TECNICO EN ADMINISTRACION",d:6,e:15,f:0},
+  {s:"VINA DEL MAR",c:"TECNICO EN FINANZAS",d:1,e:1,f:0},
+  {s:"VINA DEL MAR",c:"TECNICO EN GESTION DE PERSONAS",d:2,e:0,f:0},
+  {s:"VINA DEL MAR",c:"TECNICO EN GESTION LOGISTICA",d:0,e:0,f:6},
+  {s:"VINA DEL MAR",c:"TECNICO EN MARKETING",d:0,e:1,f:1}
 ];
 
 // helpers
-const gv = (r,yr) => yr==='2021'?r.a:yr==='2022'?r.b:yr==='2023'?r.d:yr==='2024'?r.e:r.a+r.b+r.d+r.e;
+const gv = (r,yr) => yr==='2023'?r.d:yr==='2024'?r.e:yr==='2025'?r.f:(r.d+r.e+r.f);
 const fmt = x=>x>0?x.toLocaleString('es-CL'):'<span style="color:#CCC">—</span>';
+
+// Disable datalabels globally, enable per-chart
+Chart.defaults.plugins.datalabels = {display: false};
 
 // ─── TABS ───
 const built={r:false,c:false};
@@ -751,35 +608,60 @@ function showSec(id,btn){
 // ─── RESUMEN ───
 function buildResumen(){
   built.r=true;
-  const C={2024:'#B8900A',2023:'#0A8C64',2022:'#B84A10',2021:'#007A87'};
+  const C={2025:'#B8900A',2024:'#0A8C64',2023:'#B84A10'};
   new Chart(document.getElementById('ch-monthly').getContext('2d'),{
     type:'line',
     data:{labels:MD.m,datasets:[
-      {label:'2024',data:MD[2024],borderColor:'#B8900A',backgroundColor:'rgba(245,195,0,0.07)',tension:.4,pointRadius:3,borderWidth:2,spanGaps:true},
-      {label:'2023',data:MD[2023],borderColor:'#0A8C64',backgroundColor:'rgba(34,209,158,0.04)',tension:.4,pointRadius:3,borderWidth:2},
-      {label:'2022',data:MD[2022],borderColor:'#B84A10',backgroundColor:'rgba(255,107,53,0.04)',tension:.4,pointRadius:3,borderWidth:2,spanGaps:true},
-      {label:'2021',data:MD[2021],borderColor:'#007A87',backgroundColor:'rgba(0,200,215,0.04)',tension:.4,pointRadius:3,borderWidth:2},
+      {label:'2025',data:MD[2025],borderColor:'#B8900A',backgroundColor:'rgba(245,195,0,0.07)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,spanGaps:true,datalabels:{display:false}},
+      {label:'2024',data:MD[2024],borderColor:'#0A8C64',backgroundColor:'rgba(34,209,158,0.04)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,spanGaps:true,datalabels:{display:false}},
+      {label:'2023',data:MD[2023],borderColor:'#B84A10',backgroundColor:'rgba(255,107,53,0.04)',tension:.4,pointRadius:4,pointHoverRadius:6,borderWidth:2.5,datalabels:{display:false}},
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#555',font:{family:'Lato',size:12}}}},scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'}}},y:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'}}}}}
+    options:{responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{labels:{color:'#555',font:{family:'Lato',size:12}}},
+        tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.parsed.y.toLocaleString('es-CL')+' usos'}}},
+      scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'}}},y:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato'},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
   });
   new Chart(document.getElementById('ch-vxu').getContext('2d'),{
     type:'bar',
-    data:{labels:['2021–2022','2022–2023','2023–2024','2024–2025'],datasets:[{label:'CLP/uso',data:[544.04,473.64,380.41,689.70],backgroundColor:['rgba(0,153,168,0.85)','rgba(217,90,26,0.85)','rgba(15,175,126,0.85)','rgba(245,195,0,0.95)'],borderRadius:3,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.y.toFixed(0)+' CLP/uso'}}},scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato',size:11}}},y:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',callback:v=>'$'+v}}}}
+    data:{labels:['2022–2023','2023–2024','2024–2025','2025–2026'],datasets:[{
+      label:'CLP/uso',
+      data:[474,380,527,790],
+      backgroundColor:['rgba(0,153,168,0.85)','rgba(217,90,26,0.85)','rgba(15,175,126,0.85)','rgba(245,195,0,0.95)'],
+      borderRadius:3,borderSkipped:false
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>' $'+c.parsed.y.toFixed(0)+' CLP/uso'}},
+        datalabels:{display:true,anchor:'end',align:'top',color:'#444',font:{family:'Lato',size:12,weight:'700'},
+          formatter:v=>'$'+v}},
+      scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato',size:11}}},
+        y:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',callback:v=>'$'+v},max:920}}}
   });
-  const tots=[2021,2022,2023,2024].map(y=>MD[y].reduce((a,b)=>(a||0)+(b||0),0));
+  const tots=[2023,2024,2025].map(y=>MD[y].reduce((a,b)=>(a||0)+(b||0),0));
   new Chart(document.getElementById('ch-annual').getContext('2d'),{
     type:'bar',
-    data:{labels:['2021','2022','2023','2024'],datasets:[{data:tots,backgroundColor:['rgba(0,153,168,0.85)','rgba(217,90,26,0.85)','rgba(15,175,126,0.85)','rgba(245,195,0,0.95)'],borderRadius:4,borderSkipped:false}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.parsed.x.toLocaleString('es-CL')+' usos'}}},scales:{x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato',size:11},callback:v=>v.toLocaleString('es-CL')}},y:{grid:{display:false},ticks:{color:'#444',font:{family:'Lato',size:12,weight:'700'}},autoSkip:false,maxTicksLimit:4}}}
+    data:{labels:['2023','2024','2025'],datasets:[{
+      data:tots,
+      backgroundColor:['rgba(217,90,26,0.85)','rgba(15,175,126,0.85)','rgba(245,195,0,0.95)'],
+      borderRadius:4,borderSkipped:false
+    }]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>' '+c.parsed.x.toLocaleString('es-CL')+' usos'}},
+        datalabels:{display:true,anchor:'end',align:'right',color:'#444',font:{family:'Lato',size:13,weight:'700'},
+          formatter:v=>v.toLocaleString('es-CL')}},
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,0.07)'},ticks:{color:'#888',font:{family:'Lato',size:11},callback:v=>v.toLocaleString('es-CL')}},
+        y:{grid:{display:false},ticks:{color:'#444',font:{family:'Lato',size:13,weight:'700'}},autoSkip:false,maxTicksLimit:3}}}
   });
   const tbody=document.getElementById('monthly-tbody');
-  let tr=[0,0,0,0];
+  let tr=[0,0,0];
   tbody.innerHTML=MD.m.map((m,i)=>{
-    const v=[MD[2024][i]||0,MD[2023][i]||0,MD[2022][i]||0,MD[2021][i]||0];
+    const v=[MD[2025][i]||0,MD[2024][i]||0,MD[2023][i]||0];
     v.forEach((x,j)=>tr[j]+=x);
     const tot=v.reduce((a,b)=>a+b,0);
-    return `<tr><td style="font-weight:600">${m}</td><td class="num" style="color:#B8900A">${fmt(v[0])}</td><td class="num" style="color:#0A8C64">${fmt(v[1])}</td><td class="num" style="color:#B84A10">${fmt(v[2])}</td><td class="num" style="color:#007A87">${fmt(v[3])}</td><td class="num" style="color:var(--muted)">${tot.toLocaleString('es-CL')}</td></tr>`;
+    return `<tr><td style="font-weight:600">${m}</td><td class="num" style="color:#B8900A">${fmt(v[0])}</td><td class="num" style="color:#0A8C64">${fmt(v[1])}</td><td class="num" style="color:#B84A10">${fmt(v[2])}</td><td class="num" style="color:var(--muted)">${tot.toLocaleString('es-CL')}</td></tr>`;
   }).join('');
   const gt=tr.reduce((a,b)=>a+b,0);
   tbody.innerHTML+=`<tr class="tot-row"><td><strong>TOTAL</strong></td>${tr.map(v=>`<td class="num"><strong>${v.toLocaleString('es-CL')}</strong></td>`).join('')}<td class="num"><strong>${gt.toLocaleString('es-CL')}</strong></td></tr>`;
@@ -841,14 +723,13 @@ function applyFilters(){
     const short=s=>s.replace('PADRE ALONSO DE OVALLE','P.A. OVALLE').replace('SAN CARLOS DE APOQUINDO','S.C. APOQUINDO');
     if(selYr==='all'){
       const byS={};
-      filtered.forEach(r=>{if(!byS[r.s])byS[r.s]={a:0,b:0,d:0,e:0};['a','b','d','e'].forEach(k=>byS[r.s][k]+=r[k]);});
-      const top8=Object.entries(byS).sort((a,b)=>(b[1].a+b[1].b+b[1].d+b[1].e)-(a[1].a+a[1].b+a[1].d+a[1].e)).slice(0,8);
+      filtered.forEach(r=>{if(!byS[r.s])byS[r.s]={d:0,e:0,f:0};['d','e','f'].forEach(k=>byS[r.s][k]+=r[k]);});
+      const top8=Object.entries(byS).sort((a,b)=>(b[1].d+b[1].e+b[1].f)-(a[1].d+a[1].e+a[1].f)).slice(0,8);
       chSedes.data.labels=top8.map(([s])=>short(s));
       chSedes.data.datasets=[
-        {label:'2021',data:top8.map(([,v])=>v.a),backgroundColor:DC[0],stack:'s',borderRadius:0,borderSkipped:false},
-        {label:'2022',data:top8.map(([,v])=>v.b),backgroundColor:DC[1],stack:'s',borderRadius:0,borderSkipped:false},
-        {label:'2023',data:top8.map(([,v])=>v.d),backgroundColor:DC[2],stack:'s',borderRadius:0,borderSkipped:false},
-        {label:'2024',data:top8.map(([,v])=>v.e),backgroundColor:DC[3],stack:'s',borderRadius:3,borderSkipped:false},
+        {label:'2023',data:top8.map(([,v])=>v.d),backgroundColor:DC[0],stack:'s',borderRadius:0,borderSkipped:false},
+        {label:'2024',data:top8.map(([,v])=>v.e),backgroundColor:DC[1],stack:'s',borderRadius:0,borderSkipped:false},
+        {label:'2025',data:top8.map(([,v])=>v.f),backgroundColor:DC[2],stack:'s',borderRadius:3,borderSkipped:false},
       ];
       chSedes.options.scales.x.stacked=true;
       chSedes.options.scales.y.stacked=true;
@@ -895,10 +776,9 @@ function renderTable(){
     }
     return sedeHdr+`<tr>
       <td class="car-name">${r.c}</td>
-      <td class="num" style="color:#007A87">${fmt(r.a)}</td>
-      <td class="num" style="color:#B84A10">${fmt(r.b)}</td>
-      <td class="num" style="color:#0A8C64">${fmt(r.d)}</td>
-      <td class="num" style="color:#B8900A">${fmt(r.e)}</td>
+      <td class="num" style="color:#B84A10">${fmt(r.d)}</td>
+      <td class="num" style="color:#0A8C64">${fmt(r.e)}</td>
+      <td class="num" style="color:#B8900A">${fmt(r.f)}</td>
       <td style="min-width:130px"><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${bc}"></div></div><span class="bar-pct">${pct}%</span></div></td>
     </tr>`;
   }).join('');
